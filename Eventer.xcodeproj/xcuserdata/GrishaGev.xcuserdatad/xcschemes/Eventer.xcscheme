@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C9DF58A01C40D54C005FB0A7"
+               BlueprintIdentifier = "C9DBE7061C44D572002F4525"
                BuildableName = "Eventer.app"
                BlueprintName = "Eventer"
                ReferencedContainer = "container:Eventer.xcodeproj">
@@ -28,31 +28,11 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C9DF58B71C40D54C005FB0A7"
-               BuildableName = "EventerTests.xctest"
-               BlueprintName = "EventerTests"
-               ReferencedContainer = "container:Eventer.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C9DF58C21C40D54C005FB0A7"
-               BuildableName = "EventerUITests.xctest"
-               BlueprintName = "EventerUITests"
-               ReferencedContainer = "container:Eventer.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C9DF58A01C40D54C005FB0A7"
+            BlueprintIdentifier = "C9DBE7061C44D572002F4525"
             BuildableName = "Eventer.app"
             BlueprintName = "Eventer"
             ReferencedContainer = "container:Eventer.xcodeproj">
@@ -75,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C9DF58A01C40D54C005FB0A7"
+            BlueprintIdentifier = "C9DBE7061C44D572002F4525"
             BuildableName = "Eventer.app"
             BlueprintName = "Eventer"
             ReferencedContainer = "container:Eventer.xcodeproj">
@@ -94,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C9DF58A01C40D54C005FB0A7"
+            BlueprintIdentifier = "C9DBE7061C44D572002F4525"
             BuildableName = "Eventer.app"
             BlueprintName = "Eventer"
             ReferencedContainer = "container:Eventer.xcodeproj">
