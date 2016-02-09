@@ -46,14 +46,23 @@ class FileDownloadManager {
             })
             return request
     }
-    class func uploadImage(image:UIImage, completionBlock: (error: NSError!,fileId:String!) -> Void){
+    class func uploadImage(image:UIImage, options:NSMutableDictionary!, completionBlock: (error: NSError!,fileId:String!) -> Void){
         let data = UIImageJPEGRepresentation(image, 1)
         
         //making photo findable by all users
         let metadata:KCSMetadata = KCSMetadata()
         metadata.setGloballyReadable(true)
         
-        KCSFileStore.uploadData(data, options: [KCSFilePublic : true, KCSFileACL : metadata], completionBlock: {
+        var opts = NSMutableDictionary()
+        
+        if options != nil {
+            opts = options
+        }
+        
+        opts[KCSFilePublic] = true
+        opts[KCSFileACL] = metadata
+        
+        KCSFileStore.uploadData(data, options: opts as [NSObject : AnyObject], completionBlock: {
             (file:KCSFile!, error:NSError!) -> Void in
             if (error == nil){
                 let id = file.fileId
@@ -61,7 +70,7 @@ class FileDownloadManager {
             }else{
                 completionBlock(error: error, fileId: nil)
             }
-            }, progressBlock: nil)
+        }, progressBlock: nil)
     }
     
     class func modifyImage(image:UIImage,existingFileId:NSString, completionBlock: (error: NSError!,fileId:String!) -> Void){

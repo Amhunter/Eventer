@@ -35,7 +35,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
     var cellHeights:[CGFloat] = []
     
     var loadingView = LoadingIndicatorView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, 100))
-
+    
     func back(){
         self.navigationController!.popViewControllerAnimated(true)
     }
@@ -45,7 +45,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         setSubviews()
         loadData()
     }
+    
     func setTableHeaderView(){
+        sizeHeaderToFit(false)
         self.tableHeaderView.addSubview(gridButton)
         self.tableHeaderView.addSubview(tableButton)
         self.tableHeaderView.addSubview(gridUnderline)
@@ -77,8 +79,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         self.tableHeaderView.setNeedsLayout()
         self.tableHeaderView.layoutIfNeeded()
         sizeHeaderToFit(false)
-
+        sizeHeaderToFit(false)
     }
+    
     func setSubviews(){
         let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
         backButton.tintColor = UIColor.whiteColor()
@@ -89,7 +92,10 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         let titleLabel:UILabel = UILabel()
         switch Target{
         case "Search":
-                titleLabel.text = AdditionalInfo
+            titleLabel.text = AdditionalInfo
+        case "Going":
+            titleLabel.text = "\(self.User.username) is going to:"
+            self.AdditionalInfo = self.User.userId
         default: break
         }
         titleLabel.numberOfLines = 1
@@ -144,7 +150,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         self.view.addSubview(loadingView)
         loadingView.center = CGPointMake(collectionView.frame.width/2, collectionView.frame.height/2)
         loadingView.startAnimating()
-
+        
         
     }
     
@@ -155,87 +161,87 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
     
     var query:KCSQuery!
     func loadData(){
-
+        
         EventsManager.loadEventsForTarget(nil,
             Target: Target,Addit: AdditionalInfo,
             completionHandler: {
-            (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
-            self.loadingView.stopAnimating(error == nil)
-            self.gridButton.enabled = true
-            self.tableButton.enabled = true
-            if (error == nil){
-                var temp = downloadedEventsArray
-                
-                if (temp.count < 19){
-                    self.end = true
+                (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
+                self.loadingView.stopAnimating(error == nil)
+                self.gridButton.enabled = true
+                self.tableButton.enabled = true
+                if (error == nil){
+                    var temp = downloadedEventsArray
+                    
+                    if (temp.count < 19){
+                        self.end = true
+                    }else{
+                        self.end = false
+                        temp.removeLast()
+                    }
+                    self.Events = temp
+                    for _ in temp {
+                        self.cellHeights.append(0)
+                    }
+                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
+                    self.setData()
+                    self.updateFooter()
+                    //load pictures
+                    
+                    for (index,_) in self.Events.enumerate(){
+                        EventsManager().loadPictureForEvent(&self.Events[index], completionHandler: {
+                            (error:NSError!) -> Void in
+                            if (error == nil){
+                                let cells = self.tableView.visibleCells
+                                for cell in cells{
+                                    if (cell.tag == index){
+                                        (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.Events[index], row: index)
+                                    }
+                                    
+                                }
+                                let ccells = self.collectionView.visibleCells()
+                                for cell in ccells{
+                                    if (cell.tag == index){
+                                        (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.Events[index], row: index)
+                                    }
+                                    
+                                }
+                                //println("\(index) event picture progress \(self.Events[index].pictureProgress) %")
+                                
+                            }else{
+                                print("Error:" + error.description)
+                            }
+                        })
+                        EventsManager().loadProfilePictureForEvent(&self.Events[index], completionHandler: {
+                            (error:NSError!) -> Void in
+                            if (error == nil){
+                                let cells = self.tableView.visibleCells
+                                for cell in cells{
+                                    if (cell.isKindOfClass(ProfileEventTableViewCell)){
+                                        if (cell.tag == index){
+                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
+                                                progress: self.Events[index].profilePictureProgress,
+                                                image: self.Events[index].profilePicture, row: index)
+                                        }
+                                    }else{
+                                        if (cell.tag == index){
+                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
+                                                progress: self.Events[index].profilePictureProgress,
+                                                image: self.Events[index].profilePicture, row: index)
+                                        }
+                                    }
+                                }
+                                //println("\(index) profile picture loaded \(self.Events[index].profilePictureProgress) %")
+                            }else{
+                                print("Error:" + error.description)
+                            }
+                        })
+                    }
+                    
+                    
                 }else{
-                    temp.removeLast()
-                    self.end = false
+                    print("Error:" + error.description)
                 }
-                self.Events = temp
-                for _ in temp {
-                    self.cellHeights.append(0)
-                }
-                self.tableView.reloadData()
-                self.collectionView.reloadData()
-                self.setData()
-                self.updateFooter()
-                //load pictures
-                
-                for (index,_) in self.Events.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.Events[index], completionHandler: {
-                        (error:NSError!) -> Void in
-                        if (error == nil){
-                            let cells = self.tableView.visibleCells
-                            for cell in cells{
-                                if (cell.tag == index){
-                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.Events[index], row: index)
-                                }
-                                
-                            }
-                            let ccells = self.collectionView.visibleCells()
-                            for cell in ccells{
-                                if (cell.tag == index){
-                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.Events[index], row: index)
-                                }
-                                
-                            }
-                            //println("\(index) event picture progress \(self.Events[index].pictureProgress) %")
-                            
-                        }else{
-                            print("Error:" + error.description)
-                        }
-                    })
-                    EventsManager().loadProfilePictureForEvent(&self.Events[index], completionHandler: {
-                        (error:NSError!) -> Void in
-                        if (error == nil){
-                            let cells = self.tableView.visibleCells
-                            for cell in cells{
-                                if (cell.isKindOfClass(ProfileEventTableViewCell)){
-                                    if (cell.tag == index){
-                                        (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
-                                            progress: self.Events[index].profilePictureProgress,
-                                            image: self.Events[index].profilePicture, row: index)
-                                    }
-                                }else{
-                                    if (cell.tag == index){
-                                        (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
-                                            progress: self.Events[index].profilePictureProgress,
-                                            image: self.Events[index].profilePicture, row: index)
-                                    }
-                                }
-                            }
-                            //println("\(index) profile picture loaded \(self.Events[index].profilePictureProgress) %")
-                        }else{
-                            print("Error:" + error.description)
-                        }
-                    })
-                }
-                
-                
-            }else{
-                print("Error:" + error.description)
-            }
         })
     }
     
@@ -245,86 +251,87 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             return
         }
         footerView.startAnimating()
-        
         EventsManager.loadEventsForTarget(Events.last,
             Target: Target,Addit: AdditionalInfo,
             completionHandler: {
-            (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
-            self.footerView.stopAnimating((error == nil) ? true : false)
-            if (error == nil){
-                var temp = downloadedEventsArray
-                
-                if (temp.count < 19){
-                    self.end = true
-                }else{
-                    temp.removeLast()
-                    self.end = false
-                }
-                self.Events += temp
-                for _ in temp {
-                    self.cellHeights.append(0)
-                }
-                self.tableView.reloadData()
-                self.collectionView.reloadData()
-                self.updateFooter()
-                //load pictures
-                
-                for (index,_) in self.Events.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.Events[index], completionHandler: {
-                        (error:NSError!) -> Void in
-                        if (error == nil){
-                            let cells = self.tableView.visibleCells
-                            for cell in cells{
-                                if (cell.tag == index){
-                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.Events[index], row: index)
-                                }
-                                
-                            }
-                            let ccells = self.collectionView.visibleCells()
-                            for cell in ccells{
-                                if (cell.tag == index){
-                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.Events[index], row: index)
-                                }
-                                
-                            }
-                            //println("\(index) event picture progress \(self.TimelineData[index].pictureProgress) %")
-                            
-                        }else{
-                            print("Error:" + error.description)
-                        }
-                    })
-                    EventsManager().loadProfilePictureForEvent(&self.Events[index], completionHandler: {
-                        (error:NSError!) -> Void in
-                        if (error == nil){
-                            let cells = self.tableView.visibleCells
-                            for cell in cells{
-                                if (cell.isKindOfClass(ProfileEventTableViewCell)){
-                                    if (cell.tag == index){
-                                        (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
-                                            progress: self.Events[index].profilePictureProgress,
-                                            image: self.Events[index].profilePicture, row: index)
-                                    }
-                                }else{
-                                    if (cell.tag == index){
-                                        (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
-                                            progress: self.Events[index].profilePictureProgress,
-                                            image: self.Events[index].profilePicture, row: index)
-                                    }
-                                }
-                            }
-                            //println("\(index) profile picture loaded \(self.TimelineData[index].profilePictureProgress) %")
-                        }else{
-                            print("Error:" + error.description)
-                        }
-                    })
-                }
-                
-                
-            }else{
-                print("Error:" + error.description)
-            }
-        })
+                (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
+                self.footerView.stopAnimating((error == nil) ? true : false)
+                if (error == nil){
+                    var temp = downloadedEventsArray
+                    
+                    if (temp.count < 19){
+                        self.end = true
+                    }else{
+                        self.end = false
+                        temp.removeLast()
 
+                    }
+                    
+                    self.Events += temp
+                    for _ in temp {
+                        self.cellHeights.append(0)
+                    }
+                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
+                    self.updateFooter()
+                    //load pictures
+                    
+                    for (index,_) in self.Events.enumerate(){
+                        EventsManager().loadPictureForEvent(&self.Events[index], completionHandler: {
+                            (error:NSError!) -> Void in
+                            if (error == nil){
+                                let cells = self.tableView.visibleCells
+                                for cell in cells{
+                                    if (cell.tag == index){
+                                        (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.Events[index], row: index)
+                                    }
+                                    
+                                }
+                                let ccells = self.collectionView.visibleCells()
+                                for cell in ccells{
+                                    if (cell.tag == index){
+                                        (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.Events[index], row: index)
+                                    }
+                                    
+                                }
+                                //println("\(index) event picture progress \(self.TimelineData[index].pictureProgress) %")
+                                
+                            }else{
+                                print("Error:" + error.description)
+                            }
+                        })
+                        EventsManager().loadProfilePictureForEvent(&self.Events[index], completionHandler: {
+                            (error:NSError!) -> Void in
+                            if (error == nil){
+                                let cells = self.tableView.visibleCells
+                                for cell in cells{
+                                    if (cell.isKindOfClass(ProfileEventTableViewCell)){
+                                        if (cell.tag == index){
+                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
+                                                progress: self.Events[index].profilePictureProgress,
+                                                image: self.Events[index].profilePicture, row: index)
+                                        }
+                                    }else{
+                                        if (cell.tag == index){
+                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.Events[index].profilePictureID as String,
+                                                progress: self.Events[index].profilePictureProgress,
+                                                image: self.Events[index].profilePicture, row: index)
+                                        }
+                                    }
+                                }
+                                //println("\(index) profile picture loaded \(self.TimelineData[index].profilePictureProgress) %")
+                            }else{
+                                print("Error:" + error.description)
+                            }
+                        })
+                    }
+                    
+                    
+                }else{
+                    print("Error:" + error.description)
+                }
+        })
+        
     }
     
     func setData(){
@@ -366,7 +373,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             }
         }
     }
-
+    
     func sizeHeaderToFit(animated:Bool){
         let view = self.tableHeaderView
         view.setNeedsLayout()
@@ -386,7 +393,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             self.tableView.tableHeaderView = view
         }
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -407,7 +414,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             var content = NSMutableAttributedString(string: "\(authorNameText)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 14)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-            content = NSMutableAttributedString(string: " \(self.Events[indexPath.row].details)", attributes: attrs)
+            content = NSMutableAttributedString(string: " \(self.Events[indexPath.row].shortDescription)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
         }
         let eventTimeAndLocationText = NSMutableAttributedString()
@@ -428,7 +435,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         }
         
         
-        if (self.Events[indexPath.row].pictureId != ""){ // Image with Cell
+        if (self.Events[indexPath.row].pictureId != ""){ // Cell with Image
             
             let Cell:ProfileEventTableViewCell = tableView.dequeueReusableCellWithIdentifier("Event Cell", forIndexPath: indexPath) as! ProfileEventTableViewCell
             Cell.tag = indexPath.row
@@ -447,7 +454,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 Cell.EventDescription.delegate = self
                 Cell.EventDescription.tag = indexPath.row
             }
-            
+            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushAuthor:")
+            Cell.ProfileView.addGestureRecognizer(pushAuthorRec)
+            Cell.ProfileView.tag = Cell.tag
             // clickable location
             if (self.Events[indexPath.row].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
@@ -478,6 +487,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             Cell.ShareButton.initialize(self.Events[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
+            Cell.MoreButton.tag = indexPath.row
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
             
@@ -505,9 +515,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             Cell.EventPicture.addGestureRecognizer(pushEventRec1)
             Cell.ProgressView.addGestureRecognizer(pushEventRec2)
             
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -538,7 +548,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 Cell.EventDescription.delegate = self
                 Cell.EventDescription.tag = indexPath.row
             }
-            
+            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushAuthor:")
+            Cell.ProfileView.addGestureRecognizer(pushAuthorRec)
+            Cell.ProfileView.tag = Cell.tag
             // clickable location
             if (self.Events[indexPath.row].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
@@ -583,15 +595,16 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.MoreButton.tag = indexPath.row
             
             Cell.contentView.userInteractionEnabled = true
             let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
             Cell.EventView.userInteractionEnabled = true
             Cell.EventView.tag = indexPath.row
             Cell.EventView.addGestureRecognizer(EventNameTapRecognizer)
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             let descrHeight = Cell.EventDescription.sizeThatFits(CGSizeMake(Cell.EventDescription.frame.width, CGFloat.max)).height
@@ -610,8 +623,26 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
-        UIApplication.sharedApplication().openURL((url)!)
-        
+        //        var tag = label.tag
+        print(url.scheme)
+        if (url.scheme == "pushAuthor"){ // url = "scheme://host" , host is username
+            let row = label.tag
+            if (Events[row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+                
+                let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }else{ //clicked on someone else
+                
+                let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+                VC.user = Events[row].author!
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }
+            
+        }else if (url.scheme == "mention"){
+            pushUserByUsername(url.host!)
+        }
     }
     
     func like(sender: HomeLikeButton){
@@ -633,6 +664,31 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         self.Events[sender.superview!.superview!.tag].shareManager.Share()
         
     }
+    func more(sender: HomeMoreButton){
+        //        print("more pressed \(sender.superview!.superview!.tag)")
+        //        eventsManager.More((sender.superview!.superview!.tag), button: sender)
+        let row = sender.tag
+        print(row)
+        self.Events[row].moreManager.showInView(self.view ,event:self.Events[row],row: row, handler: {
+            (result:String,error:NSError!) -> Void in
+            if result == "Deleting" {
+                
+            } else if result == "FailedToDelete" {
+                
+            } else if result == "Deleted" {
+                self.Events.removeAtIndex(row)
+                dispatch_async(dispatch_get_main_queue(), {
+                    () -> Void in
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    self.tableView.endUpdates()
+                    self.collectionView.performBatchUpdates({ () -> Void in
+                        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: row, inSection: 0)])
+                        }, completion: nil)
+                })
+            }
+        })
+    }
     
     func refresh(sender: UIButton){
         (sender.superview! as! EProgressView).updateProgress(0)
@@ -651,7 +707,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
     func eventDeleted(atIndex: Int) {
         tableView.deleteSections(NSIndexSet(index: atIndex), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
-    func PushLikes(sender:UIButton){
+    func pushLikes(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
@@ -660,7 +716,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    func PushGoing(sender:UIButton){
+    func pushGoing(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
@@ -669,7 +725,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    func PushShares(sender:UIButton){
+    func pushShares(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
@@ -689,7 +745,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-
+    
     
     func PushEventViewController(sender:UITapGestureRecognizer)->Void{
         
@@ -705,10 +761,9 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
-    func PushUserProfileViewController(sender:UITapGestureRecognizer){
-        let ViewSender = sender.view!
-        let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)
-        if (Events[SelectedIndexPath.row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+    func pushAuthor(sender:UITapGestureRecognizer){
+        let senderTag = sender.view!.tag
+        if (Events[senderTag].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
             
             let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
             self.navigationController?.pushViewController(VC, animated: true)
@@ -716,11 +771,12 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         }else{ //clicked on someone else
             
             let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
-            VC.user = Events[SelectedIndexPath.row].author!
+            VC.user = Events[senderTag].author!
             self.navigationController?.pushViewController(VC, animated: true)
             
         }
     }
+    
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return Events.count
@@ -737,6 +793,10 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         var frame = Cell.eventNameLabel.frame
         Cell.eventNameLabel.sizeToFit()
         frame.size.height = Cell.eventNameLabel.frame.size.height
+        let maxHeight = (collectionCellHeight-collectionCellWidth-8)
+        if frame.size.height > maxHeight {
+            frame.size.height = maxHeight
+        }
         Cell.eventNameLabel.frame = frame
         Cell.contentView.tag = indexPath.row
         Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "PushEventViewController:"))
@@ -746,7 +806,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         Cell.eventDateLabel.attributedText = shortenedString
         Cell.UpdateEventPicture(self.Events[indexPath.row], row: indexPath.row)
         return Cell
-
+        
     }
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -794,7 +854,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             footerView.removeFromSuperview()
             flowLayout.footerReferenceSize = CGSizeZero
             collectionFooter.setNeedsDisplay()
-            print("remove")
+            print("remove footer")
         } else {
             if (selectedView == 1){
                 tableView.tableFooterView = nil
@@ -808,11 +868,25 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 flowLayout.footerReferenceSize = CGSizeZero
                 tableView.tableFooterView = footerView
             }
-            print("display")
+            print("display footer")
         }
     }
-
-
+    
+    func pushUserByUsername(username:String){
+        print("by username")
+        
+        if (username == KCSUser.activeUser().username){
+            
+            let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+            self.navigationController?.pushViewController(VC, animated: true)
+            
+        }else{
+            
+            let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+            VC.username = username
+            self.navigationController?.pushViewController(VC, animated: true)
+        }
+    }
     
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {

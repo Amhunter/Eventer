@@ -635,7 +635,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                         handler(progress: percentComplete, error: nil)
                 }
             } else {
-                FileDownloadManager.uploadImage(image!, completionBlock: {
+                FileDownloadManager.uploadImage(image!,options:nil, completionBlock: {
                     (error:NSError!, fileId:String!) -> Void in
                     if error == nil {
                         event.pictureId = fileId
@@ -657,9 +657,84 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             }
     }
     
-    class func modifyEventData(event:FetchedEvent, imageChanged: Bool, newImage: UIImage!, completionBlock:(updatedEvent:Event!, error:NSError!) -> Void) {
+    class func modifyEventData(event:FetchedEvent, imageChanged: Bool, removeImage:Bool, completionBlock:(updatedEvent:Event!, error:NSError!) -> Void) {
+        let eventToUpload:Event = event.eventOriginal
+        eventToUpload.name = event.name
+        eventToUpload.date = event.date
+        if event.details != "" {
+            eventToUpload.details = event.details
+        }
         
         
+        // first try to update picture
+        if imageChanged {
+            if !removeImage {
+                // upload picture
+                let options:NSMutableDictionary = NSMutableDictionary()
+                
+                // specify id of the picture, to replace if there is one already
+                if event.pictureId != "" {
+                    options[KCSFileId] = event.pictureId
+                }
+                
+                FileDownloadManager.uploadImage(event.picture, options: options, completionBlock: {
+                    (error:NSError!, fileId:String!) -> Void in
+                    if error == nil {
+                        eventToUpload.pictureId = fileId
+                        // Picture Uploaded, now update event and link picture id
+                        
+                        GeneralUploadManager.uploadObject(eventToUpload, tableName: "Events", completionBlock: {
+                            (objects:[AnyObject]!, error:NSError!) -> Void in
+                            if error == nil {
+                                completionBlock(updatedEvent: eventToUpload,error: nil)
+                            } else {
+                                completionBlock(updatedEvent: nil,error: error)
+                            }
+                            }, progressBlock: nil)
+                        
+                        
+                    } else {
+                        completionBlock(updatedEvent: nil,error: error)
+                        print("Couldn't upload picture\n \(error.description)")
+                    }
+                })
+                
+            } else {
+                
+                // delete if needed
+                if eventToUpload.pictureId != nil {
+                    FileDownloadManager.deleteImage(eventToUpload.pictureId! as String, completionBlock: {
+                        (error:NSError!) -> Void in
+                        if error == nil {
+                            eventToUpload.pictureId = nil
+                            
+                            // Picture Deleted, now update event and link picture id
+                            GeneralUploadManager.uploadObject(eventToUpload, tableName: "Events", completionBlock: {
+                                (objects:[AnyObject]!, error:NSError!) -> Void in
+                                if error == nil {
+                                    completionBlock(updatedEvent: eventToUpload,error: nil)
+                                } else {
+                                    completionBlock(updatedEvent: nil,error: error)
+                                }
+                                }, progressBlock: nil)
+                            
+                        } else {
+                            completionBlock(updatedEvent: nil,error: error)
+                            print("Couldn't delete picture\n \(error.description)")
+                        }
+                    })
+                }
+            }
+        } else {
+            GeneralUploadManager.uploadObject(eventToUpload, tableName: "Events", completionBlock: {
+                (objects:[AnyObject]!, error:NSError!) -> Void in
+                if error == nil {
+                    completionBlock(updatedEvent: eventToUpload,error: nil)
+                } else {
+                    completionBlock(updatedEvent: nil,error: error)
+                }
+            }, progressBlock: nil)
+        }
     }
 
     
@@ -684,7 +759,8 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             
             
             if (lastObject != nil){ // limit 10 + 1 to check if there is anything left
-                query = GeneralDownloadManager.loadMoreQuery(lastObject, query: query, limit: 19, table: "Events")
+                
+                query = GeneralDownloadManager.loadMoreQuery(lastObject!, query: query, limit: 19, table: "Events")
             }else{
                 query.limitModifer = KCSQueryLimitModifier(limit: 19)
                 query.addSortModifier(KCSQuerySortModifier(field: "createdAt", inDirection: KCSSortDirection.Descending))

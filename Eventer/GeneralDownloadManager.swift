@@ -105,6 +105,9 @@ class GeneralDownloadManager {
         })
     }
     
+    /* loadMoreQuery
+     * Modify existing query to set limit
+     */
     class func loadMoreQuery(lastObject:AnyObject,query:KCSQuery,limit:Int,table:String) -> KCSQuery{
         query.limitModifer = KCSQueryLimitModifier(limit: limit)
         if (table == "Events"){

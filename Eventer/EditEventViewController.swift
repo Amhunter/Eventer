@@ -20,6 +20,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
     let datePickerView = EventDatePickerView()
     let imageView = UIImageView()
     var imageChanged = false
+    var removeImage = false
     let progressActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
     
     var event:FetchedEvent!
@@ -198,11 +199,11 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         event.details = eventDescriptionTextview.text
         event.date = self.eventDate
         event.pictureProgress = 1
-        if imageChanged {
-            (imageView.image != nil) ? (event.picture = imageView.image!) : (event.picture = UIImage())
-        }
+//        if imageChanged {
+//            (imageView.image != nil) ? (event.picture = imageView.image!) : (event.picture = UIImage())
+//        }
         // Try to Save
-        EventsManager.modifyEventData(event, imageChanged: imageChanged, newImage: (imageView.image != nil) ? event.picture : nil) {
+        EventsManager.modifyEventData(event, imageChanged: imageChanged, removeImage: removeImage) {
             (updatedEvent:Event!, error:NSError!) -> Void in
             if error == nil {
                 if updatedEvent != nil {
@@ -407,9 +408,11 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         if image == nil {
             event.picture = UIImage()
             imageView.image = nil
+            removeImage = true
         } else {
             event.picture = image
             imageView.image = image
+            removeImage = false
         }
     }
     

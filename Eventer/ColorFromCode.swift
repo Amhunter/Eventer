@@ -44,7 +44,7 @@ class ColorFromCode {
         return self.colorWithHexString("#02A8F3")
     }
     class func sexyPurpleColor() -> UIColor {
-        return self.colorWithHexString("#FF4500")
+        return self.colorWithHexString("#663399")
     }
     class func orangeFollowColor() -> UIColor{
         return self.colorWithHexString("#FF4500")
@@ -52,6 +52,10 @@ class ColorFromCode {
     class func redFollowColor() -> UIColor{
         return self.colorWithHexString("#FF2300")
     }
+    class func sexyOrangeColor() -> UIColor{
+        return self.colorWithHexString("#FF4500")
+    }
+    
     class func randomBlueColorFromNumber(number:Int) -> UIColor{
 //        var code:[String] = ["#03A9F5","#4FC2F8","#039BE6","#0288D1","#28B6F6","#05A8F7"]
         switch number%6{

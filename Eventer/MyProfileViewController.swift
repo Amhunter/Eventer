@@ -43,7 +43,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var screenWidth = UIScreen.mainScreen().bounds.width
     var screenHeight = UIScreen.mainScreen().bounds.height
-    var TimelineData:[FetchedEvent] = []
+    var events:[FetchedEvent] = []
     
     //!----Profile Data-------------------//
     
@@ -64,14 +64,14 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     var bioLabel:UILabel = UILabel()
     var fullNameLabel:UILabel = UILabel()
     var websiteLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
-    var editProfileButton:UILabel = UILabel()
+    var editProfileButton:UIButton = UIButton()
     
     
     var numberOfEventsLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var numberOfFollowersLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var numberOfFollowingLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var profilePictureImageView:UIImageView = UIImageView()
-    
+    var profilePictureShadowView = UIView()
     
     var collectionCellWidth = (UIScreen.mainScreen().bounds.width-2)/3
     var collectionCellHeight = (UIScreen.mainScreen().bounds.width-2)/2
@@ -79,7 +79,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
 
     var gridButton:UIButton = UIButton()
     var tableButton:UIButton = UIButton()
-    
+    var goingButton:UIButton = UIButton() // button which oopens list of events person going to
+
     var NowDate:NSDate = NSDate() //default constructor gets current date if I get it right
     var tableView: UITableView = UITableView()
     var collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -89,6 +90,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     var end = false
     var gridUnderline = UIView()
     var tableUnderline = UIView()
+    var goingUnderline = UIView()
     var selectedView:Int = 0
     var t1 = UITableViewController()
     
@@ -115,26 +117,28 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
 
-    func Set_Subviews(){
+    func setSubviews(){
         let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
         }
         // bar button
-        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "test")
+        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "pushSettings")
         settingsButton.tintColor = UIColor.whiteColor()
         
         self.navigationItem.rightBarButtonItem = settingsButton
-        // refresh controls
+        
+        // Refresh controls
         t1.refreshControl = tableViewRefreshControl
         collectionView.addSubview(collectionViewRefreshControl)
-        tableViewRefreshControl.layer.zPosition = -1
-        collectionViewRefreshControl.layer.zPosition = -1
+        tableViewRefreshControl.tintColor = UIColor.whiteColor()
+        collectionViewRefreshControl.tintColor = UIColor.whiteColor()
         tableViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
         collectionViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
-        footerView.button.addTarget(self, action: "LoadMoreEvents", forControlEvents: UIControlEvents.TouchUpInside)
-        //!----TableView---------//
+        footerView.button.addTarget(self, action: "loadMoreEvents", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        // Table View
 
         let offset = self.navigationController!.navigationBar.frame.height + UIApplication.sharedApplication().statusBarFrame.height + self.tabBarController!.tabBar.frame.height
         tableView.allowsSelection = false
@@ -144,7 +148,6 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.registerClass(ProfileNoPictureTableViewCell.self, forCellReuseIdentifier: "EventNoPic Cell")
         tableView.frame = CGRectMake(0, 0, screenWidth, self.view.frame.height-offset)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-//        tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         self.addChildViewController(t1)
         t1.tableView = tableView
@@ -166,14 +169,27 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         collectionView.registerClass(ExploreCollectionViewCell.self, forCellWithReuseIdentifier: "collection Cell")
         collectionView.registerClass(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.registerClass(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footer")
-
         collectionView.hidden = true
-        editProfileButton.textAlignment = NSTextAlignment.Center
-        editProfileButton.text = "Edit Your Profile"
-        editProfileButton.font = UIFont(name: "Lato-Regular", size: 14)
-        editProfileButton.textColor = ColorFromCode.colorWithHexString("#0087D9")
+        
+        // Edit Profile Button
+        editProfileButton.setTitle("Edit Your Profile", forState: UIControlState.Normal)
+        editProfileButton.titleLabel!.font = UIFont(name: "Lato-Regular", size: 14)
+        editProfileButton.setTitleColor(ColorFromCode.colorWithHexString("#0087D9"), forState: UIControlState.Normal)
+        editProfileButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
         editProfileButton.backgroundColor = ColorFromCode.colorWithHexString("#EBF0F2")
-
+        editProfileButton.addTarget(self, action: "editProfile", forControlEvents: UIControlEvents.TouchUpInside)
+        editProfileButton.layer.cornerRadius = 4
+        
+        // Grid and Table Buttons
+        gridButton.tag = 1
+        tableButton.tag = 2
+        gridButton.enabled = false
+        tableButton.enabled = false
+        gridButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        tableButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        // Labels
         numberOfFollowersLabel.textAlignment = NSTextAlignment.Center
         numberOfFollowersLabel.numberOfLines = 2
         numberOfFollowingLabel.textAlignment = NSTextAlignment.Center
@@ -181,13 +197,6 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         numberOfEventsLabel.textAlignment = NSTextAlignment.Center
         numberOfEventsLabel.numberOfLines = 2
         
-
-        gridButton.tag = 1
-        tableButton.tag = 2
-        gridButton.enabled = false
-        tableButton.enabled = false
-        gridButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        tableButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         var attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 21)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         var content = NSMutableAttributedString(string: " ", attributes: attrs)
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
@@ -199,47 +208,71 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         content.appendAttributedString(NSMutableAttributedString(string: "\nfollowing", attributes: attrs))
         numberOfFollowingLabel.attributedText = content
-
+        
         
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 21)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         content = NSMutableAttributedString(string: " ", attributes: attrs)
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         content.appendAttributedString(NSMutableAttributedString(string: "\nevents", attributes: attrs))
         numberOfEventsLabel.attributedText = content
-
         
         
         fullNameLabel.font = UIFont(name: "Lato-Semibold", size: 18)
         fullNameLabel.textAlignment = NSTextAlignment.Center
         fullNameLabel.numberOfLines = 0
         
-        bioLabel.font = UIFont(name: "Lato-Regular", size: 13)
+        bioLabel.font = UIFont(name: "Lato-Regular", size: 14)
         bioLabel.textAlignment = NSTextAlignment.Left
-        bioLabel.textColor = UIColor.darkGrayColor()
+        bioLabel.textColor = UIColor.blackColor()
         bioLabel.numberOfLines = 0
         
-        websiteLabel.font = UIFont(name: "Lato-Regular", size: 13)
+        websiteLabel.font = UIFont(name: "Lato-Regular", size: 14)
         websiteLabel.textAlignment = NSTextAlignment.Left
         websiteLabel.textColor = UIColor.darkGrayColor()
         websiteLabel.numberOfLines = 0
 
         profilePictureImageView.backgroundColor = UIColor.groupTableViewBackgroundColor()
         profilePictureImageView.layer.cornerRadius = 8
+        profilePictureImageView.layer.borderWidth = 2
+        profilePictureImageView.layer.borderColor = UIColor.whiteColor().CGColor
         profilePictureImageView.layer.masksToBounds = true // otherwise the corner radius doesnt work
         
-
-        //Refresh control
-        //self.tableView.addSubview(tableViewRefreshControl)
-        //
+        profilePictureShadowView.layer.shadowOffset = CGSizeMake(0, 0)
+        profilePictureShadowView.layer.shadowRadius = 3
+        profilePictureShadowView.layer.shadowColor = UIColor.blackColor().CGColor
+        profilePictureShadowView.layer.shadowOpacity = 0.4
         
+        let standardImage = UIImage(named: "going")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        let highlightedImage = UIImage(named: "going")
+        goingButton.tintColor = ColorFromCode.tabForegroundColor()
+        goingButton.setImage(standardImage, forState: UIControlState.Normal)
+        goingButton.setImage(highlightedImage, forState: UIControlState.Highlighted)
+        goingButton.enabled = false
+        goingUnderline.backgroundColor = ColorFromCode.colorWithHexString("#DAE4E7")
+        goingButton.addTarget(self, action: "pushGoingEventList", forControlEvents: UIControlEvents.TouchUpInside)
+        
+
+        // Set Refresh Control Background Color
+        let tableViewRefreshBackground = UIView()
+        let collectionViewRefreshBackground = UIView()
+        let height:CGFloat = screenHeight
+        tableViewRefreshBackground.frame.origin.y = -height
+        collectionViewRefreshBackground.frame.origin.y = -height
+        tableViewRefreshBackground.backgroundColor = ColorFromCode.standardBlueColor()
+        collectionViewRefreshBackground.backgroundColor = ColorFromCode.standardBlueColor()
+        tableViewRefreshBackground.frame.size = CGSizeMake(screenWidth,height)
+        collectionViewRefreshBackground.frame.size = CGSizeMake(screenWidth,height)
+        self.tableView.insertSubview(tableViewRefreshBackground, atIndex: 0)
+        self.collectionView.insertSubview(collectionViewRefreshBackground, atIndex: 0)
+
         //Edit Profile button
-        let EditProfileTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "Edit_Profile")
+        let EditProfileTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "editProfile")
         editProfileButton.addGestureRecognizer(EditProfileTapRecognizer)
         editProfileButton.userInteractionEnabled = true
         //
         
         //Show Followers Button
-        let ShowFollowersTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "Push_Followers_List")
+        let ShowFollowersTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushFollowers")
         numberOfFollowersLabel.addGestureRecognizer(ShowFollowersTapRecognizer)
         numberOfFollowersLabel.userInteractionEnabled = true
         
@@ -300,6 +333,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 gridUnderline.backgroundColor = ColorFromCode.colorWithHexString("#DAE4E7")
             }
         }
+
     }
     func sizeHeaderToFit(animated:Bool){
         let view = self.tableHeaderView
@@ -320,22 +354,21 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             self.tableView.tableHeaderView = view
         }
     }
-    func Make_AutoLayout(){
-        
+    func setTableHeaderView(){
         
         //!---Set Header View
-        tableHeaderView.addSubview(profilePictureImageView)
-        tableHeaderView.addSubview(numberOfEventsLabel)
+        tableHeaderView.addSubview(profilePictureShadowView)
+        //tableHeaderView.addSubview(numberOfEventsLabel)
         tableHeaderView.addSubview(numberOfFollowingLabel)
         tableHeaderView.addSubview(numberOfFollowersLabel)
         tableHeaderView.addSubview(editProfileButton)
         tableHeaderView.addSubview(fullNameLabel)
         tableHeaderView.addSubview(bioLabel)
-        tableHeaderView.addSubview(websiteLabel)
         tableHeaderView.addSubview(gridButton)
         tableHeaderView.addSubview(tableButton)
+        tableHeaderView.addSubview(goingButton)
 
-        profilePictureImageView.translatesAutoresizingMaskIntoConstraints = false
+        profilePictureShadowView.translatesAutoresizingMaskIntoConstraints = false
         numberOfEventsLabel.translatesAutoresizingMaskIntoConstraints = false
         numberOfFollowingLabel.translatesAutoresizingMaskIntoConstraints = false
         numberOfFollowersLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -345,11 +378,13 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         websiteLabel.translatesAutoresizingMaskIntoConstraints = false
         gridButton.translatesAutoresizingMaskIntoConstraints = false
         tableButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        goingButton.translatesAutoresizingMaskIntoConstraints = false
+
         
         // for autoresizable labels
         bioLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
         bioLabel.setContentCompressionResistancePriority(500, forAxis: UILayoutConstraintAxis.Vertical)
+        
         //!---Constraints
         let border:UIView = UIView()
         border.translatesAutoresizingMaskIntoConstraints = false
@@ -361,50 +396,52 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableUnderline.translatesAutoresizingMaskIntoConstraints = false
         self.tableHeaderView.addSubview(tableUnderline)
+        
+        goingUnderline.translatesAutoresizingMaskIntoConstraints = false
+        self.tableHeaderView.addSubview(goingUnderline)
         let views =
         [
-            "pp": profilePictureImageView,
+            "pp": profilePictureShadowView,
             "ne": numberOfEventsLabel,
             "nfws": numberOfFollowersLabel,
             "nfwg": numberOfFollowingLabel,
             "editbtn": editProfileButton,
             "biolbl": bioLabel,
             "fullnamelbl": fullNameLabel,
-            "websitelbl": websiteLabel,
             "border": border,
             "gridButton": gridButton,
             "tableButton": tableButton,
+            "goingButton": goingButton,
             "gridUnderline": gridUnderline,
-            "tableUnderline": tableUnderline
+            "tableUnderline": tableUnderline,
+            "goingUnderline": goingUnderline
         ]
         let metrics = [
             "o" : 15
         ]
 //        let H_Constraint0 = NSLayoutConstraint(item: profilePictureImageView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.tableHeaderView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
         let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[fullnamelbl]-15@999-|", options: [], metrics: nil, views: views)
-        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[nfwg(==ne)]-10-[pp(80@999)]-10-[nfws(==nfwg)]-10@999-|", options: [], metrics: metrics, views: views)
+        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[nfwg(==nfws)]-10-[pp(100@999)]-10-[nfws(==nfwg)]-10@999-|", options: [], metrics: metrics, views: views)
         let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-30-[editbtn]-30@999-|", options: [], metrics: metrics, views: views)
-        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[biolbl]-15@999-|", options: [], metrics: nil, views: views)
-        let H_Constraint5 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-o-[websitelbl]-10@999-|", options: [], metrics: metrics, views: views)
-        let H_Constraint6 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridButton(==tableButton)][tableButton]|", options: [], metrics: metrics, views: views)
+        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[biolbl(>=0@999)]-15@999-|", options: [], metrics: nil, views: views)
+        let H_Constraint6 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridButton(==tableButton)][tableButton(==goingButton)][goingButton(==gridButton)]|", options: [], metrics: metrics, views: views)
         let H_Constraint7 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[border]|", options: [], metrics: metrics, views: views)
-        let H_Constraint8 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridUnderline(==tableUnderline)][tableUnderline]|", options: [], metrics: metrics, views: views)
+        let H_Constraint8 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridUnderline(==tableUnderline)][tableUnderline(==goingUnderline)][goingUnderline]|", options: [], metrics: metrics, views: views)
 
         
 
-        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10@999-[pp(80@999)]-5@999-[fullnamelbl(>=0@300)]-10-[editbtn(35)]-5-[biolbl(>=0@300)]-2-[websitelbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
-        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[nfws(==pp)]-10-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl(>=0@300)]-2-[websitelbl]-10-[border(0.5)]-13-[gridButton]-13-[gridUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
-        let V_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[nfwg(==pp)]-10-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl(>=0@999)]-2-[websitelbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10@999-[pp(100@999)]-5@999-[fullnamelbl(>=0@300)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50@999-[nfws]-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[gridButton]-13-[gridUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50@999-[nfwg]-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[goingButton]-13-[goingUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
 
 //        let V_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[pp(100)]-5-[fullnamelbl]-4-[editbtn(>=0@999)]-5-[biolbl]-2-[websitelbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
 
-        let squarePictureConstraint = NSLayoutConstraint(item: profilePictureImageView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: profilePictureImageView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0)
+        let squarePictureConstraint = NSLayoutConstraint(item: profilePictureShadowView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: profilePictureShadowView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0)
         self.fullNameLabel.preferredMaxLayoutWidth = screenWidth-120
         self.tableHeaderView.addConstraints(H_Constraint0)
         self.tableHeaderView.addConstraints(H_Constraint1)
         self.tableHeaderView.addConstraints(H_Constraint2)
         self.tableHeaderView.addConstraints(H_Constraint4)
-        self.tableHeaderView.addConstraints(H_Constraint5)
         self.tableHeaderView.addConstraints(H_Constraint6)
         self.tableHeaderView.addConstraints(H_Constraint7)
         self.tableHeaderView.addConstraints(H_Constraint8)
@@ -412,18 +449,27 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableHeaderView.addConstraints(V_Constraint0)
         self.tableHeaderView.addConstraints(V_Constraint1)
         self.tableHeaderView.addConstraints(V_Constraint2)
-//        self.tableHeaderView.addConstraints(V_Constraint3)
+
         self.tableHeaderView.addConstraint(squarePictureConstraint)
         self.tableHeaderView.setNeedsLayout()
         self.tableHeaderView.layoutIfNeeded()
+        profilePictureShadowView.addSubview(profilePictureImageView)
+        self.profilePictureImageView.frame.size = self.profilePictureShadowView.frame.size
+        
         bioLabel.preferredMaxLayoutWidth = bioLabel.frame.width
         self.tableHeaderView.setNeedsUpdateConstraints()
         self.tableHeaderView.updateConstraintsIfNeeded()
         sizeHeaderToFit(true)
-//        gridUnderline.layer.addSublayer(Utility.gradientLayer(gridUnderline.frame, height: 2, alpha: 0.3))
-//        tableUnderline.layer.addSublayer(Utility.gradientLayer(tableUnderline.frame, height: 2, alpha: 0.3))
 
-
+        
+        let blueView = UIView()
+        blueView.backgroundColor = ColorFromCode.standardBlueColor()
+        blueView.frame.size = CGSizeMake(screenWidth,50)
+        self.tableHeaderView.addSubview(blueView)
+        self.tableHeaderView.sendSubviewToBack(blueView)
+        
+        
+        
     }
 
 
@@ -431,8 +477,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         Utility.checkForBeingActive()
-        Set_Subviews()
-        Make_AutoLayout()
+        setSubviews()
+        setTableHeaderView()
         switchToView(1)
         selectedView = 0
         Refresh()
@@ -450,10 +496,10 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         Utility.checkForBeingActive()
         NowDate = NSDate()
-        Load_Profile_Data()
-        Load_Events()
+        loadProfileData()
+        loadEvents()
     }
-    func Load_Profile_Data(){
+    func loadProfileData(){
         
         var Done:Bool = false
         if (mainUserDataLoaded == false){
@@ -468,10 +514,10 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                     
                     if (self.additionalUserDataLoaded && !Done){
                         Done = true
-                        self.Set_Profile_Data()
+                        self.setProfileData()
                     }
                     self.mainUserDataLoaded = true
-                    self.Load_Profile_Picture()
+                    self.loadProfilePicture()
                     
                 }else{
                     print("Error: " + error.description)
@@ -480,7 +526,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             
         }else{
             self.fetcheduser = FetchedUser(forUser: KCSUser.activeUser(), username: nil)
-            self.Load_Profile_Picture()
+            self.loadProfilePicture()
         }
         if (additionalUserDataLoaded == false){
             let store = KCSLinkedAppdataStore.storeWithOptions([
@@ -504,7 +550,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                         folDone = true
                         if (self.mainUserDataLoaded && !Done){
                             Done = true
-                            self.Set_Profile_Data()
+                            self.setProfileData()
                         }
                         self.additionalUserDataLoaded = true
                     }
@@ -527,7 +573,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                         folDone = true
                         if (self.mainUserDataLoaded && !Done){
                             Done = true
-                            self.Set_Profile_Data()
+                            self.setProfileData()
                         }
                         self.additionalUserDataLoaded = true
                         
@@ -554,7 +600,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                         folDone = true
                         if (self.mainUserDataLoaded && !Done){
                             Done = true
-                            self.Set_Profile_Data()
+                            self.setProfileData()
                         }
                         self.additionalUserDataLoaded = true
                         
@@ -569,7 +615,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
-    func Load_Profile_Picture(){
+    func loadProfilePicture(){
         //! get pic
         if ((KCSUser.activeUser().getValueForAttribute("pictureId") != nil) && (KCSUser.activeUser().getValueForAttribute("pictureId") as! String != "")){
             self.profilePictureID = KCSUser.activeUser().getValueForAttribute("pictureId") as! String
@@ -579,7 +625,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                     if (images.count > 0){
                         self.profilePicture = images[0]
                         self.profilePictureProgress = 1
-                        self.Set_Profile_Picture()
+                        self.setProfilePicture()
                         
                     }else{
                         self.profilePictureProgress = -1
@@ -594,17 +640,17 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 (objects:[AnyObject]!, percentComplete:Double) -> Void in
                 self.profilePictureProgress = percentComplete
                 if (self.profilePictureProgress == 1){
-                    self.Set_Profile_Picture()
+                    self.setProfilePicture()
                 }
             })
 
         }else{
             self.profilePictureID = ""
-            self.Set_Profile_Picture()
+            self.setProfilePicture()
             
         }
     }
-    func Set_Profile_Picture(){
+    func setProfilePicture(){
         if (self.profilePictureID == ""){//no picture
             self.profilePictureImageView.image = UIImage(named: "defaultPicture.png")!
         }else{
@@ -615,11 +661,11 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 let cells = self.tableView.visibleCells
                 for cell in cells{
                     if (cell.isKindOfClass(ProfileEventTableViewCell)){
-                        if (TimelineData[cell.tag].author!.userId == KCSUser.activeUser().userId){
+                        if (events[cell.tag].author!.userId == KCSUser.activeUser().userId){
                             (cell as! ProfileEventTableViewCell).ProfilePicture.image = self.profilePicture
                         }
                     }else{
-                        if (TimelineData[cell.tag].author!.userId == KCSUser.activeUser().userId){
+                        if (events[cell.tag].author!.userId == KCSUser.activeUser().userId){
                             (cell as! ProfileNoPictureTableViewCell).ProfilePicture.image = self.profilePicture
                         }
                     }
@@ -628,7 +674,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func Set_Profile_Data(){
+    func setProfileData(){
         let titleLabel:UILabel = UILabel()
         titleLabel.numberOfLines = 1
         titleLabel.text = self.fetcheduser.username.uppercaseString
@@ -672,7 +718,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
         numberOfFollowersLabel.attributedText = followers
         numberOfFollowingLabel.attributedText = following
-        Set_Events()
+        setEvents()
         sizeHeaderToFit(true)
         self.mainUserDataLoaded = false
         self.additionalUserDataLoaded = false
@@ -683,7 +729,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.bioLabel.sizeToFit()
 
     }
-    func Set_Events(){
+    func setEvents(){
         
         let events:NSMutableAttributedString = NSMutableAttributedString()
         
@@ -697,13 +743,14 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         numberOfEventsLabel.attributedText = events
 
     }
-    func Load_Events(){
+    func loadEvents(){
         EventsManager().loadEventsForProfileView(nil,forUserId: KCSUser.activeUser().userId, completionHandler: {
             (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
             self.tableViewRefreshControl.endRefreshing()
             self.collectionViewRefreshControl.endRefreshing()
             self.gridButton.enabled = true
             self.tableButton.enabled = true
+            self.goingButton.enabled = true
             if (error == nil){
                 var temp = downloadedEventsArray
                 
@@ -713,61 +760,61 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                     temp.removeLast()
                     self.end = false
                 }
-                self.TimelineData = temp
+                self.events = temp
                 for _ in temp {
                     self.cellHeights.append(0)
                 }
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
-                self.Set_Events()
+                self.setEvents()
                 self.updateFooter()
                 //load pictures
                 
-                for (index,_) in self.TimelineData.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.TimelineData[index], completionHandler: {
+                for (index,_) in self.events.enumerate(){
+                    EventsManager().loadPictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         if (error == nil){
                             let cells = self.tableView.visibleCells
                             for cell in cells{
                                 if (cell.tag == index){
-                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.TimelineData[index], row: index)
+                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.events[index], row: index)
                                 }
                                 
                             }
                             let ccells = self.collectionView.visibleCells()
                             for cell in ccells{
                                 if (cell.tag == index){
-                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.TimelineData[index], row: index)
+                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.events[index], row: index)
                                 }
                                 
                             }
-                            //println("\(index) event picture progress \(self.TimelineData[index].pictureProgress) %")
+                            //println("\(index) event picture progress \(self.events[index].pictureProgress) %")
                             
                         }else{
                             print("Error:" + error.description)
                         }
                     })
-                    if (self.TimelineData[index].author!.userId! != KCSUser.activeUser().userId){
-                        EventsManager().loadProfilePictureForEvent(&self.TimelineData[index], completionHandler: {
+                    if (self.events[index].author!.userId! != KCSUser.activeUser().userId){
+                        EventsManager().loadProfilePictureForEvent(&self.events[index], completionHandler: {
                             (error:NSError!) -> Void in
                             if (error == nil){
                                 let cells = self.tableView.visibleCells
                                 for cell in cells{
                                     if (cell.isKindOfClass(ProfileEventTableViewCell)){
                                         if (cell.tag == index){
-                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                                                progress: self.TimelineData[index].profilePictureProgress,
-                                                image: self.TimelineData[index].profilePicture, row: index)
+                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.events[index].profilePictureID as String,
+                                                progress: self.events[index].profilePictureProgress,
+                                                image: self.events[index].profilePicture, row: index)
                                         }
                                     }else{
                                         if (cell.tag == index){
-                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                                                progress: self.TimelineData[index].profilePictureProgress,
-                                                image: self.TimelineData[index].profilePicture, row: index)
+                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.events[index].profilePictureID as String,
+                                                progress: self.events[index].profilePictureProgress,
+                                                image: self.events[index].profilePicture, row: index)
                                         }
                                     }
                                 }
-                                //println("\(index) profile picture loaded \(self.TimelineData[index].profilePictureProgress) %")
+                                //println("\(index) profile picture loaded \(self.events[index].profilePictureProgress) %")
                             }else{
                                 print("Error:" + error.description)
                             }
@@ -781,14 +828,14 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         })
     }
-    func LoadMoreEvents(){
+    func loadMoreEvents(){
         print("loadmore")
         if footerView.isAnimating {
             return
         }
         footerView.startAnimating()
 
-        EventsManager().loadEventsForProfileView(self.TimelineData.last, forUserId: KCSUser.activeUser().userId, completionHandler: {
+        EventsManager().loadEventsForProfileView(self.events.last, forUserId: KCSUser.activeUser().userId, completionHandler: {
             (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
             self.footerView.stopAnimating((error == nil) ? true : false)
             if (error == nil){
@@ -800,7 +847,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                     temp.removeLast()
                     self.end = false
                 }
-                self.TimelineData += temp
+                self.events += temp
                 for _ in temp {
                     self.cellHeights.append(0)
                 }
@@ -809,51 +856,51 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.updateFooter()
                 //load pictures
                 
-                for (index,_) in self.TimelineData.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.TimelineData[index], completionHandler: {
+                for (index,_) in self.events.enumerate(){
+                    EventsManager().loadPictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         if (error == nil){
                             let cells = self.tableView.visibleCells
                             for cell in cells{
                                 if (cell.tag == index){
-                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.TimelineData[index], row: index)
+                                    (cell as! ProfileEventTableViewCell).UpdateEventPicture(self.events[index], row: index)
                                 }
                                 
                             }
                             let ccells = self.collectionView.visibleCells()
                             for cell in ccells{
                                 if (cell.tag == index){
-                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.TimelineData[index], row: index)
+                                    (cell as! ExploreCollectionViewCell).UpdateEventPicture(self.events[index], row: index)
                                 }
                                 
                             }
-                            //println("\(index) event picture progress \(self.TimelineData[index].pictureProgress) %")
+                            //println("\(index) event picture progress \(self.events[index].pictureProgress) %")
                             
                         }else{
                             print("Error:" + error.description)
                         }
                     })
-                    if (self.TimelineData[index].author!.userId! != KCSUser.activeUser().userId){
-                        EventsManager().loadProfilePictureForEvent(&self.TimelineData[index], completionHandler: {
+                    if (self.events[index].author!.userId! != KCSUser.activeUser().userId){
+                        EventsManager().loadProfilePictureForEvent(&self.events[index], completionHandler: {
                             (error:NSError!) -> Void in
                             if (error == nil){
                                 let cells = self.tableView.visibleCells
                                 for cell in cells{
                                     if (cell.isKindOfClass(ProfileEventTableViewCell)){
                                         if (cell.tag == index){
-                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                                                progress: self.TimelineData[index].profilePictureProgress,
-                                                image: self.TimelineData[index].profilePicture, row: index)
+                                            (cell as! ProfileEventTableViewCell).UpdateProfilePicture(self.events[index].profilePictureID as String,
+                                                progress: self.events[index].profilePictureProgress,
+                                                image: self.events[index].profilePicture, row: index)
                                         }
                                     }else{
                                         if (cell.tag == index){
-                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                                                progress: self.TimelineData[index].profilePictureProgress,
-                                                image: self.TimelineData[index].profilePicture, row: index)
+                                            (cell as! ProfileNoPictureTableViewCell).UpdateProfilePicture(self.events[index].profilePictureID as String,
+                                                progress: self.events[index].profilePictureProgress,
+                                                image: self.events[index].profilePicture, row: index)
                                         }
                                     }
                                 }
-                                //println("\(index) profile picture loaded \(self.TimelineData[index].profilePictureProgress) %")
+                                //println("\(index) profile picture loaded \(self.events[index].profilePictureProgress) %")
                             }else{
                                 print("Error:" + error.description)
                             }
@@ -873,45 +920,45 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //-------------------Table-Part--------------------//
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.TimelineData.count //first cell is profile cell
+        return self.events.count //first cell is profile cell
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         // prepare content
-        let authorNameText = self.TimelineData[indexPath.row].author!.username
-        let eventNameText = self.TimelineData[indexPath.row].name as String
-        let eventDateText = self.TimelineData[indexPath.row].eventDateText
-        let createdAtText = self.TimelineData[indexPath.row].createdAtText as String
+        let authorNameText = self.events[indexPath.row].author!.username
+        let eventNameText = self.events[indexPath.row].name as String
+        let eventDateText = self.events[indexPath.row].eventDateText
+        let createdAtText = self.events[indexPath.row].createdAtText as String
 
         // details
         let eventDetailsText = NSMutableAttributedString()
-        if (self.TimelineData[indexPath.row].details != ""){
+        if (self.events[indexPath.row].details != ""){
             var attrs = [NSFontAttributeName : UIFont(name: "Lato-Medium", size: 14)!, NSForegroundColorAttributeName: ColorFromCode.randomBlueColorFromNumber(3)]
             var content = NSMutableAttributedString(string: "\(authorNameText)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 14)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-            content = NSMutableAttributedString(string: " \(self.TimelineData[indexPath.row].details)", attributes: attrs)
+            content = NSMutableAttributedString(string: " \(self.events[indexPath.row].details)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
         }
         let eventTimeAndLocationText = NSMutableAttributedString()
         // time
         var attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: ColorFromCode.randomBlueColorFromNumber(3)]
-        var content = NSMutableAttributedString(string: "\(self.TimelineData[indexPath.row].timeString) ", attributes:attrs)
+        var content = NSMutableAttributedString(string: "\(self.events[indexPath.row].timeString) ", attributes:attrs)
         eventTimeAndLocationText.appendAttributedString(content)
         
         
-        if (self.TimelineData[indexPath.row].location != ""){
+        if (self.events[indexPath.row].location != ""){
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: UIColor.darkGrayColor()]
             content = NSMutableAttributedString(string: " at ", attributes: attrs)
             eventTimeAndLocationText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: ColorFromCode.colorWithHexString("#C78B14")]
-            content = NSMutableAttributedString(string: "\(self.TimelineData[indexPath.row].location)", attributes: attrs)
+            content = NSMutableAttributedString(string: "\(self.events[indexPath.row].location)", attributes: attrs)
             eventTimeAndLocationText.appendAttributedString(content)
             
         }
         
         
-        if (self.TimelineData[indexPath.row].pictureId != ""){ // Image with Cell
+        if (self.events[indexPath.row].pictureId != ""){ // Image with Cell
             
             let Cell:ProfileEventTableViewCell = tableView.dequeueReusableCellWithIdentifier("Event Cell", forIndexPath: indexPath) as! ProfileEventTableViewCell
             Cell.tag = indexPath.row
@@ -924,7 +971,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.createdAtLabel.text = createdAtText
             
             // clickable author name
-            if (self.TimelineData[indexPath.row].details != ""){
+            if (self.events[indexPath.row].details != ""){
                 let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
                 Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
                 Cell.EventDescription.delegate = self
@@ -932,9 +979,9 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             // clickable location
-            if (self.TimelineData[indexPath.row].location != ""){
+            if (self.events[indexPath.row].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.TimelineData[indexPath.row].location.length),length: self.TimelineData[indexPath.row].location.length)
+                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.row].location.length),length: self.events[indexPath.row].location.length)
                 Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
                 Cell.timeLocationLabel.delegate = self
                 Cell.timeLocationLabel.tag = indexPath.row
@@ -942,23 +989,23 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
             Cell.EventDescription.attributedText = eventDetailsText
             
-            if (self.TimelineData[indexPath.row].date.timeIntervalSinceNow < 0){
+            if (self.events[indexPath.row].date.timeIntervalSinceNow < 0){
                 Cell.EventDate.backgroundColor = UIColor.redColor()
             }else{
                 Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
             }
             
-            Cell.Set_Numbers(self.TimelineData[indexPath.row].goManager.numberOfGoing,
-                likes: self.TimelineData[indexPath.row].likeManager.numberOfLikes,
-                comments: self.TimelineData[indexPath.row].numberOfComments,
-                shares: self.TimelineData[indexPath.row].shareManager.numberOfShares)
+            Cell.Set_Numbers(self.events[indexPath.row].goManager.numberOfGoing,
+                likes: self.events[indexPath.row].likeManager.numberOfLikes,
+                comments: self.events[indexPath.row].numberOfComments,
+                shares: self.events[indexPath.row].shareManager.numberOfShares)
             
             // Set Buttons
-            Cell.LikeButton.initialize(self.TimelineData[indexPath.row].likeManager.isLiked)
+            Cell.LikeButton.initialize(self.events[indexPath.row].likeManager.isLiked)
             Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.TimelineData[indexPath.row].goManager.isGoing)
+            Cell.GoButton.initialize(self.events[indexPath.row].goManager.isGoing)
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.TimelineData[indexPath.row].shareManager.isShared)
+            Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -966,31 +1013,31 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             
             
             // Update profile picture
-            if (self.TimelineData[indexPath.row].author!.userId == KCSUser.activeUser().userId){
+            if (self.events[indexPath.row].author!.userId == KCSUser.activeUser().userId){
                 Cell.UpdateProfilePicture(self.profilePictureID, progress: self.profilePictureProgress, image: profilePicture, row: indexPath.row)
             }else{
-                EventsManager().loadProfilePictureForEvent(&self.TimelineData[indexPath.row], completionHandler: {
+                EventsManager().loadProfilePictureForEvent(&self.events[indexPath.row], completionHandler: {
                     (error:NSError!) -> Void in
                     let index = Cell.tag
-                    Cell.UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                        progress: self.TimelineData[index].profilePictureProgress,
-                        image: self.TimelineData[index].profilePicture, row: index)
+                    Cell.UpdateProfilePicture(self.events[index].profilePictureID as String,
+                        progress: self.events[index].profilePictureProgress,
+                        image: self.events[index].profilePicture, row: index)
                 })
             }
 
-            Cell.UpdateEventPicture(self.TimelineData[indexPath.row], row: indexPath.row)
+            Cell.UpdateEventPicture(self.events[indexPath.row], row: indexPath.row)
             
             Cell.contentView.userInteractionEnabled = true
-            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
+            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
             Cell.EventPicture.userInteractionEnabled = true
             Cell.EventPicture.tag = indexPath.row
             Cell.EventPicture.addGestureRecognizer(pushEventRec1)
             Cell.ProgressView.addGestureRecognizer(pushEventRec2)
             
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -1015,7 +1062,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.createdAtLabel.text = createdAtText
 
             // clickable author name
-            if (self.TimelineData[indexPath.row].details != ""){
+            if (self.events[indexPath.row].details != ""){
                 let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
                 Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
                 Cell.EventDescription.delegate = self
@@ -1023,9 +1070,9 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             // clickable location
-            if (self.TimelineData[indexPath.row].location != ""){
+            if (self.events[indexPath.row].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.TimelineData[indexPath.row].location.length),length: self.TimelineData[indexPath.row].location.length)
+                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.row].location.length),length: self.events[indexPath.row].location.length)
                 Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
                 Cell.timeLocationLabel.delegate = self
                 Cell.timeLocationLabel.tag = indexPath.row
@@ -1034,48 +1081,48 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.EventDescription.attributedText = eventDetailsText
             
             
-            if (self.TimelineData[indexPath.row].date.timeIntervalSinceNow < 0){
+            if (self.events[indexPath.row].date.timeIntervalSinceNow < 0){
                 Cell.EventDate.backgroundColor = UIColor.redColor()
             }else{
                 Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
             }
             
             // Update profile picture
-            if (self.TimelineData[indexPath.row].author!.userId == KCSUser.activeUser().userId){
+            if (self.events[indexPath.row].author!.userId == KCSUser.activeUser().userId){
                 Cell.UpdateProfilePicture(self.profilePictureID, progress: self.profilePictureProgress, image: profilePicture, row: indexPath.row)
             }else{
-                EventsManager().loadProfilePictureForEvent(&self.TimelineData[indexPath.row], completionHandler: {
+                EventsManager().loadProfilePictureForEvent(&self.events[indexPath.row], completionHandler: {
                     (error:NSError!) -> Void in
                     let index = Cell.tag
-                    Cell.UpdateProfilePicture(self.TimelineData[index].profilePictureID as String,
-                        progress: self.TimelineData[index].profilePictureProgress,
-                        image: self.TimelineData[index].profilePicture, row: index)
+                    Cell.UpdateProfilePicture(self.events[index].profilePictureID as String,
+                        progress: self.events[index].profilePictureProgress,
+                        image: self.events[index].profilePicture, row: index)
                 })
             }
 
             
-            Cell.Set_Numbers(self.TimelineData[indexPath.row].goManager.numberOfGoing,
-                likes: self.TimelineData[indexPath.row].likeManager.numberOfLikes,
-                comments: self.TimelineData[indexPath.row].numberOfComments,
-                shares: self.TimelineData[indexPath.row].shareManager.numberOfShares)
+            Cell.Set_Numbers(self.events[indexPath.row].goManager.numberOfGoing,
+                likes: self.events[indexPath.row].likeManager.numberOfLikes,
+                comments: self.events[indexPath.row].numberOfComments,
+                shares: self.events[indexPath.row].shareManager.numberOfShares)
             
-            Cell.LikeButton.initialize(self.TimelineData[indexPath.row].likeManager.isLiked)
+            Cell.LikeButton.initialize(self.events[indexPath.row].likeManager.isLiked)
             Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.TimelineData[indexPath.row].goManager.isGoing)
+            Cell.GoButton.initialize(self.events[indexPath.row].goManager.isGoing)
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.TimelineData[indexPath.row].shareManager.isShared)
+            Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
 
             Cell.contentView.userInteractionEnabled = true
-            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
             Cell.EventView.userInteractionEnabled = true
             Cell.EventView.tag = indexPath.row
             Cell.EventView.addGestureRecognizer(EventNameTapRecognizer)
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -1096,40 +1143,84 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             return cellHeights[indexPath.row]
         }
     }
+    
     func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
-        UIApplication.sharedApplication().openURL((url)!)
-        
+        //        var tag = label.tag
+        print(url.scheme)
+        if (url.scheme == "pushAuthor"){ // url = "scheme://host" , host is username
+            let row = label.tag
+            if (events[row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+                
+                let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }else{ //clicked on someone else
+                
+                let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+                VC.user = events[row].author!
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }
+            
+        }else if (url.scheme == "mention"){
+            pushUserByUsername(url.host!)
+        }
     }
-
+    
     func like(sender: HomeLikeButton){
         print("button pressed \(sender.superview!.superview!.tag)")
-        self.TimelineData[sender.superview!.superview!.tag].likeManager.button = sender
-        self.TimelineData[sender.superview!.superview!.tag].likeManager.Like()
+        self.events[sender.superview!.superview!.tag].likeManager.button = sender
+        self.events[sender.superview!.superview!.tag].likeManager.Like()
     }
     
     func go(sender: HomeResponseButton){
         print("button pressed \(sender.superview!.superview!.tag)")
-        self.TimelineData[sender.superview!.superview!.tag].goManager.button = sender
-        self.TimelineData[sender.superview!.superview!.tag].goManager.Going()
+        self.events[sender.superview!.superview!.tag].goManager.button = sender
+        self.events[sender.superview!.superview!.tag].goManager.Going()
         
     }
     
     func share(sender: HomeShareButton){
         print("button pressed \(sender.superview!.superview!.tag)")
-        self.TimelineData[sender.superview!.superview!.tag].shareManager.button = sender
-        self.TimelineData[sender.superview!.superview!.tag].shareManager.Share()
+        self.events[sender.superview!.superview!.tag].shareManager.button = sender
+        self.events[sender.superview!.superview!.tag].shareManager.Share()
         
+    }
+    func more(sender: HomeMoreButton){
+        //        print("more pressed \(sender.superview!.superview!.tag)")
+        //        eventsManager.More((sender.superview!.superview!.tag), button: sender)
+        let row = sender.tag
+        print(row)
+        self.events[row].moreManager.showInView(self.view ,event:self.events[row],row: row, handler: {
+            (result:String,error:NSError!) -> Void in
+            if result == "Deleting" {
+                
+            } else if result == "FailedToDelete" {
+                
+            } else if result == "Deleted" {
+                self.events.removeAtIndex(row)
+                dispatch_async(dispatch_get_main_queue(), {
+                    () -> Void in
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    self.tableView.endUpdates()
+                    self.collectionView.performBatchUpdates({ () -> Void in
+                        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: row, inSection: 0)])
+                        }, completion: nil)
+                })
+            }
+        })
     }
     
     func refresh(sender: UIButton){
         (sender.superview! as! EProgressView).updateProgress(0)
         let tag = sender.superview!.superview!.superview!.tag
-        EventsManager().loadPictureForEvent(&self.TimelineData[tag], completionHandler: {
+        EventsManager().loadPictureForEvent(&self.events[tag], completionHandler: {
             (error:NSError!) -> Void in
             let cells = self.tableView.visibleCells
             for cell in cells{
                 if (cell.tag == tag){
-                    (cell as! HomeEventTableViewCell).UpdateEventPicture(self.TimelineData[tag], row: tag)
+                    (cell as! HomeEventTableViewCell).UpdateEventPicture(self.events[tag], row: tag)
                 }
             }
         })
@@ -1138,40 +1229,48 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     func eventDeleted(atIndex: Int) {
         tableView.deleteSections(NSIndexSet(index: atIndex), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
-    func PushLikes(sender:UIButton){
+    
+    
+    func pushSettings(){
+        let VC:SettingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
+        self.navigationController?.pushViewController(VC, animated: true)
+
+    }
+    
+    func pushLikes(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = TimelineData[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Likers"
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    func PushGoing(sender:UIButton){
+    func pushGoing(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = TimelineData[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Accepted"
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    func PushShares(sender:UIButton){
+    func pushShares(sender:UIButton){
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = TimelineData[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Shares"
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
-    func PushComments(sender:UITapGestureRecognizer){
+    func pushComments(sender:UITapGestureRecognizer){
         let ViewSender:UILabel = sender.view! as! UILabel
         let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = TimelineData[SelectedIndexPath.row].eventOriginal!
+        VC.event = events[SelectedIndexPath.row].eventOriginal!
         VC.Target = "Likers"
         
         self.navigationController?.pushViewController(VC, animated: true)
@@ -1181,24 +1280,21 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     
-    func PushEventViewController(sender:UITapGestureRecognizer)->Void{
+    func pushEvent(sender:UITapGestureRecognizer)->Void{
         
         let ViewSender = sender.view!
         let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)
-        //let Cell:HomeEventTableViewCell = TimelineEventTable.cellForRowAtIndexPath(SelectedIndexPath) as HomeEventTableViewCell
-        
         let VC:EventViewController = self.storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as! EventViewController
-        VC.event = TimelineData[SelectedIndexPath.row]
-        
-        
+        VC.event = events[SelectedIndexPath.row]
+
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
-    func PushUserProfileViewController(sender:UITapGestureRecognizer){
+    func pushUser(sender:UITapGestureRecognizer){
         let ViewSender = sender.view!
         let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)
-        if (TimelineData[SelectedIndexPath.row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+        if (events[SelectedIndexPath.row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
             
             let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
             self.navigationController?.pushViewController(VC, animated: true)
@@ -1206,20 +1302,19 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         }else{ //clicked on someone else
             
             let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
-            VC.user = TimelineData[SelectedIndexPath.row].author!
+            VC.user = events[SelectedIndexPath.row].author!
             self.navigationController?.pushViewController(VC, animated: true)
             
         }
     }
 
-    func Edit_Profile(){
+    func editProfile(){
         let VC:EditProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("EditProfileViewController") as! EditProfileViewController
-        VC.user = KCSUser.activeUser()
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
     
-    func Push_Followers_List(){
+    func pushFollowers(){
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
         VC.Target = "Followers"
         VC.user = KCSUser.activeUser()
@@ -1235,34 +1330,41 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
+
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return events.count
     }
-    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let Cell:ExploreCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("collection Cell", forIndexPath: indexPath) as! ExploreCollectionViewCell
         
         Cell.tag = indexPath.row
-        Cell.UpdateEventPicture(self.TimelineData[indexPath.item], row: indexPath.row)
+        Cell.UpdateEventPicture(self.events[indexPath.item], row: indexPath.row)
         
         // Set Event Name
         
-        Cell.eventNameLabel.text = self.TimelineData[indexPath.item].name as String
+        Cell.eventNameLabel.text = self.events[indexPath.item].name as String
         var frame = Cell.eventNameLabel.frame
         Cell.eventNameLabel.sizeToFit()
         frame.size.height = Cell.eventNameLabel.frame.size.height
+        let maxHeight = (collectionCellHeight-collectionCellWidth-8)
+        if frame.size.height > maxHeight {
+            frame.size.height = maxHeight
+        }
         Cell.eventNameLabel.frame = frame
         Cell.contentView.tag = indexPath.row
         Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "PushEventViewController:"))
         
         // remove year word
-        let shortenedString:NSAttributedString = self.TimelineData[indexPath.row].smallEventDateText
+        let shortenedString:NSAttributedString = self.events[indexPath.row].smallEventDateText
         Cell.eventDateLabel.attributedText = shortenedString
-        Cell.UpdateEventPicture(self.TimelineData[indexPath.row], row: indexPath.row)
-        
-        
+        Cell.UpdateEventPicture(self.events[indexPath.row], row: indexPath.row)
         return Cell
+        
+    }
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionCellWidth, collectionCellHeight)
@@ -1289,7 +1391,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             return footer
             
         }
-
+        
     }
     func updateHeader(){
         collectionHeader.frame = self.tableHeaderView.frame
@@ -1307,7 +1409,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             footerView.removeFromSuperview()
             flowLayout.footerReferenceSize = CGSizeZero
             collectionFooter.setNeedsDisplay()
-            print("remove")
+            print("remove footer")
         } else {
             if (selectedView == 1){
                 tableView.tableFooterView = nil
@@ -1315,44 +1417,46 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 collectionFooter.addSubview(footerView)
                 flowLayout.footerReferenceSize = self.footerView.frame.size
                 collectionFooter.setNeedsDisplay()
-
+                
             }else if (selectedView == 2){
                 footerView.removeFromSuperview()
                 flowLayout.footerReferenceSize = CGSizeZero
                 tableView.tableFooterView = footerView
             }
-            print("display")
+            print("display footer")
         }
     }
     
-    
-    
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (collectionView == self.collectionView){
-            return TimelineData.count
+    func pushUserByUsername(username:String){
+        print("by username")
+        
+        if (username == KCSUser.activeUser().username){
+            
+            let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+            self.navigationController?.pushViewController(VC, animated: true)
+            
         }else{
-            return 0
+            
+            let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+            VC.username = username
+            self.navigationController?.pushViewController(VC, animated: true)
         }
     }
+    
+    
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        if (indexPath.row == self.TimelineData.count-4){
+        if (indexPath.row == self.events.count-4){
             if (!end){
-                LoadMoreEvents()
+                loadMoreEvents()
             }
         }
     }
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if (indexPath.row == self.TimelineData.count-2){
+        if (indexPath.row == self.events.count-2){
             if (!end){
-                LoadMoreEvents()
+                loadMoreEvents()
             }
         }
     }
-    
-
 }

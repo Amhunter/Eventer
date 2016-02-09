@@ -103,11 +103,12 @@
                         <segue destination="Fcw-6S-b2m" kind="show" id="RAf-qi-ekB"/>
                         <segue destination="rzq-nu-zHk" kind="show" id="bkE-22-bS0"/>
                         <segue destination="gyV-gw-DDr" kind="show" id="hkv-Ng-pbK"/>
+                        <segue destination="68Y-sT-KnI" kind="show" id="eQq-Ek-oZp"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kt0-mR-RWv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1647" y="2665"/>
+            <point key="canvasLocation" x="-1647" y="2649"/>
         </scene>
         <!--MyProfileViewController-->
         <scene sceneID="88B-mu-gZC">
@@ -139,149 +140,11 @@
                     <view key="view" contentMode="scaleToFill" id="ysN-Ko-JLS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="43" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="JqZ-bN-ZCj" userLabel="Settings TableView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="632"/>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Username Cell" id="1kF-IY-aib" userLabel="Username Cell" customClass="ProfileUsernameCell" customModule="Eventer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="114" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1kF-IY-aib" id="ZYj-pj-Ysq">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fn0-K3-Ion">
-                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="usernameLabel" destination="Fn0-K3-Ion" id="9r8-EF-XJ8"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Fullname Cell" id="I4g-zM-mGB" userLabel="Fullname Cell" customClass="ProfileFullnameCell" customModule="Eventer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="157" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I4g-zM-mGB" id="kPb-SQ-klA">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Fullname" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q49-VS-Eph">
-                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="fullnameLabel" destination="q49-VS-Eph" id="gwq-nC-1SQ"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Website Cell" id="XmU-SG-eBM" userLabel="Website Cell" customClass="ProfileWebsiteCell" customModule="Eventer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="200" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XmU-SG-eBM" id="Wjz-ez-sp7">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Website" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0H3-Re-MoH">
-                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="websiteLabel" destination="0H3-Re-MoH" id="7jH-J8-jkf"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Statement Cell" id="VQc-zH-Dsu" userLabel="Personal Statement Cell" customClass="ProfileStatementCell" customModule="Eventer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="243" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VQc-zH-Dsu" id="2Lb-VQ-UcH">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Description" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GKi-xW-M2O">
-                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="statementLabel" destination="GKi-xW-M2O" id="9Rn-7F-ZEn"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Mailbox Cell" id="uIf-01-VhG" userLabel="Mailbox Cell">
-                                        <rect key="frame" x="0.0" y="286" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uIf-01-VhG" id="h65-TR-f6a">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="e-mail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OPq-BP-PMx">
-                                                    <rect key="frame" x="8" y="6" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Phone Cell" id="va6-M6-tFJ" userLabel="Phone Cell">
-                                        <rect key="frame" x="0.0" y="329" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="va6-M6-tFJ" id="02G-RN-9by">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l2x-0K-Zh2">
-                                                    <rect key="frame" x="8" y="6" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Gender Cell" id="KIl-Yc-QDc" userLabel="Gender Cell">
-                                        <rect key="frame" x="0.0" y="372" width="320" height="43"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KIl-Yc-QDc" id="eWg-Pd-6Fg">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Gender" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q2f-fW-AIn">
-                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="eCS-B6-Oph" id="gEH-2A-S3D"/>
-                                    <outlet property="delegate" destination="eCS-B6-Oph" id="cjs-Ny-4Ef"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Edit Profile" id="Zhv-Cs-jGz">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="gPj-dE-nK2">
-                            <connections>
-                                <action selector="Save:" destination="eCS-B6-Oph" id="QMh-SV-AEZ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Edit Profile" id="Zhv-Cs-jGz"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="SettingsTableView" destination="JqZ-bN-ZCj" id="Uqc-wE-OLz"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fwP-wZ-Ffl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -812,6 +675,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SrL-w1-g3D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1477" y="4152"/>
+        </scene>
+        <!--SettingsViewController-->
+        <scene sceneID="UtL-ug-v8P">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" title="SettingsViewController" id="68Y-sT-KnI" customClass="SettingsViewController" customModule="Eventer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VHX-LY-WMh"/>
+                        <viewControllerLayoutGuide type="bottom" id="VUC-eS-kxG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="V7m-ca-vW8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Settings" id="olZ-hp-dd3"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2i5-cy-aHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-819" y="4152"/>
         </scene>
     </scenes>
     <resources>

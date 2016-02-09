@@ -20,21 +20,14 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     var screenWidth = UIScreen.mainScreen().bounds.width
     var screenHeight = UIScreen.mainScreen().bounds.height
 
-    @IBAction func log(sender: AnyObject) {
-        KCSUser.activeUser().logout()
-        
-        let appDelegateTemp:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let rootController:UIViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("Signup View") as! SignupViewController
-        let navigation:UINavigationController = UINavigationController(rootViewController: rootController)
-        appDelegateTemp.window?.rootViewController = navigation as UIViewController
-
-    }
+    
 
 
     //referencing outlets
     @IBOutlet var SwitchButton: UIBarButtonItem!
     
+    
+    var events:[FetchedEvent] = []
     var calendarView: CalendarCollectionView = CalendarCollectionView(frame: CGRectMake(0,0,0,0), collectionViewLayout: MonthCustomLayout())
     var calendarSuperView: UITableView = UITableView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width
         , UIScreen.mainScreen().bounds.height))//for attaching refresh control to calendar
@@ -609,12 +602,12 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         return 1
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return eventsManager.events.count
+        return events.count
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var header:eventHeaderView = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! eventHeaderView
-        header = eventHeaderView(event: self.eventsManager.events[section])
+        header = eventHeaderView(event: self.events[section])
         header.tag = section
         header.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushUser:"))
         return header
@@ -631,40 +624,40 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
 
         // prepare content
-        let authorNameText = self.eventsManager.events[indexPath.section].author!.username
-        let eventNameText = self.eventsManager.events[indexPath.section].name as String
-        let eventDateText = self.eventsManager.events[indexPath.section].eventDateText
+        let authorNameText = self.events[indexPath.section].author!.username
+        let eventNameText = self.events[indexPath.section].name as String
+        let eventDateText = self.events[indexPath.section].eventDateText
         
         // details
         let eventDetailsText = NSMutableAttributedString()
-        if (self.eventsManager.events[indexPath.section].details != ""){
+        if (self.events[indexPath.section].details != ""){
             var attrs = [NSFontAttributeName : UIFont(name: "Lato-Medium", size: 14)!, NSForegroundColorAttributeName: ColorFromCode.randomBlueColorFromNumber(3)]
             var content = NSMutableAttributedString(string: "\(authorNameText)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 14)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-            content = NSMutableAttributedString(string: " \(self.eventsManager.events[indexPath.section].details)", attributes: attrs)
+            content = NSMutableAttributedString(string: " \(self.events[indexPath.section].details)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
         }
         
         let eventTimeAndLocationText = NSMutableAttributedString()
         // time
         var attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: ColorFromCode.randomBlueColorFromNumber(3)]
-        var content = NSMutableAttributedString(string: "\(self.eventsManager.events[indexPath.section].timeString) ", attributes:attrs)
+        var content = NSMutableAttributedString(string: "\(self.events[indexPath.section].timeString) ", attributes:attrs)
         eventTimeAndLocationText.appendAttributedString(content)
 
 
-        if (self.eventsManager.events[indexPath.section].location != ""){
+        if (self.events[indexPath.section].location != ""){
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: UIColor.darkGrayColor()]
             content = NSMutableAttributedString(string: " at ", attributes: attrs)
             eventTimeAndLocationText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: ColorFromCode.colorWithHexString("#C78B14")]
-            content = NSMutableAttributedString(string: "\(self.eventsManager.events[indexPath.section].location)", attributes: attrs)
+            content = NSMutableAttributedString(string: "\(self.events[indexPath.section].location)", attributes: attrs)
             eventTimeAndLocationText.appendAttributedString(content)
 
         }
         
         
-        if (self.eventsManager.events[indexPath.section].pictureId != ""){ // Image with Cell
+        if (self.events[indexPath.section].pictureId != ""){ // Image with Cell
             
             let Cell:HomeEventTableViewCell = tableView.dequeueReusableCellWithIdentifier("Event Cell", forIndexPath: indexPath) as! HomeEventTableViewCell
             Cell.tag = indexPath.section
@@ -675,7 +668,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.EventDate.attributedText = eventDateText
             
             // clickable author name
-            if (self.eventsManager.events[indexPath.section].details != ""){
+            if (self.events[indexPath.section].details != ""){
                 let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
                 Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
                 Cell.EventDescription.delegate = self
@@ -683,9 +676,9 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             }
             
             // clickable location
-            if (self.eventsManager.events[indexPath.section].location != ""){
+            if (self.events[indexPath.section].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.eventsManager.events[indexPath.section].location.length),length: self.eventsManager.events[indexPath.section].location.length)
+                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.section].location.length),length: self.events[indexPath.section].location.length)
                 Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
                 Cell.timeLocationLabel.delegate = self
                 Cell.timeLocationLabel.tag = indexPath.section
@@ -693,42 +686,42 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
             Cell.EventDescription.attributedText = eventDetailsText
 
-            if (self.eventsManager.events[indexPath.section].date.timeIntervalSinceNow < 0){
+            if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
                 Cell.EventDate.backgroundColor = UIColor.redColor()
             }else{
                 Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
             }
             
-            Cell.Set_Numbers(self.eventsManager.events[indexPath.section].goManager.numberOfGoing, likes: self.eventsManager.events[indexPath.section].likeManager.numberOfLikes, comments: self.eventsManager.events[indexPath.section].numberOfComments, shares: self.eventsManager.events[indexPath.section].shareManager.numberOfShares)
+            Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
             
             // Set Buttons
-            Cell.LikeButton.initialize(self.eventsManager.events[indexPath.section].likeManager.isLiked)
+            Cell.LikeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
             Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.eventsManager.events[indexPath.section].goManager.isGoing)
+            Cell.GoButton.initialize(self.events[indexPath.section].goManager.isGoing)
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.eventsManager.events[indexPath.section].shareManager.isShared)
+            Cell.ShareButton.initialize(self.events[indexPath.section].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
             
             
-            EventsManager().loadProfilePictureForEvent(&self.eventsManager.events[Cell.tag], completionHandler: {
+            EventsManager().loadProfilePictureForEvent(&self.events[Cell.tag], completionHandler: {
                 (error:NSError!) -> Void in
                 let index = Cell.tag
                 if (error == nil){
                     if (self.tableView.headerViewForSection(index) != nil){
                         let header:eventHeaderView = self.tableView.headerViewForSection(index) as! eventHeaderView
                         header.updateProfilePicture(
-                            self.eventsManager.events[index].profilePictureID as String,
-                            progress: self.eventsManager.events[index].profilePictureProgress,
-                            image: self.eventsManager.events[index].profilePicture)
+                            self.events[index].profilePictureID as String,
+                            progress: self.events[index].profilePictureProgress,
+                            image: self.events[index].profilePicture)
                     }
                 }else{
                     print("Error:" + error.description)
                 }
             })
-            Cell.UpdateEventPicture(self.eventsManager.events[indexPath.section], row: indexPath.section)
+            Cell.UpdateEventPicture(self.events[indexPath.section], row: indexPath.section)
             
             Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
             Cell.contentView.userInteractionEnabled = true
@@ -781,7 +774,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.EventDate.attributedText = eventDateText
             
             // clickable author name
-            if (self.eventsManager.events[indexPath.section].details != ""){
+            if (self.events[indexPath.section].details != ""){
                 let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
                 Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
                 Cell.EventDescription.delegate = self
@@ -789,9 +782,9 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             }
             
             // clickable location
-            if (self.eventsManager.events[indexPath.section].location != ""){
+            if (self.events[indexPath.section].location != ""){
                 let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.eventsManager.events[indexPath.section].location.length),length: self.eventsManager.events[indexPath.section].location.length)
+                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.section].location.length),length: self.events[indexPath.section].location.length)
                 Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
                 Cell.timeLocationLabel.delegate = self
                 Cell.timeLocationLabel.tag = indexPath.section
@@ -800,26 +793,26 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.EventDescription.attributedText = eventDetailsText
             
             
-            if (self.eventsManager.events[indexPath.section].date.timeIntervalSinceNow < 0){
+            if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
                 Cell.EventDate.backgroundColor = UIColor.redColor()
             }else{
                 Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
             }
 
-            Cell.Set_Numbers(self.eventsManager.events[indexPath.section].goManager.numberOfGoing, likes: self.eventsManager.events[indexPath.section].likeManager.numberOfLikes, comments: self.eventsManager.events[indexPath.section].numberOfComments, shares: self.eventsManager.events[indexPath.section].shareManager.numberOfShares)
+            Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
             
-            Cell.LikeButton.initialize(self.eventsManager.events[indexPath.section].likeManager.isLiked)
+            Cell.LikeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
             Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.eventsManager.events[indexPath.section].goManager.isGoing)
+            Cell.GoButton.initialize(self.events[indexPath.section].goManager.isGoing)
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.eventsManager.events[indexPath.section].shareManager.isShared)
+            Cell.ShareButton.initialize(self.events[indexPath.section].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             // Set Profile Picture
             //        dispatch_async(dispatch_get_main_queue(), {
             //            () -> Void in
-            //            Cell.DownloadProfilePicture(&self.eventsManager.events[indexPath.row], row: indexPath.row)
+            //            Cell.DownloadProfilePicture(&self.events[indexPath.row], row: indexPath.row)
             //        })
             
             Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
@@ -849,13 +842,12 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     }
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if (indexPath.section == self.eventsManager.events.count-2){
+        if (indexPath.section == self.events.count-2){
             if (!end){
                 LoadMore()
             }
         }
     }
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if cellHeights[indexPath.section] < 46 || (cellHeights[indexPath.section] == 0) {
             return UITableViewAutomaticDimension
@@ -863,44 +855,103 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             return cellHeights[indexPath.section]
         }
     }
-//    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        
-//        return 470
-//    }
-//    
-    func more(sender: HomeMoreButton){
-        print("more pressed \(sender.superview!.superview!.tag)")
-        eventsManager.More((sender.superview!.superview!.tag), button: sender)
+    
+    
+    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+        //        var tag = label.tag
+        print(url.scheme)
+        if (url.scheme == "pushAuthor"){ // url = "scheme://host" , host is username
+            let row = label.tag
+            if (events[row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+                
+                let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }else{ //clicked on someone else
+                
+                let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+                VC.user = events[row].author!
+                self.navigationController?.pushViewController(VC, animated: true)
+                
+            }
+            
+        }else if (url.scheme == "mention"){
+            pushUserByUsername(url.host!)
+        }
     }
-    func like(sender: HomeLikeButton){
-        print("like pressed \(sender.superview!.superview!.tag)")
-        self.eventsManager.events[sender.superview!.superview!.tag].likeManager.button = sender
-        self.eventsManager.events[sender.superview!.superview!.tag].likeManager.Like()
+    
+    func pushUserByUsername(username:String){
+        print("by username")
         
+        if (username == KCSUser.activeUser().username){
+            
+            let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
+            self.navigationController?.pushViewController(VC, animated: true)
+            
+        }else{
+            
+            let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+            VC.username = username
+            self.navigationController?.pushViewController(VC, animated: true)
+        }
+    }
+
+    
+    func like(sender: HomeLikeButton){
+        print("button pressed \(sender.superview!.superview!.tag)")
+        self.events[sender.superview!.superview!.tag].likeManager.button = sender
+        self.events[sender.superview!.superview!.tag].likeManager.Like()
     }
     
     func go(sender: HomeResponseButton){
-        print("go pressed \(sender.superview!.superview!.tag)")
-        self.eventsManager.events[sender.superview!.superview!.tag].goManager.button = sender
-        self.eventsManager.events[sender.superview!.superview!.tag].goManager.Going()
+        print("button pressed \(sender.superview!.superview!.tag)")
+        self.events[sender.superview!.superview!.tag].goManager.button = sender
+        self.events[sender.superview!.superview!.tag].goManager.Going()
         
     }
     
     func share(sender: HomeShareButton){
-        print("share pressed \(sender.superview!.superview!.tag)")
-        self.eventsManager.events[sender.superview!.superview!.tag].shareManager.button = sender
-        self.eventsManager.events[sender.superview!.superview!.tag].shareManager.Share()
+        print("button pressed \(sender.superview!.superview!.tag)")
+        self.events[sender.superview!.superview!.tag].shareManager.button = sender
+        self.events[sender.superview!.superview!.tag].shareManager.Share()
+        
     }
+    func more(sender: HomeMoreButton){
+        //        print("more pressed \(sender.superview!.superview!.tag)")
+        //        eventsManager.More((sender.superview!.superview!.tag), button: sender)
+        let row = sender.tag
+        print(row)
+        self.events[row].moreManager.showInView(self.view ,event:self.events[row],row: row, handler: {
+            (result:String,error:NSError!) -> Void in
+            if result == "Deleting" {
+                
+            } else if result == "FailedToDelete" {
+                
+            } else if result == "Deleted" {
+                self.events.removeAtIndex(row)
+                dispatch_async(dispatch_get_main_queue(), {
+                    () -> Void in
+                    self.eventDeleted(row)
+//                    self.collectionView.performBatchUpdates({ () -> Void in
+//                        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: row, inSection: 0)])
+//                        }, completion: nil)
+                })
+            }
+        })
+    }
+    
+    
+    
     
     func refresh(sender: UIButton){
         (sender.superview! as! EProgressView).updateProgress(0)
         let tag = sender.superview!.superview!.superview!.tag
-        EventsManager().loadPictureForEvent(&self.eventsManager.events[tag], completionHandler: {
+        EventsManager().loadPictureForEvent(&self.events[tag], completionHandler: {
             (error:NSError!) -> Void in
             let cells = self.tableView.visibleCells
             for cell in cells{
                 if (cell.tag == tag){
-                    (cell as! HomeEventTableViewCell).UpdateEventPicture(self.eventsManager.events[tag], row: tag)
+                    (cell as! HomeEventTableViewCell).UpdateEventPicture(self.events[tag], row: tag)
                 }
             }
         })
@@ -913,7 +964,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = eventsManager.events[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Likers"
         
         self.navigationController?.pushViewController(VC, animated: true)
@@ -922,7 +973,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = eventsManager.events[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Accepted"
         
         self.navigationController?.pushViewController(VC, animated: true)
@@ -931,7 +982,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         let selectedRow = sender.superview!.superview!.tag
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = eventsManager.events[selectedRow].eventOriginal!
+        VC.event = events[selectedRow].eventOriginal!
         VC.Target = "Shares"
         
         self.navigationController?.pushViewController(VC, animated: true)
@@ -941,34 +992,12 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)
         
         let VC:UserListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserListViewController") as! UserListViewController
-        VC.event = eventsManager.events[SelectedIndexPath.row].eventOriginal!
+        VC.event = events[SelectedIndexPath.row].eventOriginal!
         VC.Target = "Likers"
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
-//        var tag = label.tag
-        print(url.scheme)
-        if (url.scheme == "pushAuthor"){ // url = "scheme://host" , host is username
-            let row = label.tag
-            if (eventsManager.events[row].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
-                
-                let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
-                self.navigationController?.pushViewController(VC, animated: true)
-                
-            }else{ //clicked on someone else
-                
-                let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
-                VC.user = eventsManager.events[row].author!
-                self.navigationController?.pushViewController(VC, animated: true)
-                
-            }
 
-        }else if (url.scheme == "pushLocation"){
-            
-        }
-    }
-    
 
     func PushEventViewController(sender:UITapGestureRecognizer)->Void{
         
@@ -977,7 +1006,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         //let Cell:HomeEventTableViewCell = TimelineEventTable.cellForRowAtIndexPath(SelectedIndexPath) as HomeEventTableViewCell
         
         let VC:EventViewController = self.storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as! EventViewController
-        VC.event = eventsManager.events[selectedRow]
+        VC.event = events[selectedRow]
         
         
         
@@ -986,7 +1015,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     
     func pushUser(sender:UITapGestureRecognizer){
         let senderTag = sender.view!.tag
-        if (eventsManager.events[senderTag].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
+        if (events[senderTag].author!.userId == KCSUser.activeUser().userId as NSString){ //clicked on myself
             
             let VC:MyProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MyProfileViewController") as! MyProfileViewController
             self.navigationController?.pushViewController(VC, animated: true)
@@ -994,7 +1023,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         }else{ //clicked on someone else
             
             let VC:UserProfileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
-            VC.user = eventsManager.events[senderTag].author!
+            VC.user = events[senderTag].author!
             self.navigationController?.pushViewController(VC, animated: true)
 
         }
@@ -1015,7 +1044,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                     temp.removeLast()
                     self.end = false
                 }
-                self.eventsManager.events = temp
+                self.events = temp
                 for _ in temp {
                     self.cellHeights.append(0)
                 }
@@ -1025,26 +1054,26 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
 
                 //load pictures
                 
-                for (index,_) in self.eventsManager.events.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.eventsManager.events[index], completionHandler: {
+                for (index,_) in self.events.enumerate(){
+                    EventsManager().loadPictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         let cells = self.tableView.visibleCells
                         for cell in cells{
                             if (cell.tag == index){
-                                (cell as! HomeEventTableViewCell).UpdateEventPicture(self.eventsManager.events[index], row: index)
+                                (cell as! HomeEventTableViewCell).UpdateEventPicture(self.events[index], row: index)
                             }
                             
                         }
                     })
-                    EventsManager().loadProfilePictureForEvent(&self.eventsManager.events[index], completionHandler: {
+                    EventsManager().loadProfilePictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         if (error == nil){
                             if (self.tableView.headerViewForSection(index) != nil){
                                 let header:eventHeaderView = self.tableView.headerViewForSection(index) as! eventHeaderView
                                 header.updateProfilePicture(
-                                    self.eventsManager.events[index].profilePictureID as String,
-                                    progress: self.eventsManager.events[index].profilePictureProgress,
-                                    image: self.eventsManager.events[index].profilePicture)
+                                    self.events[index].profilePictureID as String,
+                                    progress: self.events[index].profilePictureProgress,
+                                    image: self.events[index].profilePicture)
                             }
                         }else{
                             print("Error:" + error.description)
@@ -1062,7 +1091,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             return
         }
         footerView.startAnimating()
-        EventsManager.loadEventsForHomeTableView(self.eventsManager.events.last!,completionHandler: {
+        EventsManager.loadEventsForHomeTableView(self.events.last!,completionHandler: {
             (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
             
             self.footerView.stopAnimating((error == nil) ? true : false)
@@ -1075,7 +1104,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                     temp.removeLast()
                     self.end = false
                 }
-                self.eventsManager.events += temp
+                self.events += temp
                 
                 for _ in temp {
                     self.cellHeights.append(0)
@@ -1084,26 +1113,26 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                 self.attachFooterView(!self.end)
                 //load pictures
                 
-                for (index,_) in self.eventsManager.events.enumerate(){
-                    EventsManager().loadPictureForEvent(&self.eventsManager.events[index], completionHandler: {
+                for (index,_) in self.events.enumerate(){
+                    EventsManager().loadPictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         let cells = self.tableView.visibleCells
                         for cell in cells{
                             if (cell.tag == index){
-                                (cell as! HomeEventTableViewCell).UpdateEventPicture(self.eventsManager.events[index], row: index)
+                                (cell as! HomeEventTableViewCell).UpdateEventPicture(self.events[index], row: index)
                             }
                             
                         }
                     })
-                    EventsManager().loadProfilePictureForEvent(&self.eventsManager.events[index], completionHandler: {
+                    EventsManager().loadProfilePictureForEvent(&self.events[index], completionHandler: {
                         (error:NSError!) -> Void in
                         if (error == nil){
                             if (self.tableView.headerViewForSection(index) != nil){
                                 let header:eventHeaderView = self.tableView.headerViewForSection(index) as! eventHeaderView
                                 header.updateProfilePicture(
-                                    self.eventsManager.events[index].profilePictureID as String,
-                                    progress: self.eventsManager.events[index].profilePictureProgress,
-                                    image: self.eventsManager.events[index].profilePicture)
+                                    self.events[index].profilePictureID as String,
+                                    progress: self.events[index].profilePictureProgress,
+                                    image: self.events[index].profilePicture)
                             }
                         }else{
                             print("Error:" + error.description)

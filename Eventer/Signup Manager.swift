@@ -74,7 +74,7 @@ class SignupManager {
             
             if (error == nil){
                 if picture != nil {
-                    FileDownloadManager.uploadImage(picture, completionBlock: {
+                    FileDownloadManager.uploadImage(picture,options: nil, completionBlock: {
                         (error:NSError!, fileId:String!) -> Void in
                         if (error == nil) {
                             
