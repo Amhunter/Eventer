@@ -171,16 +171,16 @@ class GoManager {
         }
         if (self.tab == forTab.Home){
             if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! HomeEventNoPictureCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
+                (self.button.superview!.superview!.superview!.superview! as! HomeEventNoPictureCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
             }else{
-                (self.button.superview!.superview! as! HomeEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
+                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
                 
             }
         }else{ // profile
             if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
+                (self.button.superview!.superview!.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
             }else{
-                (self.button.superview!.superview! as! ProfileEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
+                (self.button.superview!.superview!.superview!.superview! as! ProfileEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
                 
             }
 

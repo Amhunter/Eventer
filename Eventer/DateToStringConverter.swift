@@ -195,12 +195,17 @@ class DateToStringConverter {
     
     class func eventDateToText(date:NSDate,tab:forTab) -> NSMutableAttributedString{
         var smallFont:CGFloat = 12
+        var smallFontName = "Lato-Medium"
         var mediumFont:CGFloat = 13
+        var mediumFontName = "Lato-Regular"
+
         var bigFont:CGFloat = 14
+        var bigFontName = "Lato-Medium"
+
         if (tab == forTab.Home){
-            smallFont = 14
-            mediumFont = 16
-            bigFont = 20
+            smallFont = 14 // month
+            mediumFont = 16 // for weekday
+            bigFont = 27 // for day/year
         }else if (tab == forTab.Explore){
             smallFont = 12
             mediumFont = 13
@@ -223,9 +228,10 @@ class DateToStringConverter {
             if (tab == forTab.Explore){
                 bigFont = 16
             }
-            text.appendAttributedString(self.attrStr("\(year)", size: bigFont))
+            
+            text.appendAttributedString(self.attrStr("\(year)", size: bigFont, fontName: bigFontName))
             text.appendAttributedString(NSAttributedString(string: "\n"))
-            text.appendAttributedString(self.attrStr("\(month)", size: smallFont))
+            text.appendAttributedString(self.attrStr("\(month)", size: smallFont, fontName: smallFontName))
             return text
         }else{
             if (MonthDifference >= 0){
@@ -233,35 +239,35 @@ class DateToStringConverter {
                     if(DayDifference < 13){
                         let weekDayText = self.weekDayInText(calendar.component(NSCalendarUnit.Weekday, fromDate: date), shorten: true)
                         if (DayDifference > 6){ // next week , positive date
-                            text.appendAttributedString(self.attrStr("Next\n\(weekDayText)", size: mediumFont))
+                            text.appendAttributedString(self.attrStr("Next\n\(weekDayText)", size: mediumFont, fontName: mediumFontName))
                             return text
                         }else{                  // this week , positive date
                             if (DayDifference == 0){
-                                text.appendAttributedString(self.attrStr("Today", size: mediumFont))
+                                text.appendAttributedString(self.attrStr("Today", size: mediumFont, fontName: mediumFontName))
                                 return text
                             }else if (DayDifference == 1){
                                 
-                                text.appendAttributedString(self.attrStr("Tom", size: mediumFont))
+                                text.appendAttributedString(self.attrStr("Tom", size: mediumFont, fontName: mediumFontName))
                                 return text
                             }else{
-                                text.appendAttributedString(self.attrStr("This\n\(weekDayText)", size: mediumFont))
+                                text.appendAttributedString(self.attrStr("This\n\(weekDayText)", size: mediumFont, fontName: mediumFontName))
                                 return text
                             }
                         }
                     }else{
                         let day = calendar.component(NSCalendarUnit.Day, fromDate: date)
                         let month = self.monthInText(calendar.component(NSCalendarUnit.Month, fromDate: date), shorten: true)
-                        text.appendAttributedString(self.attrStr("\(day)", size: bigFont))
+                        text.appendAttributedString(self.attrStr("\(day)", size: bigFont, fontName: bigFontName))
                         text.appendAttributedString(NSAttributedString(string: "\n"))
-                        text.appendAttributedString(self.attrStr("\(month)", size: smallFont))
+                        text.appendAttributedString(self.attrStr("\(month)", size: smallFont, fontName:  smallFontName))
                         return text
                     }
                 }else{ // this month, negative date
                     let day = calendar.component(NSCalendarUnit.Day, fromDate: date)
                     let month = self.monthInText(calendar.component(NSCalendarUnit.Month, fromDate: date), shorten: true)
-                    text.appendAttributedString(self.attrStr("\(day)", size: bigFont))
+                    text.appendAttributedString(self.attrStr("\(day)", size: bigFont, fontName: bigFontName))
                     text.appendAttributedString(NSAttributedString(string: "\n"))
-                    text.appendAttributedString(self.attrStr("\(month)", size: smallFont))
+                    text.appendAttributedString(self.attrStr("\(month)", size: smallFont, fontName:  smallFontName))
                     return text
                 }
                 
@@ -269,9 +275,9 @@ class DateToStringConverter {
                 
                 let day = calendar.component(NSCalendarUnit.Day, fromDate: date)
                 let month = self.monthInText(calendar.component(NSCalendarUnit.Month, fromDate: date), shorten: true)
-                text.appendAttributedString(self.attrStr("\(day)", size: bigFont))
+                text.appendAttributedString(self.attrStr("\(day)", size: bigFont, fontName: bigFontName))
                 text.appendAttributedString(NSAttributedString(string: "\n"))
-                text.appendAttributedString(self.attrStr("\(month)", size: smallFont))
+                text.appendAttributedString(self.attrStr("\(month)", size: smallFont, fontName:  smallFontName))
                 return text
             }
         }
@@ -315,9 +321,9 @@ class DateToStringConverter {
         return difference
     }
     
-    class func attrStr(text:String,size:CGFloat) -> NSAttributedString{
+    class func attrStr(text:String,size:CGFloat,fontName: String) -> NSAttributedString{
         return NSAttributedString(string: "\(text)",
-            attributes: [NSFontAttributeName: UIFont(name: "Lato-Regular", size: size)!])
+            attributes: [NSFontAttributeName: UIFont(name: fontName, size: size)!])
     }
     class func monthInText(month:Int,shorten:Bool) -> String {
         var text:NSString = NSString()

@@ -36,6 +36,43 @@ class Utility {
        
     }
     
+    /*
+    *  Resize UIImage
+    *
+    */
+    class func resizeImage(image: UIImage, newHeight: CGFloat) -> UIImage {
+        let scale = newHeight / image.size.height
+        let newWidth = image.size.width * scale
+
+        let newRect: CGRect = CGRectIntegral(CGRectMake(0, 0, newWidth, newHeight))
+        let newSize = CGSizeMake(newWidth, newHeight)
+        let imageRef: CGImageRef = image.CGImage!
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+        let context: CGContextRef = UIGraphicsGetCurrentContext()!
+        // Set the quality level to use when rescaling
+        CGContextSetInterpolationQuality(context, .High)
+        let flipVertical: CGAffineTransform = CGAffineTransformMake(1, 0, 0, -1, 0, newSize.height)
+        CGContextConcatCTM(context, flipVertical)
+        // Draw into the context; this scales the image
+        CGContextDrawImage(context, newRect, imageRef)
+        // Get the resized image from the context and a UIImage
+        let newImageRef: CGImageRef = CGBitmapContextCreateImage(context)!
+        let newImage: UIImage = UIImage(CGImage: newImageRef)
+//        CGImageRelease(newImageRef)
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+//    class func resizeImage(image: UIImage, newHeight: CGFloat) -> UIImage {
+//        let scale = newHeight / image.size.height
+//        let newWidth = image.size.width * scale
+//        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+//        image.drawInRect(CGRectMake(0, 0, newWidth, newHeight))
+//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        
+//        return newImage
+//    }
+    
     class func numberOfWordsInString(str:NSString) -> Int {
         let words = str.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         var wordDictionary = Dictionary<String, Int>()
@@ -174,6 +211,8 @@ class Utility {
         let equalHeightConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: equalToView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0)
         return [centerXConstraint , centerYConstraint, equalWidthConstraint, equalHeightConstraint]
     }
+    
+    
     
     /*
     * Checking versions

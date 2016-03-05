@@ -55,6 +55,15 @@ class ColorFromCode {
     class func sexyOrangeColor() -> UIColor{
         return self.colorWithHexString("#FF4500")
     }
+    class func likeBlueColor() -> UIColor{
+        return self.colorWithHexString("#009DE6")
+    }
+    class func goingBlueColor() -> UIColor{
+        return self.colorWithHexString("#008DD4")
+    }
+    class func commentBlueColor() -> UIColor{
+        return self.colorWithHexString("#0079BF")
+    }
     
     class func randomBlueColorFromNumber(number:Int) -> UIColor{
 //        var code:[String] = ["#03A9F5","#4FC2F8","#039BE6","#0288D1","#28B6F6","#05A8F7"]
@@ -78,7 +87,9 @@ class ColorFromCode {
         
     }
     
-
+    class func orangeDateColor() -> UIColor {
+        return self.colorWithHexString("#FA5528")
+    }
     class func tabBackgroundColor() -> UIColor{
         return self.colorWithHexString("#EBF0F2")
     }

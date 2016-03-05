@@ -15,6 +15,7 @@
 		C95642731C44E69F00A1931A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95642721C44E69F00A1931A /* AppDelegate.swift */; };
 		C96E71601C54CD59004E62C7 /* EditProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96E715F1C54CD59004E62C7 /* EditProfileTableViewCell.swift */; };
 		C96E71621C54CFFA004E62C7 /* UsersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96E71611C54CFFA004E62C7 /* UsersManager.swift */; };
+		C9807A121C753B0A002D2C56 /* ImagesCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9807A111C753B0A002D2C56 /* ImagesCenter.swift */; };
 		C981F15C1C6260C000F5B577 /* GeneralUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C981F15B1C6260C000F5B577 /* GeneralUploadManager.swift */; };
 		C9AEE8C61C44E72D00E75F4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9AEE8C41C44E72D00E75F4F /* Main.storyboard */; };
 		C9DBE7BC1C44D607002F4525 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9DBE7201C44D606002F4525 /* Lato-Bold.ttf */; };
@@ -164,6 +165,7 @@
 		C95642721C44E69F00A1931A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C96E715F1C54CD59004E62C7 /* EditProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewCell.swift; sourceTree = "<group>"; };
 		C96E71611C54CFFA004E62C7 /* UsersManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersManager.swift; sourceTree = "<group>"; };
+		C9807A111C753B0A002D2C56 /* ImagesCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesCenter.swift; sourceTree = "<group>"; };
 		C981F15B1C6260C000F5B577 /* GeneralUploadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralUploadManager.swift; sourceTree = "<group>"; };
 		C9AEE8C51C44E72D00E75F4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C9DBE7071C44D572002F4525 /* Eventer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eventer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -393,6 +395,7 @@
 			isa = PBXGroup;
 			children = (
 				C9DBE7351C44D606002F4525 /* Utility.swift */,
+				C9807A111C753B0A002D2C56 /* ImagesCenter.swift */,
 				C9DBE7361C44D606002F4525 /* DateToStringConverter.swift */,
 				C9DBE7371C44D606002F4525 /* ColorFromCode.swift */,
 				C9DBE7381C44D606002F4525 /* ActivityButton.swift */,
@@ -852,6 +855,7 @@
 				C9DBE8311C44D607002F4525 /* CommentTableViewCell.swift in Sources */,
 				C9DBE7FF1C44D607002F4525 /* CalendarCollectionView.swift in Sources */,
 				C9DBE7D01C44D607002F4525 /* DateToStringConverter.swift in Sources */,
+				C9807A121C753B0A002D2C56 /* ImagesCenter.swift in Sources */,
 				C9DBE82F1C44D607002F4525 /* MiniCommentTableViewCell.swift in Sources */,
 				C9DBE8131C44D607002F4525 /* CreateEventViewController.swift in Sources */,
 				C9DBE7DC1C44D607002F4525 /* eventHeaderView.swift in Sources */,

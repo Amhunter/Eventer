@@ -122,7 +122,7 @@ class DayViewController: UIViewController, UITableViewDataSource, UITableViewDel
         let EventDateFormatter = NSDateFormatter()
         EventDateFormatter.dateFormat = "HH:mm"
         let EventDate:NSDate = self.TimelineData[indexPath.row]["date"] as! NSDate
-        EventCell.EventDate.text = EventDateFormatter.stringFromDate(EventDate)
+        EventCell.eventDateLabel.text = EventDateFormatter.stringFromDate(EventDate)
         
         // click on EventName will push another view controller
         EventCell.EventName.tag = indexPath.row // this is to remember in which cell we clicked the label

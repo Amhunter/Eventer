@@ -173,21 +173,21 @@ class LikeManager {
             button.setImage(UIImage(named: "like-active.png"), forState: UIControlState.Highlighted)
             self.numberOfLikes--
         }
-        if (self.tab == forTab.Home){
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! HomeEventNoPictureCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-            }else{
-                (self.button.superview!.superview! as! HomeEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-                
-            }
-        }else if self.tab == forTab.Profile { // profile
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-            }else{
-                (self.button.superview!.superview! as! ProfileEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-                
-            }
-        }
+//        if (self.tab == forTab.Home){
+//            if (self.event.pictureId == ""){
+//                (self.button.superview!.superview!.superview!.superview! as! HomeEventNoPictureCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
+//            }else{
+//                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
+//                
+//            }
+//        }else if self.tab == forTab.Profile { // profile
+//            if (self.event.pictureId == ""){
+//                (self.button.superview!.superview!.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
+//            }else{
+//                (self.button.superview!.superview!.superview!.superview! as! ProfileEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
+//                
+//            }
+//        }
 
         
     }

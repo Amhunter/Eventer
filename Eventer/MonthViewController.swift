@@ -618,7 +618,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
 //        Cell.ProfileView.addGestureRecognizer(ProfileNameTapRecognizer)
     }
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 55
+        return 65
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -665,7 +665,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.EventName.text = eventNameText
             Cell.EventDescription.attributedText = eventDetailsText
             Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
-            Cell.EventDate.attributedText = eventDateText
+            Cell.eventDateLabel.attributedText = eventDateText
             
             // clickable author name
             if (self.events[indexPath.section].details != ""){
@@ -687,18 +687,18 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.EventDescription.attributedText = eventDetailsText
 
             if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
-                Cell.EventDate.backgroundColor = UIColor.redColor()
+                Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
             }else{
-                Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
+                Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
             }
             
             Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
             
             // Set Buttons
-            Cell.LikeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.events[indexPath.section].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
+            Cell.likeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goButton.initialize(self.events[indexPath.section].goManager.isGoing)
+            Cell.goButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.events[indexPath.section].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
@@ -794,9 +794,9 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             
             
             if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
-                Cell.EventDate.backgroundColor = UIColor.redColor()
+                Cell.EventDate.backgroundColor = ColorFromCode.orangeDateColor()
             }else{
-                Cell.EventDate.backgroundColor = ColorFromCode.standardBlueColor()
+                Cell.EventDate.backgroundColor = ColorFromCode.orangeDateColor()
             }
 
             Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)

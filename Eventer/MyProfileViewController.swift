@@ -454,7 +454,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableHeaderView.setNeedsLayout()
         self.tableHeaderView.layoutIfNeeded()
         profilePictureShadowView.addSubview(profilePictureImageView)
-        self.profilePictureImageView.frame.size = self.profilePictureShadowView.frame.size
+        self.profilePictureImageView.frame.size = CGSizeMake(100,100)
         
         bioLabel.preferredMaxLayoutWidth = bioLabel.frame.width
         self.tableHeaderView.setNeedsUpdateConstraints()
