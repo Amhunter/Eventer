@@ -23,7 +23,7 @@ class CommentTextView: UITextView {
         self.userInteractionEnabled = true
         self.textContainerInset = UIEdgeInsetsMake(5, 5, 5, 5)
         putPlaceHolder()
-
+        //sds
     }
     
 
