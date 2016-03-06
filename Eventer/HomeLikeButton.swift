@@ -11,14 +11,14 @@ class HomeLikeButton: UIButton {
 
     func initialize(isActive:Bool){
         if (isActive){
-            self.setImage(ImagesCenter.HomeLikeImage(true), forState: UIControlState.Normal)
-            self.setImage(ImagesCenter.HomeLikeImage(false), forState: UIControlState.Highlighted)
+            self.setImage(ImagesCenter.homeLikeImage(true), forState: UIControlState.Normal)
+            self.setImage(ImagesCenter.homeLikeImage(false), forState: UIControlState.Highlighted)
 //            self.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Normal)
 //            self.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Highlighted)
 
         }else{
-            self.setImage(ImagesCenter.HomeLikeImage(false), forState: UIControlState.Normal)
-            self.setImage(ImagesCenter.HomeLikeImage(true), forState: UIControlState.Highlighted)
+            self.setImage(ImagesCenter.homeLikeImage(false), forState: UIControlState.Normal)
+            self.setImage(ImagesCenter.homeLikeImage(true), forState: UIControlState.Highlighted)
 //            self.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Highlighted)
 //            self.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Normal)
         }

@@ -116,7 +116,8 @@ class Utility {
         // add the drop shadow
         forView.layer.shadowColor = UIColor.blackColor().CGColor
         forView.layer.shadowOffset = CGSizeMake(0, offset)
-        forView.layer.shadowOpacity = Float(opacity)    
+        forView.layer.shadowOpacity = Float(0.5)
+        forView.layer.shadowRadius = 2.5
         forView.layer.masksToBounds = false
         forView.layer.shouldRasterize = true
     }

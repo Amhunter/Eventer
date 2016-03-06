@@ -173,7 +173,7 @@ class GoManager {
             if (self.event.pictureId == ""){
                 (self.button.superview!.superview!.superview!.superview! as! HomeEventNoPictureCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
             }else{
-                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
+                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).goButton.setLabelNumber(self.numberOfGoing)
                 
             }
         }else{ // profile

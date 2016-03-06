@@ -15,6 +15,8 @@
 		C95642731C44E69F00A1931A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95642721C44E69F00A1931A /* AppDelegate.swift */; };
 		C96E71601C54CD59004E62C7 /* EditProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96E715F1C54CD59004E62C7 /* EditProfileTableViewCell.swift */; };
 		C96E71621C54CFFA004E62C7 /* UsersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96E71611C54CFFA004E62C7 /* UsersManager.swift */; };
+		C9715E441C8B5B6900AB2CEE /* ETableViewCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9715E431C8B5B6900AB2CEE /* ETableViewCellButton.swift */; };
+		C9715E491C8C6E3800AB2CEE /* LXTouchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = C9715E481C8C6E3800AB2CEE /* LXTouchGestureRecognizer.m */; };
 		C9807A121C753B0A002D2C56 /* ImagesCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9807A111C753B0A002D2C56 /* ImagesCenter.swift */; };
 		C981F15C1C6260C000F5B577 /* GeneralUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C981F15B1C6260C000F5B577 /* GeneralUploadManager.swift */; };
 		C9AEE8C61C44E72D00E75F4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9AEE8C41C44E72D00E75F4F /* Main.storyboard */; };
@@ -165,6 +167,9 @@
 		C95642721C44E69F00A1931A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C96E715F1C54CD59004E62C7 /* EditProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewCell.swift; sourceTree = "<group>"; };
 		C96E71611C54CFFA004E62C7 /* UsersManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersManager.swift; sourceTree = "<group>"; };
+		C9715E431C8B5B6900AB2CEE /* ETableViewCellButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ETableViewCellButton.swift; sourceTree = "<group>"; };
+		C9715E471C8C6E3800AB2CEE /* LXTouchGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LXTouchGestureRecognizer.h; sourceTree = "<group>"; };
+		C9715E481C8C6E3800AB2CEE /* LXTouchGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LXTouchGestureRecognizer.m; sourceTree = "<group>"; };
 		C9807A111C753B0A002D2C56 /* ImagesCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesCenter.swift; sourceTree = "<group>"; };
 		C981F15B1C6260C000F5B577 /* GeneralUploadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralUploadManager.swift; sourceTree = "<group>"; };
 		C9AEE8C51C44E72D00E75F4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -403,6 +408,7 @@
 				C9DBE73A1C44D606002F4525 /* HomeResponseButton.swift */,
 				C9DBE73B1C44D606002F4525 /* HomeShareButton.swift */,
 				C9DBE73C1C44D606002F4525 /* HomeMoreButton.swift */,
+				C9715E431C8B5B6900AB2CEE /* ETableViewCellButton.swift */,
 				C9DBE73D1C44D606002F4525 /* ResponseButton.swift */,
 				C9DBE73E1C44D606002F4525 /* WorkAroundViewController.h */,
 				C9DBE73F1C44D606002F4525 /* WorkAroundViewController.m */,
@@ -434,6 +440,8 @@
 				C9DBE7531C44D606002F4525 /* MySearchController.swift */,
 				C9DBE7541C44D606002F4525 /* LoadingIndicatorView.swift */,
 				C9DBE7551C44D606002F4525 /* TableFooterRefreshView.swift */,
+				C9715E471C8C6E3800AB2CEE /* LXTouchGestureRecognizer.h */,
+				C9715E481C8C6E3800AB2CEE /* LXTouchGestureRecognizer.m */,
 			);
 			name = "Subclassed Views";
 			sourceTree = "<group>";
@@ -832,6 +840,7 @@
 				C9DBE8261C44D607002F4525 /* EditProfileViewController.swift in Sources */,
 				C9DBE7FB1C44D607002F4525 /* ActivityNavigationController.swift in Sources */,
 				C9DBE7ED1C44D607002F4525 /* ActivityUnit.swift in Sources */,
+				C9715E491C8C6E3800AB2CEE /* LXTouchGestureRecognizer.m in Sources */,
 				C9DBE7D21C44D607002F4525 /* ActivityButton.swift in Sources */,
 				C9DBE7CF1C44D607002F4525 /* Utility.swift in Sources */,
 				C9DBE7C71C44D607002F4525 /* MoreManager.swift in Sources */,
@@ -868,6 +877,7 @@
 				C9DBE7DF1C44D607002F4525 /* MyTimer.swift in Sources */,
 				C9DBE8231C44D607002F4525 /* fromUserToUserFollowNFCell.swift in Sources */,
 				C95642711C44E69300A1931A /* TabBarViewController.swift in Sources */,
+				C9715E441C8B5B6900AB2CEE /* ETableViewCellButton.swift in Sources */,
 				C9DBE7EF1C44D607002F4525 /* KCSUserWith3Events.swift in Sources */,
 				C9DBE7C91C44D607002F4525 /* FileDownloadManager.swift in Sources */,
 				C9DBE7F31C44D607002F4525 /* Signup Manager.swift in Sources */,

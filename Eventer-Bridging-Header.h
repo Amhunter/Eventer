@@ -4,3 +4,4 @@
 
 #import <KinveyKit/KinveyKit.h>
 #import <TTTAttributedLabel/TTTAttributedLabel.h>
+#import "LXTouchGestureRecognizer.h"

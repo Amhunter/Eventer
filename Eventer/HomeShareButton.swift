@@ -10,14 +10,23 @@ import UIKit
 
 class HomeShareButton: UIButton {
     
+    
     func initialize(isActive:Bool){
         if (isActive){
-            self.setImage(UIImage(named: "share-active.png"), forState: UIControlState.Normal)
-            self.setImage(UIImage(named: "share.png"), forState: UIControlState.Highlighted)
+            self.setImage(ImagesCenter.homeShareImage(true), forState: UIControlState.Normal)
+            self.setImage(ImagesCenter.homeShareImage(false), forState: UIControlState.Highlighted)
+            //            self.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Normal)
+            //            self.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Highlighted)
+            
         }else{
-            self.setImage(UIImage(named: "share.png"), forState: UIControlState.Normal)
-            self.setImage(UIImage(named: "share-active.png"), forState: UIControlState.Highlighted)
+            self.setImage(ImagesCenter.homeShareImage(false), forState: UIControlState.Normal)
+            self.setImage(ImagesCenter.homeShareImage(true), forState: UIControlState.Highlighted)
+            //            self.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Highlighted)
+            //            self.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Normal)
         }
+        self.imageView!.tintColor = UIColor.whiteColor()
+        
     }
     
+
 }

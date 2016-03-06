@@ -25,7 +25,7 @@ class eventHeaderView: UITableViewHeaderFooterView {
         self.profilePictureImageView.backgroundColor = UIColor.lightGrayColor()
         // Profile View
         self.contentView.backgroundColor = UIColor.whiteColor()
-        profilePictureImageView.layer.cornerRadius = 17.5
+        profilePictureImageView.layer.cornerRadius = 20
         profilePictureImageView.layer.masksToBounds = true
         profilePictureImageView.layer.rasterizationScale = UIScreen.mainScreen().scale
 
@@ -51,10 +51,10 @@ class eventHeaderView: UITableViewHeaderFooterView {
             "graySep": graySeparator
         ]
         
-        let SH_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[profilePicture(35)]-10-[profileName]-10-[createdAt]-15@999-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
-        let SV_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[profilePicture(35@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
-        let SV_Constraints1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[profileName(35@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
-        let SV_Constraints2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[createdAt(35@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+        let SH_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[profilePicture(40)]-10-[profileName]-10-[createdAt]-15@999-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+        let SV_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[profilePicture(40@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+        let SV_Constraints1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[profileName(40@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
+        let SV_Constraints2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[createdAt(40@999)]->=10@700-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
         let SV_Constraints3 = NSLayoutConstraint.constraintsWithVisualFormat("V:|->=0@999-[graySep(1)]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views)
 
         self.contentView.addConstraints(SH_Constraints0)

@@ -322,8 +322,21 @@ class DateToStringConverter {
     }
     
     class func attrStr(text:String,size:CGFloat,fontName: String) -> NSAttributedString{
+        
+        let font = UIFont(name: fontName, size: size)!
+//
+//        let paragraphStyle: NSMutableParagraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.alignment = NSTextAlignment.Center
+//        paragraphStyle.lineSpacing = 1
+//        paragraphStyle.lineHeightMultiple = 0.5
+//        let minMaxLineHeight: CGFloat = (font.pointSize - font.ascender + font.capHeight)
+//        let offset = font.capHeight - font.ascender
+//        paragraphStyle.minimumLineHeight = minMaxLineHeight
+//        paragraphStyle.maximumLineHeight = minMaxLineHeight
+//        
+
         return NSAttributedString(string: "\(text)",
-            attributes: [NSFontAttributeName: UIFont(name: fontName, size: size)!])
+            attributes: [NSFontAttributeName: font])
     }
     class func monthInText(month:Int,shorten:Bool) -> String {
         var text:NSString = NSString()

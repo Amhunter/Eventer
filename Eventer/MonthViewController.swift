@@ -144,6 +144,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         tableView.allowsSelection = false
         tableView.delegate = self
         tableView.dataSource = self
+//        tableView.canCancelContentTouches = false
         tableView.registerClass(HomeEventTableViewCell.self, forCellReuseIdentifier: "Event Cell")
         tableView.registerClass(HomeEventNoPictureCell.self, forCellReuseIdentifier: "EventNoPic Cell")
         tableView.registerClass(eventHeaderView.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -192,6 +193,8 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Utility.dropShadow(self.navigationController!.navigationBar, offset: -1, opacity: 0.25)
         Set_Subviews()
         LoadTimeline()
         CalculateSkippedDays() //calculating
@@ -214,6 +217,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.moveNavBar(1000, animated: false)
+        Utility.dropShadow(self.navigationController!.navigationBar, offset: 0, opacity: 0)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
@@ -618,7 +622,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
 //        Cell.ProfileView.addGestureRecognizer(ProfileNameTapRecognizer)
     }
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 65
+        return 60
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -695,12 +699,16 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
             
             // Set Buttons
-            Cell.likeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
-            Cell.likeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goButton.initialize(self.events[indexPath.section].goManager.isGoing)
-            Cell.goButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.events[indexPath.section].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likeButton.setState(self.events[indexPath.section].likeManager.isLiked)
+            Cell.goButton.setState(self.events[indexPath.section].goManager.isGoing)
+            Cell.shareButton.setState(self.events[indexPath.section].shareManager.isShared)
+
+//            Cell.likeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
+//            Cell.likeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.goButton.initialize(self.events[indexPath.section].goManager.isGoing)
+//            Cell.goButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.shareButton.initialize(self.events[indexPath.section].shareManager.isShared)
+//            Cell.shareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.initialize()
             Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -754,12 +762,12 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
 
             let descrHeight = Cell.EventDescription.sizeThatFits(CGSizeMake(Cell.EventDescription.frame.width, 550)).height
             let timelocHeight = Cell.timeLocationLabel.sizeThatFits(CGSizeMake(Cell.timeLocationLabel.frame.width, 100)).height
-            let numberOfGoingHeight = Cell.numberOfGoingLabel.sizeThatFits(CGSizeMake(Cell.numberOfGoingLabel.frame.width, 100)).height
+//            let numberOfGoingHeight = Cell.numberOfGoingLabel.sizeThatFits(CGSizeMake(Cell.numberOfGoingLabel.frame.width, 100)).height
 
             //            println("time location height for \(indexPath.section) : \(Cell.timeLocationLabel.frame.height)")
             //            println("event description height for \(indexPath.section) : \(Cell.EventDescription.frame.height)")
             //            println("got height for \(indexPath.section) : \(Cell.frame.height)")
-            cellHeights.insert((screenWidth+15+timelocHeight+5+descrHeight+10+numberOfGoingHeight+5+60), atIndex: indexPath.section)
+            cellHeights.insert((screenWidth*4/5+15+timelocHeight+5+descrHeight), atIndex: indexPath.section)
             
             return Cell
 

@@ -199,7 +199,7 @@ class ShareManager:NSObject,UIActionSheetDelegate{
             if (self.event.pictureId == ""){
                 (self.button.superview!.superview! as! HomeEventNoPictureCell).numberOfSharesLabel.text = "\(self.numberOfShares)"
             }else{
-                (self.button.superview!.superview! as! HomeEventTableViewCell).numberOfSharesLabel.text = "\(self.numberOfShares)"
+                (self.button.superview!.superview! as! HomeEventTableViewCell).shareButton.setLabelNumber(self.numberOfShares)
                 
             }
         }else if (self.tab == forTab.Profile){ // profile

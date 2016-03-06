@@ -5,17 +5,7 @@
 //  Created by Grisha on 30/10/2014.
 //  Copyright (c) 2014 Grisha. All rights reserved.
 //
-extension UIButton {
-    func setBackgroundColor(color: UIColor, forState: UIControlState) {
-        UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
-        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), color.CGColor)
-        CGContextFillRect(UIGraphicsGetCurrentContext(), CGRect(x: 0, y: 0, width: 1, height: 1))
-        let colorImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        self.setBackgroundImage(colorImage, forState: forState)
-    }
-}
+
 
 import UIKit
 
@@ -43,25 +33,17 @@ class HomeEventTableViewCell: UITableViewCell {
     var commentsimg:UIImageView = UIImageView(image: UIImage(named: "small-comment.png"))
     var sharesimg:UIImageView = UIImageView(image: UIImage(named: "small-share.png"))
     
-    var numberOfGoingLabel:UILabel = UILabel()
-    var numberOfLikesLabel:UILabel = UILabel()
-    var numberOfCommentsLabel:UILabel = UILabel()
-    var numberOfSharesLabel:UILabel = UILabel()
 
-    var likeContainer = UIButton()
-    var likeContainerCenterSubview = UIView()
-
-    var goingContainer = UIView()
-    var goingContainerCenterSubview = UIView()
+    var likeButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeLikeImage(true), backgroundColor: ColorFromCode.colorWithHexString("#008DD4"))
+    var commentButton = UIButton()
+    var goButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeGoImage(true), backgroundColor: ColorFromCode.colorWithHexString("#0079BF"))
+    var shareButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeShareImage(true), backgroundColor: ColorFromCode.colorWithHexString("#009DE6"))
+    var MoreButton:HomeMoreButton = HomeMoreButton()
 
     var commentContainer = UIView()
     
-    var goButton:HomeResponseButton = HomeResponseButton()
-    var likeButton:HomeLikeButton = HomeLikeButton()
-    var commentButton:UIButton = UIButton()
-    var ShareButton:HomeShareButton = HomeShareButton()
-    var MoreButton:HomeMoreButton = HomeMoreButton()
-    
+
+
     
     var goingbtn:UIButton = UIButton()
     var likesbtn:UIButton = UIButton()
@@ -84,26 +66,6 @@ class HomeEventTableViewCell: UITableViewCell {
 //        println(height)
 //        println(width)
         self.contentView.frame.size.width = UIScreen.mainScreen().bounds.width
-        
-        numberOfGoingLabel.font = UIFont(name: "Lato-Bold", size: 15)
-        numberOfLikesLabel.font = UIFont(name: "Lato-Bold", size: 15)
-        numberOfCommentsLabel.font = UIFont(name: "Lato-Regular", size: 12)
-        numberOfSharesLabel.font = UIFont(name: "Lato-Regular", size: 12)
-
-        numberOfGoingLabel.textColor = UIColor.whiteColor()
-        numberOfLikesLabel.textColor = UIColor.whiteColor()
-        numberOfCommentsLabel.textColor = UIColor.lightGrayColor()
-        numberOfSharesLabel.textColor = UIColor.lightGrayColor()
-
-//        likeContainer.backgroundClike-active-2x.pngolor = ColorFromCode.colorWithHexString("#009DE6")
-        likeContainer.backgroundColor = ColorFromCode.colorWithHexString("#009DE6")
-        goingContainer.backgroundColor = ColorFromCode.colorWithHexString("#008DD4")
-        commentContainer.backgroundColor = ColorFromCode.colorWithHexString("#0079BF")
-        
-        numberOfGoingLabel.textAlignment = NSTextAlignment.Center
-        numberOfLikesLabel.textAlignment = NSTextAlignment.Center
-        numberOfCommentsLabel.textAlignment = NSTextAlignment.Center
-        numberOfSharesLabel.textAlignment = NSTextAlignment.Center
 
         timeLocationLabel.textAlignment = NSTextAlignment.Center
         timeLocationLabel.numberOfLines = 3
@@ -117,7 +79,7 @@ class HomeEventTableViewCell: UITableViewCell {
         EventName.backgroundColor = UIColor.clearColor()
         EventName.textColor = UIColor.whiteColor()
         EventName.textAlignment = NSTextAlignment.Center
-        EventName.font = UIFont(name: "Lato-Semibold", size: 21)
+        EventName.font = UIFont(name: "Lato-Semibold", size: 19)
         EventName.numberOfLines = 0
         eventDateLabel.backgroundColor = ColorFromCode.colorWithHexString("#02A8F3")
         eventDateLabel.textColor = UIColor.whiteColor()
@@ -137,7 +99,6 @@ class HomeEventTableViewCell: UITableViewCell {
         //self.contentMode = UIViewContentMode.Redraw
         //self.contentView.contentMode = UIViewContentMode.Redraw
 
-    
         self.EventName.translatesAutoresizingMaskIntoConstraints = false
         self.eventDateLabel.translatesAutoresizingMaskIntoConstraints = false
         self.EventDescription.translatesAutoresizingMaskIntoConstraints = false
@@ -146,14 +107,8 @@ class HomeEventTableViewCell: UITableViewCell {
         self.goButton.translatesAutoresizingMaskIntoConstraints = false
         self.likeButton.translatesAutoresizingMaskIntoConstraints = false
         self.commentButton.translatesAutoresizingMaskIntoConstraints = false
-        self.ShareButton.translatesAutoresizingMaskIntoConstraints = false
-//        self.MoreButton.translatesAutoresizingMaskIntoConstraints = false
+        self.shareButton.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        // Going / Like / Comment views
-        self.goingContainer.translatesAutoresizingMaskIntoConstraints = false
-        self.likeContainer.translatesAutoresizingMaskIntoConstraints = false
-        self.commentContainer.translatesAutoresizingMaskIntoConstraints = false
         
         self.goingbtn.translatesAutoresizingMaskIntoConstraints = false
         self.likesbtn.translatesAutoresizingMaskIntoConstraints = false
@@ -170,9 +125,9 @@ class HomeEventTableViewCell: UITableViewCell {
 //        self.contentView.addSubview(ShareButton)
 ////        self.contentView.addSubview(MoreButton)
 //        self.contentView.addSubview(commentButton)
-        self.contentView.addSubview(goingContainer)
-        self.contentView.addSubview(likeContainer)
-        self.contentView.addSubview(commentContainer)
+        self.contentView.addSubview(goButton)
+        self.contentView.addSubview(likeButton)
+        self.contentView.addSubview(shareButton)
 //        self.contentView.addSubview(sharesbtn)
 
         self.contentView.addSubview(goingbtn)
@@ -185,10 +140,9 @@ class HomeEventTableViewCell: UITableViewCell {
             "evPicture": EventPicture,
             "evDate": eventDateLabel,
             "evDescription": EventDescription,
-            "goingContainer": goingContainer,
-            "likeContainer": likeContainer,
-            "commentContainer": commentContainer,
-            "shareButton": ShareButton,
+            "goButton": goButton,
+            "likeButton": likeButton,
+            "shareButton": shareButton,
             "commentButton" : commentButton,
             "moreButton" : MoreButton,
             "timeloc" : timeLocationLabel,
@@ -200,12 +154,12 @@ class HomeEventTableViewCell: UITableViewCell {
         let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[timeloc]-10-|", options: [], metrics: nil, views: views)
         let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[evDescription]-10-|", options: [], metrics: nil, views: views)
         let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][evDate(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][likeContainer(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][goingContainer(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint5 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][commentContainer(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][likeButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][goButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint5 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][shareButton(sq@999)]|", options: [], metrics: metrics, views: views)
 
 
-        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evDate(sq@999)][likeContainer(sq@999)][goingContainer(sq@999)][commentContainer(sq@999)]-15@999-[timeloc(<=100@999)]-5-[evDescription(<=550@999)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evDate(sq@999)][shareButton(sq@999)][likeButton(sq@999)][goButton(sq@999)]-15@999-[timeloc(<=100@999)]-5-[evDescription(<=550@999)]->=0@999-|", options: [], metrics: metrics, views: views)
         let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evPicture]-15@999-[timeloc(<=100@999)]-5-[evDescription(<=550@999)]->=0@999-|", options: [], metrics: nil, views: views)
 
         // height == width for picture
@@ -235,53 +189,12 @@ class HomeEventTableViewCell: UITableViewCell {
 //        println(ProgressView.frame)
         self.showImage(false)
         
-        // Like Container
-        self.likeContainer.addSubview(likeContainerCenterSubview)
-        likeContainerCenterSubview.translatesAutoresizingMaskIntoConstraints = false
-        self.likeContainer.addConstraint(NSLayoutConstraint(item: likeContainerCenterSubview, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: likeContainer, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        self.likeContainer.addConstraint(NSLayoutConstraint(item: likeContainerCenterSubview, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: likeContainer, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
-
-        self.likeContainerCenterSubview.addSubview(likeButton)
-        self.likeContainerCenterSubview.addSubview(numberOfLikesLabel)
         
-        self.numberOfLikesLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.likeButton.translatesAutoresizingMaskIntoConstraints = false
-        let l = [
-            "likeBtn" : likeButton,
-            "numberOfLikesLabel" : numberOfLikesLabel
-        ]
         
-        let lH_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[numberOfLikesLabel]|", options: [], metrics: nil, views: l)
-        let lV_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[likeBtn]-5@999-[numberOfLikesLabel]|", options: [NSLayoutFormatOptions.AlignAllCenterX], metrics: nil, views: l)
-
-        self.likeContainerCenterSubview.addConstraints(lH_Constraints0)
-        self.likeContainerCenterSubview.addConstraints(lV_Constraints0)
         
-        // Going Container
         
-        self.goingContainer.addSubview(goingContainerCenterSubview)
-        goingContainerCenterSubview.translatesAutoresizingMaskIntoConstraints = false
-        self.goingContainer.addConstraint(NSLayoutConstraint(item: goingContainerCenterSubview, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: goingContainer, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        self.goingContainer.addConstraint(NSLayoutConstraint(item: goingContainerCenterSubview, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: goingContainer, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
-        
-        self.goingContainerCenterSubview.addSubview(goButton)
-        self.goingContainerCenterSubview.addSubview(numberOfGoingLabel)
-        
-        self.numberOfGoingLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.goButton.translatesAutoresizingMaskIntoConstraints = false
-        let g = [
-            "goButton" : goButton,
-            "numberOfGoingLabel" : numberOfGoingLabel
-        ]
-        
-        let gH_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[numberOfGoingLabel]|", options: [], metrics: nil, views: g)
-        let gV_Constraints0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[goButton]-5@999-[numberOfGoingLabel]|", options: [NSLayoutFormatOptions.AlignAllCenterX], metrics: nil, views: g)
-        
-        self.goingContainerCenterSubview.addConstraints(gH_Constraints0)
-        self.goingContainerCenterSubview.addConstraints(gV_Constraints0)
-        
-        likeContainer.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Highlighted)
-        likeContainer.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Normal)
+//        likeContainer.setBackgroundColor(ColorFromCode.orangeDateColor(), forState: UIControlState.Highlighted)
+//        likeContainer.setBackgroundColor(ColorFromCode.likeBlueColor(), forState: UIControlState.Normal)
         // Set number of going/likes/comments/shares
 //        
 //        self.numberOfGoingLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -466,10 +379,15 @@ class HomeEventTableViewCell: UITableViewCell {
         self.numberOfComments = comments
         self.numberOfShares = shares
         
-        self.numberOfGoingLabel.text = "\(going)"
-        self.numberOfLikesLabel.text = "\(likes)"
-        self.numberOfCommentsLabel.text = "\(comments)"
-        self.numberOfSharesLabel.text = "\(shares)"
+//        self.goButton.setLabelNumber(going)
+        self.likeButton.setLabelNumber(likes)
+        self.shareButton.setLabelNumber(shares)
+//        self.commentButton.setLabelNumber(going)
+//
+//        self.numberOfGoingLabel.text = "\(going)"
+//        self.numberOfLikesLabel.text = "\(likes)"
+//        self.numberOfCommentsLabel.text = "\(comments)"
+//        self.numberOfSharesLabel.text = "\(shares)"
         
         
     }

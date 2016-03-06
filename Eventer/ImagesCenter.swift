@@ -10,16 +10,40 @@ import UIKit
 
 class ImagesCenter {
     
-    class func HomeLikeImage(active:Bool) -> UIImage {
+    class func homeLikeImage(active:Bool) -> UIImage {
         var image:UIImage!
         if active {
             image = UIImage(named: "like-active.png")
         } else {
-            image = UIImage(named: "like.png")
-
+            image = UIImage(named: "like-active.png")
         }
         image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
 
+        
+        return image
+    }
+    class func homeGoImage(active:Bool) -> UIImage {
+        var image:UIImage!
+        if active {
+            image = UIImage(named: "going-active.png")
+        } else {
+            image = UIImage(named: "going-active.png")
+        }
+        image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        
+        
+        return image
+    }
+    
+    class func homeShareImage(active:Bool) -> UIImage {
+        var image:UIImage!
+        if active {
+            image = UIImage(named: "share-active.png")
+        } else {
+            image = UIImage(named: "share-active.png")
+        }
+        image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        
         
         return image
     }
