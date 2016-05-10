@@ -14,12 +14,12 @@ class DateToStringConverter {
         date = fromDate
     }
     
-    class func getCreatedAtString(fromDate:NSDate , tab:forTab) -> String{
+    class func getCreatedAtString(fromDate:NSDate , tab:TargetView) -> String{
         var shorten:Bool
         switch tab{
-        case forTab.Home:
+        case TargetView.Home:
             shorten = true
-        case forTab.Activity:
+        case TargetView.Activity:
             shorten = false
         default:
             shorten = false
@@ -193,7 +193,7 @@ class DateToStringConverter {
 //        //
 //    }
     
-    class func eventDateToText(date:NSDate,tab:forTab) -> NSMutableAttributedString{
+    class func eventDateToText(date:NSDate,tab:TargetView) -> NSMutableAttributedString{
         var smallFont:CGFloat = 12
         var smallFontName = "Lato-Medium"
         var mediumFont:CGFloat = 13
@@ -202,11 +202,11 @@ class DateToStringConverter {
         var bigFont:CGFloat = 14
         var bigFontName = "Lato-Medium"
 
-        if (tab == forTab.Home){
+        if (tab == TargetView.Home){
             smallFont = 14 // month
             mediumFont = 16 // for weekday
             bigFont = 27 // for day/year
-        }else if (tab == forTab.Explore){
+        }else if (tab == TargetView.Explore){
             smallFont = 12
             mediumFont = 13
             bigFont = 17
@@ -225,7 +225,7 @@ class DateToStringConverter {
             // 2016 jun
             let year = calendar.component(NSCalendarUnit.Year, fromDate: date)
             let month = self.monthInText(calendar.component(NSCalendarUnit.Month, fromDate: date), shorten: true)
-            if (tab == forTab.Explore){
+            if (tab == TargetView.Explore){
                 bigFont = 16
             }
             

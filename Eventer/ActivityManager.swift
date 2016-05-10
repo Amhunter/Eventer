@@ -244,8 +244,8 @@ class ActivityManager {
                     if (object as! ActivityUnit).type == "share" {
                         isSharedByYou = true
                     }
-                    event.likeManager.initialize(event, isLiked: isLikedByYou, row: 0, tab: forTab.EventView)
-                    event.shareManager.initialize(event, isShared: isSharedByYou, row: 0, tab: forTab.EventView)
+                    event.likeManager.initialize(event, isLiked: isLikedByYou, row: 0, tab: TargetView.EventView)
+                    event.shareManager.initialize(event, isShared: isSharedByYou, row: 0, tab: TargetView.EventView)
 
                     if (numbersOfLikesAndSharesLoaded && !Done){
                         Done = true
@@ -255,8 +255,8 @@ class ActivityManager {
                 }
             } else {
                 if error.code == 404 { // not found ,no error
-                    event.likeManager.initialize(event, isLiked: isLikedByYou, row: 0, tab: forTab.EventView)
-                    event.shareManager.initialize(event, isShared: isSharedByYou, row: 0, tab: forTab.EventView)
+                    event.likeManager.initialize(event, isLiked: isLikedByYou, row: 0, tab: TargetView.EventView)
+                    event.shareManager.initialize(event, isShared: isSharedByYou, row: 0, tab: TargetView.EventView)
                     
                     if (numbersOfLikesAndSharesLoaded && !Done){
                         Done = true
@@ -484,7 +484,7 @@ class ActivityManager {
                     // Events Found , collect them
                     print("events found: \(objects.count)")
                     for object in objects {
-                        eventsFound.append(FetchedEvent(fromEvent: object as! Event, tab: forTab.Home))
+                        eventsFound.append(FetchedEvent(fromEvent: object as! Event, tab: TargetView.Home))
                     }
                     
                     handler(eventsFound: eventsFound,error: nil)
@@ -609,7 +609,7 @@ class ActivityManager {
                         temp.append(FetchedActivityUnit(fromUnit: object as! ActivityUnit))
                     }
                     for unit in temp { // to shorten createdAt 
-                        unit.createdAtText = DateToStringConverter.getCreatedAtString(unit.metadata!.creationTime(), tab: forTab.Home)
+                        unit.createdAtText = DateToStringConverter.getCreatedAtString(unit.metadata!.creationTime(), tab: TargetView.Home)
                     }
                     
                     handler(data: temp, error: nil)

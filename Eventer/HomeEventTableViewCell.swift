@@ -14,13 +14,13 @@ class HomeEventTableViewCell: UITableViewCell {
     
     var downloadingProfilePicture:Bool = false
 
-    var EventName: UILabel = UILabel()
+    var eventNameLabel: UILabel = UILabel()
     var eventDateLabel: UILabel = UILabel()
-    var EventPicture: UIImageView = UIImageView()
-    var ProgressView: EProgressView = EProgressView()
-    var TransparentView: UIView = UIView()
+    var pictureImageView: UIImageView = UIImageView()
+    var progressView: EProgressView = EProgressView()
+    var transparentView: UIView = UIView()
     var createdAtLabel:UILabel = UILabel()
-    var EventDescription: TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
+    var eventDescriptionLabel: TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var timeLocationLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var numberOfGoing:Int!
     var numberOfLikes:Int!
@@ -34,13 +34,11 @@ class HomeEventTableViewCell: UITableViewCell {
     var sharesimg:UIImageView = UIImageView(image: UIImage(named: "small-share.png"))
     
 
-    var likeButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeLikeImage(true), backgroundColor: ColorFromCode.colorWithHexString("#008DD4"))
-    var commentButton = UIButton()
-    var goButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeGoImage(true), backgroundColor: ColorFromCode.colorWithHexString("#0079BF"))
-    var shareButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeShareImage(true), backgroundColor: ColorFromCode.colorWithHexString("#009DE6"))
-    var MoreButton:HomeMoreButton = HomeMoreButton()
-
-    var commentContainer = UIView()
+    var likeButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeLikeImage(), backgroundColor: ColorFromCode.colorWithHexString("#008DD4"))
+    var goButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeGoImage(), backgroundColor: ColorFromCode.colorWithHexString("#0079BF"))
+    var shareButton = ETableViewCellButton(withButtonImage: ImagesCenter.homeShareImage(), backgroundColor: ColorFromCode.colorWithHexString("#009DE6"))
+    var moreButton:HomeMoreButton = HomeMoreButton()
+    var commentButton = HomeCommentButton()
     
 
 
@@ -73,23 +71,23 @@ class HomeEventTableViewCell: UITableViewCell {
         let attrs = [NSForegroundColorAttributeName: UIColor.blackColor()]
         timeLocationLabel.activeLinkAttributes = attrs
         
-        EventDescription.activeLinkAttributes = attrs
+        eventDescriptionLabel.activeLinkAttributes = attrs
         // Image View
-        EventName.alpha = 1
-        EventName.backgroundColor = UIColor.clearColor()
-        EventName.textColor = UIColor.whiteColor()
-        EventName.textAlignment = NSTextAlignment.Center
-        EventName.font = UIFont(name: "Lato-Semibold", size: 19)
-        EventName.numberOfLines = 0
+        eventNameLabel.alpha = 1
+        eventNameLabel.backgroundColor = UIColor.clearColor()
+        eventNameLabel.textColor = UIColor.whiteColor()
+//        eventNameLabel.textAlignment = NSTextAlignment.Center
+        eventNameLabel.font = UIFont(name: "Lato-Bold", size: 19)
+        eventNameLabel.numberOfLines = 0
         eventDateLabel.backgroundColor = ColorFromCode.colorWithHexString("#02A8F3")
         eventDateLabel.textColor = UIColor.whiteColor()
         eventDateLabel.numberOfLines = 0
         eventDateLabel.textAlignment = NSTextAlignment.Center
-        EventDescription.numberOfLines = 0
+        eventDescriptionLabel.numberOfLines = 0
         // Progress View
-        ProgressView.backgroundColor = ColorFromCode.colorWithHexString("#02A8F3")
+        progressView.backgroundColor = ColorFromCode.colorWithHexString("#02A8F3")
         
-        TransparentView.backgroundColor = UIColor.clearColor()
+        transparentView.backgroundColor = UIColor.clearColor()
         
 
     }
@@ -99,71 +97,75 @@ class HomeEventTableViewCell: UITableViewCell {
         //self.contentMode = UIViewContentMode.Redraw
         //self.contentView.contentMode = UIViewContentMode.Redraw
 
-        self.EventName.translatesAutoresizingMaskIntoConstraints = false
+        self.eventNameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.eventDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.EventDescription.translatesAutoresizingMaskIntoConstraints = false
-        self.EventPicture.translatesAutoresizingMaskIntoConstraints = false
+        self.eventDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.pictureImageView.translatesAutoresizingMaskIntoConstraints = false
         self.timeLocationLabel.translatesAutoresizingMaskIntoConstraints = false
         self.goButton.translatesAutoresizingMaskIntoConstraints = false
         self.likeButton.translatesAutoresizingMaskIntoConstraints = false
         self.commentButton.translatesAutoresizingMaskIntoConstraints = false
         self.shareButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        self.moreButton.translatesAutoresizingMaskIntoConstraints = false
         
         self.goingbtn.translatesAutoresizingMaskIntoConstraints = false
         self.likesbtn.translatesAutoresizingMaskIntoConstraints = false
         self.commentsbtn.translatesAutoresizingMaskIntoConstraints = false
         self.sharesbtn.translatesAutoresizingMaskIntoConstraints = false
 
-        self.contentView.addSubview(EventPicture)
+        self.contentView.addSubview(pictureImageView)
         self.contentView.addSubview(eventDateLabel)
-        self.contentView.addSubview(EventDescription)
+        self.contentView.addSubview(eventDescriptionLabel)
         self.contentView.addSubview(timeLocationLabel)
         
 //        self.contentView.addSubview(GoButton)
 //        self.contentView.addSubview(likeButton)
 //        self.contentView.addSubview(ShareButton)
-////        self.contentView.addSubview(MoreButton)
+////        self.contentView.addSubview(moreButton)
 //        self.contentView.addSubview(commentButton)
         self.contentView.addSubview(goButton)
         self.contentView.addSubview(likeButton)
         self.contentView.addSubview(shareButton)
+        self.contentView.addSubview(moreButton)
+        self.contentView.addSubview(commentButton)
+
 //        self.contentView.addSubview(sharesbtn)
 
-        self.contentView.addSubview(goingbtn)
-        self.contentView.addSubview(likesbtn)
-        self.contentView.addSubview(commentsbtn)
-        self.contentView.addSubview(sharesbtn)
+//        self.contentView.addSubview(goingbtn)
+//        self.contentView.addSubview(likesbtn)
+//        self.contentView.addSubview(commentsbtn)
+//        self.contentView.addSubview(sharesbtn)
 
         
         let views = [
-            "evPicture": EventPicture,
+            "evPicture": pictureImageView,
             "evDate": eventDateLabel,
-            "evDescription": EventDescription,
+            "evDescription": eventDescriptionLabel,
             "goButton": goButton,
             "likeButton": likeButton,
             "shareButton": shareButton,
             "commentButton" : commentButton,
-            "moreButton" : MoreButton,
+            "moreButton" : moreButton,
             "timeloc" : timeLocationLabel,
         ]
         let metrics = [
             "sq" : screenWidth/5, // little square for date
-            "bsq": (screenWidth/5)*4 // big square for pic
+            "bsq": (screenWidth/5)*4, // big square for pic
+            "rec": (screenWidth/5)*3
         ]
-        let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[timeloc]-10-|", options: [], metrics: nil, views: views)
-        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[evDescription]-10-|", options: [], metrics: nil, views: views)
-        let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][evDate(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][likeButton(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][goButton(sq@999)]|", options: [], metrics: metrics, views: views)
-        let H_Constraint5 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][shareButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[evDescription]-10-|", options: [], metrics: nil, views: views)
+        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][evDate(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][likeButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][goButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[evPicture][shareButton(sq@999)]|", options: [], metrics: metrics, views: views)
+        let H_Constraint5 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[moreButton(sq@999)][timeloc][commentButton(sq@999)]|", options: [.AlignAllTop, .AlignAllBottom, .AlignAllCenterY], metrics: metrics, views: views)
 
 
-        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evDate(sq@999)][shareButton(sq@999)][likeButton(sq@999)][goButton(sq@999)]-15@999-[timeloc(<=100@999)]-5-[evDescription(<=550@999)]->=0@999-|", options: [], metrics: metrics, views: views)
-        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evPicture]-15@999-[timeloc(<=100@999)]-5-[evDescription(<=550@999)]->=0@999-|", options: [], metrics: nil, views: views)
+        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evPicture(bsq@999)][moreButton(sq@999)]-5-[evDescription(>=0@999)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evDate(sq@999)][shareButton(sq@999)][likeButton(sq@999)][goButton(sq@999)][commentButton(sq@999)]-5-[evDescription(>=0@999)]->=0@999-|", options: [], metrics: metrics, views: views)
 
         // height == width for picture
-        self.contentView.addConstraint(NSLayoutConstraint(item: EventPicture, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: EventPicture, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: pictureImageView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: pictureImageView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
         self.contentView.addConstraints(H_Constraint0)
         self.contentView.addConstraints(H_Constraint1)
         self.contentView.addConstraints(H_Constraint2)
@@ -173,20 +175,20 @@ class HomeEventTableViewCell: UITableViewCell {
         self.contentView.addConstraints(V_Constraint0)
         self.contentView.addConstraints(V_Constraint1)
 
-        // Set ImageView and ProgressView
+        // Set ImageView and progressView
 
         self.contentView.setNeedsLayout()
         self.contentView.layoutIfNeeded()
-        self.EventPicture.addSubview(TransparentView)
-        self.TransparentView.frame.origin = CGPointMake(0, EventPicture.frame.height-160)
-        self.TransparentView.frame.size = CGSizeMake(EventPicture.frame.width, 160)
-        self.TransparentView.layer.insertSublayer(Utility.gradientLayer(self.TransparentView.frame, height: self.TransparentView.frame.height, alpha: 0.75), atIndex: 0)
+        self.pictureImageView.addSubview(transparentView)
+        self.transparentView.frame.origin = CGPointMake(0, pictureImageView.frame.height-160)
+        self.transparentView.frame.size = CGSizeMake(pictureImageView.frame.width, 160)
+        self.transparentView.layer.insertSublayer(Utility.gradientLayer(self.transparentView.frame, height: self.transparentView.frame.height, alpha: 0.75), atIndex: 0)
 
-        self.contentView.addSubview(ProgressView)
-        self.ProgressView.frame = self.EventPicture.frame
-        self.ProgressView.initProgressView()
-//        println(EventPicture.frame)
-//        println(ProgressView.frame)
+        self.contentView.addSubview(progressView)
+        self.progressView.frame = self.pictureImageView.frame
+        self.progressView.initProgressView()
+//        println(pictureImageView.frame)
+//        println(progressView.frame)
         self.showImage(false)
         
         
@@ -246,42 +248,42 @@ class HomeEventTableViewCell: UITableViewCell {
 //        
 
 
-        //self.contentView.addConstraint(NSLayoutConstraint(item: EventPicture, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        //self.contentView.addConstraint(NSLayoutConstraint(item: pictureImageView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         
         
     }
     
     func showImage(show:Bool){
         let ImageSubviews = [
-            "evName": EventName,
+            "evName": eventNameLabel,
         ]
 
 
         if (show){
-            self.ProgressView.hidden = true
-            self.EventPicture.hidden = false
-            self.EventPicture.addSubview(EventName)
+            self.progressView.hidden = true
+            self.pictureImageView.hidden = false
+            self.pictureImageView.addSubview(eventNameLabel)
             
             let IH_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[evName(>=0@999)]-20-|", options: [], metrics: nil, views: ImageSubviews)
             
 
             let IV_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|->=0@999-[evName(90)]|", options: [], metrics: nil, views: ImageSubviews)
 
-            self.EventPicture.addConstraints(IH_Constraint1)
-            self.EventPicture.addConstraints(IV_Constraint1)
-            self.EventPicture.bringSubviewToFront(EventName)
+            self.pictureImageView.addConstraints(IH_Constraint1)
+            self.pictureImageView.addConstraints(IV_Constraint1)
+            self.pictureImageView.bringSubviewToFront(eventNameLabel)
         }else{
-            self.ProgressView.hidden = false
-            self.EventPicture.hidden = true
-            self.ProgressView.addSubview(EventName)
+            self.progressView.hidden = false
+            self.pictureImageView.hidden = true
+            self.progressView.addSubview(eventNameLabel)
 
             let IH_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[evName]-20-|", options: [], metrics: nil, views: ImageSubviews)
             
             let IV_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|->=0@999-[evName(90)]|", options: [], metrics: nil, views: ImageSubviews)
             
-            self.ProgressView.addConstraints(IH_Constraint1)
-            self.ProgressView.addConstraints(IV_Constraint2)
-            self.ProgressView.bringSubviewToFront(EventName)
+            self.progressView.addConstraints(IH_Constraint1)
+            self.progressView.addConstraints(IV_Constraint2)
+            self.progressView.bringSubviewToFront(eventNameLabel)
 
         }
 
@@ -294,13 +296,15 @@ class HomeEventTableViewCell: UITableViewCell {
             () -> Void in
             if (row == self.tag){
                 if (withDataFromEvent.pictureId == ""){//no picture
+                    self.progressView.progressCircle.hidden = true
+                    self.progressView.backgroundColor = UIColor.lightGrayColor()
                     self.showImage(false)
                 }else{
                     if (withDataFromEvent.pictureProgress < 1){ //picture is loading
-                        self.ProgressView.updateProgress(withDataFromEvent.pictureProgress)
+                        self.progressView.updateProgress(withDataFromEvent.pictureProgress)
                         self.showImage(false)
                     }else{ //picture is loaded
-                        self.EventPicture.image = withDataFromEvent.picture
+                        self.pictureImageView.image = withDataFromEvent.picture
                         self.showImage(true)
 
                     }
@@ -346,10 +350,10 @@ class HomeEventTableViewCell: UITableViewCell {
             let linkRange:NSRange = (text.string as NSString).rangeOfString(mentionString as String)
             let username:NSString = mentionString.substringFromIndex(1)
             let url:NSURL = NSURL(scheme: "mention", host: username as String, path: "/")!
-            self.EventDescription.addLinkToURL(url, withRange: linkRange)
+            self.eventDescriptionLabel.addLinkToURL(url, withRange: linkRange)
             text.addAttribute(NSForegroundColorAttributeName, value: withColor, range: linkRange)
         }
-        self.EventDescription.attributedText = text
+        self.eventDescriptionLabel.attributedText = text
         
     }
     
@@ -363,10 +367,10 @@ class HomeEventTableViewCell: UITableViewCell {
             let linkRange:NSRange = (text.string as NSString).rangeOfString(mentionString as String)
             let tag:NSString = mentionString.substringFromIndex(1)
             let url:NSURL = NSURL(scheme: "hashtag", host: tag as String, path: "/")!
-            self.EventDescription.addLinkToURL(url, withRange: linkRange)
+            self.eventDescriptionLabel.addLinkToURL(url, withRange: linkRange)
             text.addAttribute(NSForegroundColorAttributeName, value: withColor, range: linkRange)
         }
-        self.EventDescription.attributedText = text
+        self.eventDescriptionLabel.attributedText = text
         
     }
 
@@ -379,25 +383,21 @@ class HomeEventTableViewCell: UITableViewCell {
         self.numberOfComments = comments
         self.numberOfShares = shares
         
-//        self.goButton.setLabelNumber(going)
+        self.goButton.setLabelNumber(going)
         self.likeButton.setLabelNumber(likes)
         self.shareButton.setLabelNumber(shares)
-//        self.commentButton.setLabelNumber(going)
-//
-//        self.numberOfGoingLabel.text = "\(going)"
-//        self.numberOfLikesLabel.text = "\(likes)"
-//        self.numberOfCommentsLabel.text = "\(comments)"
-//        self.numberOfSharesLabel.text = "\(shares)"
+        self.commentButton.setLabelNumber(comments)
+
         
         
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.EventDescription.text = ""
+        self.eventDescriptionLabel.text = ""
         self.timeLocationLabel.text = ""
-        self.EventName.text = ""
-        self.EventPicture.image = UIImage()
+        self.eventNameLabel.text = ""
+        self.pictureImageView.image = UIImage()
 
     }
 

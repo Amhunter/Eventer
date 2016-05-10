@@ -51,10 +51,10 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         Set_Subviews()
     }
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupStep2ViewController.back))
         backButton.tintColor = UIColor.whiteColor()
         
-        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "createAccount")
+        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("createAccount"))
         pushButton.tintColor = UIColor.whiteColor()
         
         if (self.navigationController!.viewControllers.count > 1){
@@ -139,7 +139,7 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         pickImageButton.contentVerticalAlignment = UIControlContentVerticalAlignment.Top
         pickImageButton.imageEdgeInsets = UIEdgeInsetsMake((buttonSize.height - (titleSize.height + buttonImageSize.height)) / 2 - offsetBetweenImageAndText, (buttonSize.width - buttonImageSize.width) / 2, 0, 0)
         pickImageButton.titleEdgeInsets = UIEdgeInsetsMake((buttonSize.height - (titleSize.height + buttonImageSize.height)) / 2 + buttonImageSize.height + offsetBetweenImageAndText, titleSize.width + pickImageButton.imageEdgeInsets.left > buttonSize.width ? -buttonImage!.size.width  +  (buttonSize.width - titleSize.width) / 2 : (buttonSize.width - titleSize.width)/2 - buttonImage!.size.width, 0, 0)
-        pickImageButton.addTarget(self, action: "presentActionSheet", forControlEvents: UIControlEvents.TouchUpInside)
+        pickImageButton.addTarget(self, action: #selector(self.presentActionSheet), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         self.backgroundImageView.image = UIImage(named: "signup-background.png")
@@ -168,11 +168,11 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
             self.emailValid = true
         }
         
-        emailTextField.addTarget(self, action: "emailTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
-        usernameTextField.addTarget(self, action: "usernameTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
-        passwordTextField.addTarget(self, action: "passwordTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
+        emailTextField.addTarget(self, action: #selector(self.emailTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
+        usernameTextField.addTarget(self, action: #selector(self.usernameTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
+        passwordTextField.addTarget(self, action: #selector(self.passwordTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
         passwordTextField.secureTextEntry = true
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "endEditing"))
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.endEditing)))
         
 
         backgroundImageView.userInteractionEnabled = true
@@ -187,7 +187,7 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         
         
         
-        pushButton.action = "signup"
+        pushButton.action = #selector(self.signup)
         pushIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
         pushIndicator.hidesWhenStopped = true
         pushIndicator.frame = CGRectMake(0,0,25,25)

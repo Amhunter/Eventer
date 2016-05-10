@@ -23,7 +23,7 @@ class UserFollowManager {
     var attempts:Int = 0 //attempts to save or delete
     
     var isBusy:Bool = false // if processing a query
-    var tab:forTab!
+    var tab:TargetView!
     
     func initialize(user:KCSUser,isFollowing:Bool,button:UserFollowButton,delegate:UserFollowDelegate){
         self.user = user
@@ -175,7 +175,7 @@ class UserFollowManager {
                 isBusy = false
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 Save_Follow(buttonWasPressed: false)
             }
         }else{

@@ -10,7 +10,7 @@ import UIKit
 
 class ShareManager:NSObject,UIActionSheetDelegate{
     var row:Int!
-    var button:HomeShareButton!
+    var button:UIButton!
     var event:FetchedEvent!
     
     var numberOfShares:Int = 0
@@ -21,9 +21,9 @@ class ShareManager:NSObject,UIActionSheetDelegate{
     var attempts:Int = 0 //attempts to save or delete
     
     var isBusy:Bool = false // if processing a query
-    var tab:forTab!
+    var tab:TargetView!
 
-    func initialize(event:FetchedEvent,isShared:Bool, row:Int, tab:forTab){
+    func initialize(event:FetchedEvent,isShared:Bool, row:Int, tab:TargetView){
         self.event = event
         self.wasInitiallyShared = isShared
         self.isShared = isShared
@@ -43,7 +43,7 @@ class ShareManager:NSObject,UIActionSheetDelegate{
                 
             }else{
                 // manage action sheet
-                button.highlighted = true
+//                button.highlighted = true
 
                 var actionSheet:UIActionSheet
                 if (isShared == true){
@@ -65,17 +65,33 @@ class ShareManager:NSObject,UIActionSheetDelegate{
         }
     }
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        button.highlighted = false
+//        button.highlighted = false
         if (actionSheet.tag == 0){ // unshare confirmation
             if (buttonIndex == 0){
                 Save_Share(buttonWasPressed: true)
             }else{
+                switch self.tab! {
+                case .Home:
+                    (self.button as! ETableViewCellButton).setState(isShared)
+                case .EventView:
+                    (self.button as! HomeShareButton).highlighted = false
+                default:
+                    break
+                }
                 //Unhighlight()
             }
         }else if (actionSheet.tag == 1){ // share confirmation
             if (buttonIndex == 1){
                 Save_Share(buttonWasPressed: true)
             }else{
+                switch self.tab! {
+                case .Home:
+                    (self.button as! ETableViewCellButton).setState(isShared)
+                case .EventView:
+                    (self.button as! HomeShareButton).highlighted = false
+                default:
+                    break
+                }
                 //Unhighlight()
             }
         }
@@ -184,34 +200,17 @@ class ShareManager:NSObject,UIActionSheetDelegate{
     
     
     func Display_Changes(){
-        if (isShared == true){
-            button.setImage(UIImage(named: "share-active.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "share.png"), forState: UIControlState.Highlighted)
-            self.numberOfShares++
-        }else{
-            button.setImage(UIImage(named: "share.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "share-active.png"), forState: UIControlState.Highlighted)
-
-            self.numberOfShares--
-        }
+        isShared ? (numberOfShares += 1) : (numberOfShares -= 1)
         
-        if (self.tab == forTab.Home){
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! HomeEventNoPictureCell).numberOfSharesLabel.text = "\(self.numberOfShares)"
-            }else{
-                (self.button.superview!.superview! as! HomeEventTableViewCell).shareButton.setLabelNumber(self.numberOfShares)
-                
-            }
-        }else if (self.tab == forTab.Profile){ // profile
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfSharesLabel.text = "\(self.numberOfShares)"
-            }else{
-                (self.button.superview!.superview! as! ProfileEventTableViewCell).numberOfSharesLabel.text = "\(self.numberOfShares)"
-                
-            }
-
+        switch self.tab! {
+        case .Home:
+            (self.button as! ETableViewCellButton).setState(isShared)
+            (self.button as! ETableViewCellButton).setLabelNumber(numberOfShares)
+        case .EventView:
+            (self.button as! HomeShareButton).initialize(isShared)
+        default:
+            break
         }
-        
     }
     
     
@@ -224,7 +223,7 @@ class ShareManager:NSObject,UIActionSheetDelegate{
                 isBusy = false
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 Save_Share(buttonWasPressed: false)
             }
             

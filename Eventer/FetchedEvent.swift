@@ -49,14 +49,14 @@ class FetchedEvent:NSObject{ //used just for comfortable data storage and displa
     var createdAt:NSDate = NSDate()
     var modifiedAt:NSDate = NSDate()
     var metadata: KCSMetadata? //Kinvey metadata, optional
-    init(fromEvent event:Event, tab:forTab){
+    init(fromEvent event:Event, tab:TargetView){
         super.init()
         self.loadDataFromOriginalDownloadedFile(event, forActivityUnit: false)
         
         //date
         createdAtText = DateToStringConverter.getCreatedAtString(metadata!.creationTime(), tab: tab)
         eventDateText = DateToStringConverter.eventDateToText(date, tab: tab)
-        smallEventDateText = DateToStringConverter.eventDateToText(date, tab: forTab.Explore)
+        smallEventDateText = DateToStringConverter.eventDateToText(date, tab: TargetView.Explore)
         let dateFormatter:NSDateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         self.timeString = dateFormatter.stringFromDate(self.date)
@@ -75,8 +75,8 @@ class FetchedEvent:NSObject{ //used just for comfortable data storage and displa
         self.modifiedAt = metadata!.lastModifiedTime()
         self.creatorID = metadata!.creatorId()
         
-        createdAtText = DateToStringConverter.getCreatedAtString(createdAt, tab: forTab.Home)
-        smallEventDateText = DateToStringConverter.eventDateToText(date, tab: forTab.Explore)
+        createdAtText = DateToStringConverter.getCreatedAtString(createdAt, tab: TargetView.Home)
+        smallEventDateText = DateToStringConverter.eventDateToText(date, tab: TargetView.Explore)
         
         
     }

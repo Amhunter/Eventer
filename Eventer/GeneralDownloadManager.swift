@@ -128,7 +128,7 @@ class GeneralDownloadManager {
         return query
     }
     
-    class func loadEventsWithQuery(query:KCSQuery,tab:forTab,
+    class func loadEventsWithQuery(query:KCSQuery,tab:TargetView,
         completionBlock: (events:[FetchedEvent]!, error:NSError!) -> Void,
         progressBlock: ((objects:[AnyObject]!, percentComplete:Double) -> Void)!){
         let store = KCSLinkedAppdataStore.storeWithOptions([

@@ -83,7 +83,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func setSubviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -141,8 +141,8 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         tableButton.tag = 2
         gridButton.enabled = false
         tableButton.enabled = false
-        gridButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        tableButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        gridButton.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        tableButton.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         setTableHeaderView()
         switchToView(1)
         
@@ -454,7 +454,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 Cell.EventDescription.delegate = self
                 Cell.EventDescription.tag = indexPath.row
             }
-            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushAuthor:")
+            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushAuthor(_:)))
             Cell.ProfileView.addGestureRecognizer(pushAuthorRec)
             Cell.ProfileView.tag = Cell.tag
             // clickable location
@@ -481,15 +481,15 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             
             // Set Buttons
             Cell.LikeButton.initialize(self.Events[indexPath.row].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.GoButton.initialize(self.Events[indexPath.row].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.GoButton.addTarget(self, action: #selector(go(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.Events[indexPath.row].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.tag = indexPath.row
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.tag = indexPath.row
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ProgressView.progressCircle.addTarget(self, action: #selector(refresh(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
             
             // Update profile picture
@@ -508,16 +508,16 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
             Cell.UpdateEventPicture(self.Events[indexPath.row], row: indexPath.row)
             
             Cell.contentView.userInteractionEnabled = true
-            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:)))
+            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:)))
             Cell.EventPicture.userInteractionEnabled = true
             Cell.EventPicture.tag = indexPath.row
             Cell.EventPicture.addGestureRecognizer(pushEventRec1)
             Cell.ProgressView.addGestureRecognizer(pushEventRec2)
             
-            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: #selector(pushLikes(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: #selector(pushGoing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: #selector(pushShares(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -548,7 +548,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 Cell.EventDescription.delegate = self
                 Cell.EventDescription.tag = indexPath.row
             }
-            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushAuthor:")
+            let pushAuthorRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushAuthor(_:)))
             Cell.ProfileView.addGestureRecognizer(pushAuthorRec)
             Cell.ProfileView.tag = Cell.tag
             // clickable location
@@ -588,23 +588,24 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
                 shares: self.Events[indexPath.row].shareManager.numberOfShares)
             
             Cell.LikeButton.initialize(self.Events[indexPath.row].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.GoButton.initialize(self.Events[indexPath.row].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.GoButton.addTarget(self, action: #selector(go(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
             Cell.ShareButton.initialize(self.Events[indexPath.row].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.MoreButton.tag = indexPath.row
             
             Cell.contentView.userInteractionEnabled = true
-            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:)))
             Cell.EventView.userInteractionEnabled = true
             Cell.EventView.tag = indexPath.row
             Cell.EventView.addGestureRecognizer(EventNameTapRecognizer)
-            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: #selector(pushLikes(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: #selector(pushGoing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: #selector(pushShares(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             let descrHeight = Cell.EventDescription.sizeThatFits(CGSizeMake(Cell.EventDescription.frame.width, CGFloat.max)).height
@@ -799,7 +800,7 @@ class EventListViewController: UIViewController, UICollectionViewDelegate, UICol
         }
         Cell.eventNameLabel.frame = frame
         Cell.contentView.tag = indexPath.row
-        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "PushEventViewController:"))
+        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:))))
         
         // remove year word
         let shortenedString:NSAttributedString = self.Events[indexPath.row].smallEventDateText

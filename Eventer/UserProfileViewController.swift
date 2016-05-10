@@ -69,7 +69,7 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -80,8 +80,8 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
         collectionView.addSubview(collectionViewRefreshControl)
         tableViewRefreshControl.layer.zPosition = -1
         collectionViewRefreshControl.layer.zPosition = -1
-        tableViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
-        collectionViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableViewRefreshControl.addTarget(self, action: #selector(Refresh), forControlEvents: UIControlEvents.ValueChanged)
+        collectionViewRefreshControl.addTarget(self, action: #selector(Refresh), forControlEvents: UIControlEvents.ValueChanged)
         footerView.button.addTarget(self, action: "LoadMoreEvents", forControlEvents: UIControlEvents.TouchUpInside)
 
         //!----TableView---------//
@@ -1111,8 +1111,8 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.TimelineData[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
             
             
@@ -1216,8 +1216,8 @@ class UserProfileViewController: UIViewController, UITableViewDelegate, UITableV
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.TimelineData[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             
             Cell.contentView.userInteractionEnabled = true
             let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")

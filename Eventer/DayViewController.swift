@@ -115,9 +115,9 @@ class DayViewController: UIViewController, UITableViewDataSource, UITableViewDel
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let EventCell:HomeEventTableViewCell = EventTable.dequeueReusableCellWithIdentifier("EventCell", forIndexPath: indexPath) as! HomeEventTableViewCell
         
-        EventCell.EventName.text = self.TimelineData[indexPath.row]["eventName"] as? String
-        EventCell.EventDescription.text = self.TimelineData[indexPath.row]["description"] as? String
-        EventCell.EventPicture.image = self.EventImages[indexPath.row] as? UIImage
+        EventCell.eventNameLabel.text = self.TimelineData[indexPath.row]["eventName"] as? String
+        EventCell.eventDescriptionLabel.text = self.TimelineData[indexPath.row]["description"] as? String
+        EventCell.pictureImageView.image = self.EventImages[indexPath.row] as? UIImage
         
         let EventDateFormatter = NSDateFormatter()
         EventDateFormatter.dateFormat = "HH:mm"
@@ -125,10 +125,10 @@ class DayViewController: UIViewController, UITableViewDataSource, UITableViewDel
         EventCell.eventDateLabel.text = EventDateFormatter.stringFromDate(EventDate)
         
         // click on EventName will push another view controller
-        EventCell.EventName.tag = indexPath.row // this is to remember in which cell we clicked the label
-        EventCell.EventName.userInteractionEnabled = true
-        let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:") // we put : if called func has arguments
-        EventCell.EventName.addGestureRecognizer(EventNameTapRecognizer)
+        EventCell.eventNameLabel.tag = indexPath.row // this is to remember in which cell we clicked the label
+        EventCell.eventNameLabel.userInteractionEnabled = true
+        let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.PushEventViewController(_:))) // we put : if called func has arguments
+        EventCell.eventNameLabel.addGestureRecognizer(EventNameTapRecognizer)
 
         return EventCell
     }

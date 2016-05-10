@@ -89,7 +89,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             var temp:FetchedEvent!
             if error == nil {
                 if objects != nil {
-                    temp = FetchedEvent(fromEvent: objects[0] as! Event, tab: forTab.Home)
+                    temp = FetchedEvent(fromEvent: objects[0] as! Event, tab: TargetView.Home)
                     event.eventOriginal = temp.eventOriginal
                     event.name = temp.name
                     event.details = temp.details
@@ -158,14 +158,14 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             query.limitModifer = KCSQueryLimitModifier(limit: 11)
             query.addSortModifier(KCSQuerySortModifier(field: "createdAt", inDirection: KCSSortDirection.Descending))
         }
-        GeneralDownloadManager.loadEventsWithQuery(query,tab:forTab.Home, completionBlock: {
+        GeneralDownloadManager.loadEventsWithQuery(query,tab:TargetView.Home, completionBlock: {
             (events:[FetchedEvent]!, error:NSError!) -> Void in
             if (error == nil){
                 //println("events found: \(events.count)")
                 for (index,event) in events.enumerate(){
                     EventsData.insert(event, atIndex: index)
                 }
-                EventsManager.loadAdditionalData(&EventsData, tab: forTab.Home, completionHandler: {
+                EventsManager.loadAdditionalData(&EventsData, tab: TargetView.Home, completionHandler: {
                     (error:NSError!) -> Void in
                     if (error == nil){
                         completionHandler(downloadedEventsArray: EventsData, error: nil)
@@ -198,14 +198,14 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             query.limitModifer = KCSQueryLimitModifier(limit: 19)
             query.addSortModifier(KCSQuerySortModifier(field: "createdAt", inDirection: KCSSortDirection.Descending))
         }
-        GeneralDownloadManager.loadEventsWithQuery(query,tab:forTab.Home, completionBlock: {
+        GeneralDownloadManager.loadEventsWithQuery(query,tab:TargetView.Home, completionBlock: {
             (events:[FetchedEvent]!, error:NSError!) -> Void in
             if (error == nil){
                 //println("events found: \(events.count)")
                 for (index,event) in events.enumerate(){
                     EventsData.insert(event, atIndex: index)
                 }
-                EventsManager.loadAdditionalData(&EventsData, tab: forTab.Profile, completionHandler: {
+                EventsManager.loadAdditionalData(&EventsData, tab: TargetView.Profile, completionHandler: {
                     (error:NSError!) -> Void in
                     if (error == nil){
                         completionHandler(downloadedEventsArray: EventsData, error: nil)
@@ -221,7 +221,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
     }
     
     
-    class func loadAdditionalData(inout forEvents:[FetchedEvent], tab:forTab, completionHandler: (error: NSError!) -> Void){
+    class func loadAdditionalData(inout forEvents:[FetchedEvent], tab:TargetView, completionHandler: (error: NSError!) -> Void){
         
         let substore = KCSAppdataStore.storeWithOptions([
             KCSStoreKeyCollectionName : "Activity",
@@ -423,14 +423,14 @@ class EventsManager:NSObject, UIActionSheetDelegate {
             query.limitModifer = KCSQueryLimitModifier(limit: 19)
             query.addSortModifier(KCSQuerySortModifier(field: "createdAt", inDirection: KCSSortDirection.Descending))
         }
-        GeneralDownloadManager.loadEventsWithQuery(query, tab:forTab.Explore, completionBlock: {
+        GeneralDownloadManager.loadEventsWithQuery(query, tab:TargetView.Explore, completionBlock: {
             (events:[FetchedEvent]!, error:NSError!) -> Void in
             if (error == nil){
                 //println("events found: \(events.count)")
                 for (index,event) in events.enumerate(){
                     EventsData.insert(event, atIndex: index)
                 }
-                EventsManager.loadAdditionalData(&EventsData, tab: forTab.Home, completionHandler: {
+                EventsManager.loadAdditionalData(&EventsData, tab: TargetView.Home, completionHandler: {
                     (error:NSError!) -> Void in
                     if (error == nil){
                         completionHandler(downloadedEventsArray: EventsData, error: nil)
@@ -504,7 +504,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                                     temp[idx].events = threeEvents
                                 }
                                 for (index,user) in temp.enumerate(){
-                                    user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:forTab.Home)
+                                    user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:TargetView.Home)
                                 }
                                 completionHandler(downloadedUsersArray: temp, error: nil)
                             }
@@ -528,10 +528,10 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                                 
                                 var tempev:[FetchedEvent] = []
                                 for object in objects{
-                                    tempev.append(FetchedEvent(fromEvent: object as! Event, tab: forTab.Explore))
+                                    tempev.append(FetchedEvent(fromEvent: object as! Event, tab: TargetView.Explore))
                                 }
                                 eventsLoaded[index] = tempev
-                                numberOfEventsLoaded++
+                                numberOfEventsLoaded += 1
                                 if (numberOfEventsLoaded == usersIdsToLoad.count){
                                     if (usersLoaded && followsLoaded && !Done){
                                         Done = true
@@ -539,7 +539,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                                             temp[idx].events = threeEvents
                                         }
                                         for (index,user) in temp.enumerate(){
-                                            user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:forTab.Home)
+                                            user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:TargetView.Home)
                                         }
                                         completionHandler(downloadedUsersArray: temp, error: nil)
                                         
@@ -581,7 +581,7 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                                         temp[idx].events = threeEvents
                                     }
                                     for (index,user) in temp.enumerate(){
-                                        user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:forTab.Home)
+                                        user.followManager.initialize(user.user! ,isFollowing: followArray[user.user!.userId]!, row: index, tab:TargetView.Home)
                                     }
                                     completionHandler(downloadedUsersArray: temp, error: nil)
 
@@ -765,14 +765,14 @@ class EventsManager:NSObject, UIActionSheetDelegate {
                 query.limitModifer = KCSQueryLimitModifier(limit: 19)
                 query.addSortModifier(KCSQuerySortModifier(field: "createdAt", inDirection: KCSSortDirection.Descending))
             }
-            GeneralDownloadManager.loadEventsWithQuery(query,tab:forTab.Home, completionBlock: {
+            GeneralDownloadManager.loadEventsWithQuery(query,tab:TargetView.Home, completionBlock: {
                 (events:[FetchedEvent]!, error:NSError!) -> Void in
                 if (error == nil){
                     //println("events found: \(events.count)")
                     for (index,event) in events.enumerate(){
                         EventsData.insert(event, atIndex: index)
                     }
-                    EventsManager.loadAdditionalData(&EventsData, tab: forTab.Profile, completionHandler: {
+                    EventsManager.loadAdditionalData(&EventsData, tab: TargetView.Profile, completionHandler: {
                         (error:NSError!) -> Void in
                         if (error == nil){
                             completionHandler(downloadedEventsArray: EventsData, error: nil)

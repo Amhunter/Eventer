@@ -23,9 +23,9 @@ class FollowManager {
     var attempts:Int = 0 //attempts to save or delete
     
     var isBusy:Bool = false // if processing a query
-    var tab:forTab!
+    var tab:TargetView!
     
-    func initialize(user:KCSUser,isFollowing:Bool, row:Int, tab:forTab){
+    func initialize(user:KCSUser,isFollowing:Bool, row:Int, tab:TargetView){
         self.user = user
         self.wasInitiallyFollowing = isFollowing
         self.isFollowing = isFollowing
@@ -165,13 +165,13 @@ class FollowManager {
             
             button.setImage(UIImage(named: "following.png"), forState: UIControlState.Normal)
             button.setImage(UIImage(named: "follow.png"), forState: UIControlState.Highlighted)
-            self.numberOfFollows++
+            self.numberOfFollows += 1
         }else{
             button.setImage(UIImage(named: "follow.png"), forState: UIControlState.Normal)
             button.setImage(UIImage(named: "following.png"), forState: UIControlState.Highlighted)
-            self.numberOfFollows--
+            self.numberOfFollows -= 1
         }
-//        if (self.tab == forTab.Profile){
+//        if (self.tab == TargetView.Profile){
 //            if (self.event.pictureID == ""){
 //                (self.button.superview!.superview! as! HomeEventNoPictureCell).numberOfFollowsLabel.text = "\(self.numberOfFollows)"
 //            }else{
@@ -200,7 +200,7 @@ class FollowManager {
                 isBusy = false
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 Save_Follow(buttonWasPressed: false)
             }
             

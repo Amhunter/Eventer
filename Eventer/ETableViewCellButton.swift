@@ -19,7 +19,7 @@ extension UIButton {
     }
 }
 
-class ETableViewCellButton: UIView {
+class ETableViewCellButton: UIButton {
     var containerCenterSubview = UIView()
     var buttonImageView = UIImageView()
     var label = UILabel()
@@ -28,6 +28,7 @@ class ETableViewCellButton: UIView {
     
     var highlightColor:UIColor!
     var unhighlightColor:UIColor!
+    var handler:(() -> Void)!
     
     init(withButtonImage:UIImage, backgroundColor:UIColor) {
         super.init(frame: CGRectZero)
@@ -38,7 +39,9 @@ class ETableViewCellButton: UIView {
         label.font = UIFont(name: "Lato-Bold", size: 15)
         label.textColor = UIColor.whiteColor()
         label.textAlignment = NSTextAlignment.Center
-        
+        containerCenterSubview.userInteractionEnabled = false
+        buttonImageView.userInteractionEnabled = false
+        label.userInteractionEnabled = false
         self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(containerCenterSubview)
         containerCenterSubview.translatesAutoresizingMaskIntoConstraints = false
@@ -60,23 +63,23 @@ class ETableViewCellButton: UIView {
         
         self.containerCenterSubview.addConstraints(sH_Constraints0)
         self.containerCenterSubview.addConstraints(sV_Constraints0)
-        self.exclusiveTouch = true
+//        self.exclusiveTouch = true
         self.setNeedsLayout()
         self.layoutIfNeeded()
 //        self.backgroundRectForBounds(self.frame)
-        let rec1 = LXTouchGestureRecognizer(),rec2 = LXTouchGestureRecognizer(),rec3 = LXTouchGestureRecognizer(),rec4 = LXTouchGestureRecognizer(),rec5 = LXTouchGestureRecognizer()
+//        let rec1 = LXTouchGestureRecognizer(),rec2 = LXTouchGestureRecognizer(),rec3 = LXTouchGestureRecognizer(),rec4 = LXTouchGestureRecognizer(),rec5 = LXTouchGestureRecognizer()
         
-        rec1.addTarget(self, action: "unhighlight", forControlEvents: UIControlEvents.TouchCancel)
-        rec2.addTarget(self, action: "unhighlight", forControlEvents: UIControlEvents.TouchDragOutside)
-        rec3.addTarget(self, action: "highlight", forControlEvents: UIControlEvents.TouchDragInside)
-        rec4.addTarget(self, action: "highlight", forControlEvents: UIControlEvents.TouchDown)
-        rec5.addTarget(self, action: "trigger", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addTarget(self, action: #selector(self.unhighlight), forControlEvents: UIControlEvents.TouchCancel)
+        self.addTarget(self, action: #selector(self.unhighlight), forControlEvents: UIControlEvents.TouchDragOutside)
+        self.addTarget(self, action: #selector(self.highlight), forControlEvents: UIControlEvents.TouchDragInside)
+        self.addTarget(self, action: #selector(self.highlight), forControlEvents: UIControlEvents.TouchDown)
+        self.addTarget(self, action: #selector(self.trigger), forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.addGestureRecognizer(rec1)
-        self.addGestureRecognizer(rec2)
-        self.addGestureRecognizer(rec3)
-        self.addGestureRecognizer(rec4)
-        self.addGestureRecognizer(rec5)
+//        self.addGestureRecognizer(rec1)
+//        self.addGestureRecognizer(rec2)
+//        self.addGestureRecognizer(rec3)
+//        self.addGestureRecognizer(rec4)
+//        self.addGestureRecognizer(rec5)
 
     }
     func setState(active:Bool) {
@@ -86,25 +89,16 @@ class ETableViewCellButton: UIView {
         self.backgroundColor = unhighlightColor
     }
     
-//    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-//        super.touchesBegan(touches, withEvent: event)
-//        print("touched")
-//    }
-//    
-//    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-//        super.touchesEnded(touches, withEvent: event)
-//        print("touch ended")
-//    }
-//    
-//    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-//        super.touchesCancelled(touches, withEvent: event)
-//        print("touch cancelled")
-//    }
-//    
+    func handleTap(completionBlock:() -> Void) {
+        self.handler = completionBlock
+    }
     
     func trigger() {
+//        print("trigger")
         self.setState(!self.active)
-        print("trigger")
+        if self.handler != nil {
+            self.handler()
+        }
     }
     func highlight() {
         self.backgroundColor = self.highlightColor
@@ -116,7 +110,11 @@ class ETableViewCellButton: UIView {
     
     func setLabelNumber(number:Int!) {
         if number != nil {
-            self.label.text = "\(number)"
+            if number > 0 {
+                self.label.text = "\(number)"
+            } else {
+                self.label.text = ""
+            }
         }
     }
     

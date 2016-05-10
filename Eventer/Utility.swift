@@ -8,12 +8,11 @@
 
 import UIKit
 
+
 class Utility {
     class func classNameAsString(obj: Any) -> String {
         //prints more readable results for dictionaries, arrays, Int, etc
-        return _stdlib_getDemangledTypeName(obj).componentsSeparatedByString(".").last!
-        
-        
+        return String(obj.dynamicType).componentsSeparatedByString("__").last!
     }
 
     
@@ -116,7 +115,7 @@ class Utility {
         // add the drop shadow
         forView.layer.shadowColor = UIColor.blackColor().CGColor
         forView.layer.shadowOffset = CGSizeMake(0, offset)
-        forView.layer.shadowOpacity = Float(0.5)
+        forView.layer.shadowOpacity = (opacity == 0) ? 0 : 0.5
         forView.layer.shadowRadius = 2.5
         forView.layer.masksToBounds = false
         forView.layer.shouldRasterize = true
@@ -130,7 +129,7 @@ class Utility {
     class func getImageFromUIBarButtonItem(systemItem:UIBarButtonSystemItem) -> UIImage!{
         
         // Creating a temporary item: UIBarButtonSystemItemTrash - change based on your needs
-        let item:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: "")
+        let item:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: Selector(""))
         let itemView = item.customView!
         
         for view in itemView.subviews {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3EE7E5B34B069CB211A7D6A5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2DF3BFFBD1F77AFF226A189 /* libPods.a */; };
+		C93370231C97807200606FA2 /* HomeCommentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93370221C97807200606FA2 /* HomeCommentButton.swift */; };
 		C93BECCB1C5FEBB2002FB2D4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BECCA1C5FEBB2002FB2D4 /* SettingsViewController.swift */; };
 		C956426D1C44E67800A1931A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C956426C1C44E67800A1931A /* Info.plist */; };
 		C956426F1C44E68B00A1931A /* Eventer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = C956426E1C44E68B00A1931A /* Eventer.xcdatamodel */; };
@@ -90,7 +91,6 @@
 		C9DBE8001C44D607002F4525 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7701C44D606002F4525 /* DayCollectionViewCell.swift */; };
 		C9DBE8011C44D607002F4525 /* WeekDayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7711C44D606002F4525 /* WeekDayCollectionViewCell.swift */; };
 		C9DBE8021C44D607002F4525 /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7721C44D606002F4525 /* DayViewController.swift */; };
-		C9DBE8031C44D607002F4525 /* HomeEventNoPictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7731C44D606002F4525 /* HomeEventNoPictureCell.swift */; };
 		C9DBE8041C44D607002F4525 /* HomeEventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7741C44D606002F4525 /* HomeEventTableView.swift */; };
 		C9DBE8051C44D607002F4525 /* HomeEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7751C44D606002F4525 /* HomeEventTableViewCell.swift */; };
 		C9DBE8061C44D607002F4525 /* TransparentDayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBE7761C44D606002F4525 /* TransparentDayCollectionViewCell.swift */; };
@@ -160,6 +160,7 @@
 /* Begin PBXFileReference section */
 		53BBCA647674FFD1CE47005F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		B39DCBAB3E8580E3BE824991 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		C93370221C97807200606FA2 /* HomeCommentButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCommentButton.swift; sourceTree = "<group>"; };
 		C93BECCA1C5FEBB2002FB2D4 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C956426C1C44E67800A1931A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C956426E1C44E68B00A1931A /* Eventer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Eventer.xcdatamodel; sourceTree = "<group>"; };
@@ -249,7 +250,6 @@
 		C9DBE7701C44D606002F4525 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DayCollectionViewCell.swift; path = Eventer/DayCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		C9DBE7711C44D606002F4525 /* WeekDayCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeekDayCollectionViewCell.swift; path = Eventer/WeekDayCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		C9DBE7721C44D606002F4525 /* DayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DayViewController.swift; path = Eventer/DayViewController.swift; sourceTree = SOURCE_ROOT; };
-		C9DBE7731C44D606002F4525 /* HomeEventNoPictureCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeEventNoPictureCell.swift; path = Eventer/HomeEventNoPictureCell.swift; sourceTree = SOURCE_ROOT; };
 		C9DBE7741C44D606002F4525 /* HomeEventTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeEventTableView.swift; path = Eventer/HomeEventTableView.swift; sourceTree = SOURCE_ROOT; };
 		C9DBE7751C44D606002F4525 /* HomeEventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeEventTableViewCell.swift; path = Eventer/HomeEventTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		C9DBE7761C44D606002F4525 /* TransparentDayCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransparentDayCollectionViewCell.swift; path = Eventer/TransparentDayCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -404,19 +404,12 @@
 				C9DBE7361C44D606002F4525 /* DateToStringConverter.swift */,
 				C9DBE7371C44D606002F4525 /* ColorFromCode.swift */,
 				C9DBE7381C44D606002F4525 /* ActivityButton.swift */,
-				C9DBE7391C44D606002F4525 /* HomeLikeButton.swift */,
-				C9DBE73A1C44D606002F4525 /* HomeResponseButton.swift */,
-				C9DBE73B1C44D606002F4525 /* HomeShareButton.swift */,
-				C9DBE73C1C44D606002F4525 /* HomeMoreButton.swift */,
-				C9715E431C8B5B6900AB2CEE /* ETableViewCellButton.swift */,
-				C9DBE73D1C44D606002F4525 /* ResponseButton.swift */,
 				C9DBE73E1C44D606002F4525 /* WorkAroundViewController.h */,
 				C9DBE73F1C44D606002F4525 /* WorkAroundViewController.m */,
 				C9DBE7401C44D606002F4525 /* UIAppearance+Swift.h */,
 				C9DBE7411C44D606002F4525 /* UIAppearance+Swift.m */,
 				C9DBE7421C44D606002F4525 /* FollowButton.swift */,
 				C9DBE7431C44D606002F4525 /* Reachability.swift */,
-				C9DBE7441C44D606002F4525 /* eventHeaderView.swift */,
 				C9DBE7451C44D606002F4525 /* AMScrollingNavbar.h */,
 				C9DBE7461C44D606002F4525 /* UIViewController+ScrollingNavbar.h */,
 				C9DBE7471C44D606002F4525 /* UIViewController+ScrollingNavbar.m */,
@@ -434,6 +427,14 @@
 		C95642621C44E36200A1931A /* Subclassed Views */ = {
 			isa = PBXGroup;
 			children = (
+				C9DBE7391C44D606002F4525 /* HomeLikeButton.swift */,
+				C9DBE73A1C44D606002F4525 /* HomeResponseButton.swift */,
+				C9DBE73B1C44D606002F4525 /* HomeShareButton.swift */,
+				C9DBE73C1C44D606002F4525 /* HomeMoreButton.swift */,
+				C93370221C97807200606FA2 /* HomeCommentButton.swift */,
+				C9715E431C8B5B6900AB2CEE /* ETableViewCellButton.swift */,
+				C9DBE73D1C44D606002F4525 /* ResponseButton.swift */,
+				C9DBE7441C44D606002F4525 /* eventHeaderView.swift */,
 				C9DBE7501C44D606002F4525 /* RefreshControl.swift */,
 				C9DBE7511C44D606002F4525 /* CommentTextView.swift */,
 				C9DBE7521C44D606002F4525 /* EProgressView.swift */,
@@ -467,7 +468,6 @@
 				C9DBE7701C44D606002F4525 /* DayCollectionViewCell.swift */,
 				C9DBE7711C44D606002F4525 /* WeekDayCollectionViewCell.swift */,
 				C9DBE7721C44D606002F4525 /* DayViewController.swift */,
-				C9DBE7731C44D606002F4525 /* HomeEventNoPictureCell.swift */,
 				C9DBE7741C44D606002F4525 /* HomeEventTableView.swift */,
 				C9DBE7751C44D606002F4525 /* HomeEventTableViewCell.swift */,
 				C9DBE7761C44D606002F4525 /* TransparentDayCollectionViewCell.swift */,
@@ -807,7 +807,6 @@
 				C9DBE81B1C44D607002F4525 /* EventDatePickerCalendarLayout.swift in Sources */,
 				C9DBE83C1C44D607002F4525 /* EditEventViewController.swift in Sources */,
 				C9DBE7C31C44D607002F4525 /* LikeManager.swift in Sources */,
-				C9DBE8031C44D607002F4525 /* HomeEventNoPictureCell.swift in Sources */,
 				C9DBE8011C44D607002F4525 /* WeekDayCollectionViewCell.swift in Sources */,
 				C9DBE7D51C44D607002F4525 /* HomeShareButton.swift in Sources */,
 				C9DBE8151C44D607002F4525 /* InvitePeopleViewController.swift in Sources */,
@@ -851,6 +850,7 @@
 				C9DBE8041C44D607002F4525 /* HomeEventTableView.swift in Sources */,
 				C9DBE7EB1C44D607002F4525 /* FetchedEvent.swift in Sources */,
 				C956426F1C44E68B00A1931A /* Eventer.xcdatamodel in Sources */,
+				C93370231C97807200606FA2 /* HomeCommentButton.swift in Sources */,
 				C9DBE80A1C44D607002F4525 /* ExploreCollectionViewCell.swift in Sources */,
 				C9DBE7F71C44D607002F4525 /* SignupStep3ViewController.swift in Sources */,
 				C9DBE81A1C44D607002F4525 /* EventDatePickerCalendarCell.swift in Sources */,

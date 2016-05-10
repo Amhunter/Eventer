@@ -144,7 +144,7 @@ class UserListViewController: UIViewController,UITableViewDelegate, UITableViewD
                             unit.followManager.checkFollow(user.userId, row: index, completionBlock: {
                                 (isFollowing:Bool, error:NSError!) -> Void in
                                 if (error == nil){
-                                    unit.followManager.initialize(user, isFollowing: isFollowing, row: index, tab: forTab.Activity)
+                                    unit.followManager.initialize(user, isFollowing: isFollowing, row: index, tab: TargetView.Activity)
                                     let cells = self.tableView.visibleCells
                                     for cell in cells{
                                         if (cell.tag == index){
@@ -170,7 +170,7 @@ class UserListViewController: UIViewController,UITableViewDelegate, UITableViewD
                             user = unit.toUser
                         }
                         if user.userId != KCSUser.activeUser().userId {
-                            unit.followManager.initialize(user, isFollowing: true, row: index, tab: forTab.Activity)
+                            unit.followManager.initialize(user, isFollowing: true, row: index, tab: TargetView.Activity)
                             unit.followManager.loaded = true
                         }
                     }

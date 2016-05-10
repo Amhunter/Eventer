@@ -63,7 +63,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
         if searchWasActive {
             self.setVisible(true,animated: false)
         } else {
@@ -96,7 +96,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
     }
     
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -157,7 +157,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
         
         // Segment View Autolayout
         self.segmentLabel1.setTitle("EVENTS", forState: UIControlState.Normal)
-        self.segmentLabel2.setTitle("USERS", forState: UIControlState.Normal)
+        self.segmentLabel2.setTitle("POPULAR", forState: UIControlState.Normal)
         self.segmentLabel1.adjustsImageWhenDisabled = false
         self.segmentLabel2.adjustsImageWhenDisabled = false
         self.segmentLabel1.titleLabel?.font = UIFont(name: "Lato-Bold", size: 15)
@@ -171,8 +171,8 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
 
         self.segmentLabel1.titleLabel?.textAlignment = NSTextAlignment.Center
         self.segmentLabel2.titleLabel?.textAlignment = NSTextAlignment.Center
-        self.segmentLabel1.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.segmentLabel2.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel1.addTarget(self, action: #selector(switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel2.addTarget(self, action: #selector(switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.segmentIndicator.backgroundColor = ColorFromCode.colorWithHexString("#0087D9")
         
@@ -216,7 +216,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
     func setCollectionAndTableViews(){
         // Set Collection View
         self.eventsCollectionView.collectionViewLayout = flowLayout
-        self.eventsCollectionViewRefreshControl.addTarget(self, action: "loadCollectionView", forControlEvents: UIControlEvents.ValueChanged)
+        self.eventsCollectionViewRefreshControl.addTarget(self, action: #selector(loadCollectionView), forControlEvents: UIControlEvents.ValueChanged)
         self.eventsCollectionView.scrollsToTop = true
         self.eventsCollectionView.backgroundColor = UIColor.whiteColor()
         self.eventsCollectionView.alwaysBounceVertical = true
@@ -225,14 +225,14 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
         self.eventsCollectionView.dataSource = self
         self.eventsCollectionView.tag = 0
         self.eventsCollectionView.registerClass(ExploreCollectionViewCell.self, forCellWithReuseIdentifier: "collection Cell")
-        self.collectionFooterView.button.addTarget(self, action: "loadMoreCollectionView", forControlEvents: UIControlEvents.TouchUpInside)
+        self.collectionFooterView.button.addTarget(self, action: #selector(loadMoreCollectionView), forControlEvents: UIControlEvents.TouchUpInside)
         eventsCollectionView.registerClass(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footer")
         eventsCollectionView.addSubview(collectionLoadingView)
         collectionLoadingView.center = CGPointMake(eventsCollectionView.frame.width/2, eventsCollectionView.frame.height/2)
         collectionLoadingView.startAnimating()
         // Set Table View
 
-        self.usersTableViewRefreshControl.addTarget(self, action: "loadUsersTableView", forControlEvents: UIControlEvents.ValueChanged)
+        self.usersTableViewRefreshControl.addTarget(self, action: #selector(loadUsersTableView), forControlEvents: UIControlEvents.ValueChanged)
         self.usersTableView.allowsSelection = false
         self.usersTableView.estimatedRowHeight = 100
         self.usersTableView.rowHeight = UITableViewAutomaticDimension
@@ -256,7 +256,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
         // Indicator for search events tableview
         self.searchDisplay.hashtagsTableView.addSubview(self.searchEventsIndicatorView)
         self.searchEventsIndicatorView.center = CGPointMake(searchEventsIndicatorView.frame.width/2, searchEventsIndicatorView.frame.height/2)
-        self.searchEventsIndicatorView.button.addTarget(self, action: "searchEvents", forControlEvents: UIControlEvents.TouchUpInside)
+        self.searchEventsIndicatorView.button.addTarget(self, action: #selector(searchEvents), forControlEvents: UIControlEvents.TouchUpInside)
         self.searchEventsIndicatorView.disableAfterFirstTime = false
 
         
@@ -270,7 +270,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
         // Indicator for search users tableview
         self.searchDisplay.usersTableView.addSubview(self.searchUsersIndicatorView)
         self.searchUsersIndicatorView.center = CGPointMake(searchUsersIndicatorView.frame.width/2, searchUsersIndicatorView.frame.height/2)
-        self.searchUsersIndicatorView.button.addTarget(self, action: "searchUsers", forControlEvents: UIControlEvents.TouchUpInside)
+        self.searchUsersIndicatorView.button.addTarget(self, action: #selector(searchUsers), forControlEvents: UIControlEvents.TouchUpInside)
         self.searchUsersIndicatorView.disableAfterFirstTime = false
 
     }
@@ -572,13 +572,13 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
             Cell.UpdateEventPictures(usersTableViewData[indexPath.row].events, cellRow: indexPath.row)
             Cell.showEventNames(usersTableViewData[indexPath.row].events, cellRow: indexPath.row)
             Cell.followButton.initialize(self.usersTableViewData[indexPath.row].followManager.isFollowing, isLoaded: true)
-            Cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.followButton.addTarget(self, action: #selector(follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.followButton.tag = indexPath.row
             Cell.profileView.tag = indexPath.row
-            Cell.profileView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushExploreTableViewUser:"))
+            Cell.profileView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushExploreTableViewUser(_:))))
             Cell.contentView.tag = indexPath.row
             for imageView in Cell.eventPictures{
-                imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushExploreTableViewEvent:"))
+                imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushExploreTableViewEvent(_:))))
             }
             if (usersTableViewData[indexPath.row].userId == KCSUser.activeUser().userId){
                 Cell.followButton.hidden = true
@@ -594,7 +594,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
                 Cell.viewResultsButton.hidden = true
             } else {
                 Cell.viewResultsButton.hidden = false
-                Cell.viewResultsButton.addTarget(self, action: "pushSearchEventResults", forControlEvents: UIControlEvents.TouchUpInside)
+                Cell.viewResultsButton.addTarget(self, action: #selector(pushSearchEventResults), forControlEvents: UIControlEvents.TouchUpInside)
                 Cell.resultsLabel.text = "\(self.searchBar.text!) : \(searchEventsResults) results"
             }
 
@@ -637,7 +637,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
                 Cell.UpdatePictures(self.searchUsersResults[Cell.tag], row: Cell.tag)
                 Cell.label.attributedText = finalString
                 
-                let rec = UITapGestureRecognizer(target: self, action: "pushSearchUser:")
+                let rec = UITapGestureRecognizer(target: self, action: #selector(pushSearchUser(_:)))
                 Cell.userInteractionEnabled = true
                 Cell.addGestureRecognizer(rec)
                 
@@ -724,7 +724,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
         frame.size.height = Cell.eventNameLabel.frame.size.height
         Cell.eventNameLabel.frame = frame
         Cell.contentView.tag = indexPath.row
-        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushExploreCollectionViewEvent:"))
+        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushExploreCollectionViewEvent(_:))))
         
         // remove year word
         let shortenedString:NSAttributedString = self.eventsCollectionViewData[indexPath.row].eventDateText
@@ -976,7 +976,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource,UITableView
     }
     func updateBarButtonItems(alpha: CGFloat) {
         for view in self.navigationController!.navigationBar.subviews as [AnyObject] {
-            let className:String = Utility.classNameAsString(view)
+            let className:String = Utility.classNameAsString(view) 
             if ((className != "_UINavigationBarBackground") && (className != "_UINavigationBarBackIndicatorView")){
                 (view as! UIView).alpha = alpha
             }

@@ -223,7 +223,7 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         self.dismissViewControllerAnimated(false, completion: nil)
         selectHomeTab()
         ((self.viewControllers![0] as! UINavigationController).viewControllers[0] as! MonthViewController).tableView.setContentOffset(CGPointZero, animated: true)
-        ((self.viewControllers![0] as! UINavigationController).viewControllers[0] as! MonthViewController).LoadTimeline()
+        ((self.viewControllers![0] as! UINavigationController).viewControllers[0] as! MonthViewController).loadTimeline()
 
     }
     func selectActivityTab(){

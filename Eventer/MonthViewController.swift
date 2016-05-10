@@ -80,7 +80,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     }
     
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(MonthViewController.back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -116,7 +116,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
         MonthLabel.frame = CGRectMake(0, 5, screenWidth, 20)
         MonthLabel.textAlignment = NSTextAlignment.Center
-        let TapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "Jump_To_Month")
+        let TapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MonthViewController.Jump_To_Month))
         MonthLabel.addGestureRecognizer(TapRec)
         MonthLabel.userInteractionEnabled = true
         
@@ -146,19 +146,18 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         tableView.dataSource = self
 //        tableView.canCancelContentTouches = false
         tableView.registerClass(HomeEventTableViewCell.self, forCellReuseIdentifier: "Event Cell")
-        tableView.registerClass(HomeEventNoPictureCell.self, forCellReuseIdentifier: "EventNoPic Cell")
         tableView.registerClass(eventHeaderView.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.frame = CGRectMake(0, 0, screenWidth, self.view.frame.height-offset)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         //tableView.contentInset.top = refreshControlForTimeLine.frame.height
         //tableView.estimatedRowHeight = 600
-        footerView.button.addTarget(self, action: "LoadMore", forControlEvents: UIControlEvents.TouchUpInside)
+        footerView.button.addTarget(self, action: "loadMore", forControlEvents: UIControlEvents.TouchUpInside)
         tableView.rowHeight = UITableViewAutomaticDimension
         
         let tableViewController = UITableViewController()
         self.addChildViewController(tableViewController)
         tableViewController.refreshControl = refreshControlForTimeLine
-        tableViewController.refreshControl!.addTarget(self, action: "LoadTimeline", forControlEvents: UIControlEvents.ValueChanged)
+        tableViewController.refreshControl!.addTarget(self, action: "loadTimeline", forControlEvents: UIControlEvents.ValueChanged)
         tableViewController.tableView = tableView
         self.view.addSubview(tableViewController.tableView)
         
@@ -196,7 +195,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
         Utility.dropShadow(self.navigationController!.navigationBar, offset: -1, opacity: 0.25)
         Set_Subviews()
-        LoadTimeline()
+        loadTimeline()
         CalculateSkippedDays() //calculating
         SetNewMonthLabel()
         StartScroll()
@@ -204,7 +203,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         //self.setUseSuperview(true)
 
     }
-
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.calendarView.reloadData()
@@ -230,10 +228,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     var scrollValue:CGFloat = 0 // previous offset
     var scrollCount:CGFloat = 0
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -402,11 +396,10 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         calendarView.StillDecellerates = false
             
     }
-    //----------------------------------------------------------------------------------------//
+    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 3;
     }
-
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var SkippedDays:Int
         if (section == 0){
@@ -431,7 +424,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         let numberOfDaysInMonth:Int = Range.length;
         return numberOfDaysInMonth+7+SkippedDays;//days in a week ,1 for month
     }
-    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var SkippedDays:Int
             if (indexPath.section == 0){
@@ -538,7 +530,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     }
 
     func chooseDay(sender:UITapGestureRecognizer){
-        let Cell:DayCollectionViewCell = sender.view as! DayCollectionViewCell
+        let _:DayCollectionViewCell = sender.view as! DayCollectionViewCell
         
         let VC = self.storyboard?.instantiateViewControllerWithIdentifier("EventListViewController") as! EventListViewController
 //        VC.SelectedDay = Cell.day
@@ -547,7 +539,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    
     func SetNewMonthLabel(){
         //Handling animation,when another month scrolled, new Month name will appear with fade
         let animation:CATransition = CATransition()
@@ -557,8 +548,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         //--------------------------------------------------------------------------------------//
         self.MonthLabel.text = DateToStringConverter.monthInText(SelectedMonth, shorten: false) + " \(SelectedYear)"
     }
-    
-    
     func CalculateSkippedDays(){         //------calculating skipped days,i.e offset we need to set up for month cells in collectionview
         
         //now we put day to 1 ,to get the first weekday in order to choose offset for day cells
@@ -592,8 +581,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         }
         //---------------------------------//
     }
-    
-
     func StartScroll(){
         calendarView.setContentOffset(CGPointMake(428.5, 0), animated: false)
         self.previousPage = 1
@@ -608,7 +595,6 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return events.count
     }
-
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var header:eventHeaderView = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! eventHeaderView
         header = eventHeaderView(event: self.events[section])
@@ -639,16 +625,18 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             var content = NSMutableAttributedString(string: "\(authorNameText)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 14)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-            content = NSMutableAttributedString(string: " \(self.events[indexPath.section].details)", attributes: attrs)
+            content = NSMutableAttributedString(string: " \(self.events[indexPath.section].shortDescription)", attributes: attrs)
             eventDetailsText.appendAttributedString(content)
         }
         
         let eventTimeAndLocationText = NSMutableAttributedString()
         // time
-        var attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: ColorFromCode.randomBlueColorFromNumber(3)]
+        var attrs = [NSFontAttributeName : UIFont(name: "Lato-Semibold", size: 14)!, NSForegroundColorAttributeName: UIColor.blackColor()]
         var content = NSMutableAttributedString(string: "\(self.events[indexPath.section].timeString) ", attributes:attrs)
         eventTimeAndLocationText.appendAttributedString(content)
-
+        attrs = [NSFontAttributeName : UIFont(name: "Lato-Semibold", size: 12)!, NSForegroundColorAttributeName: ColorFromCode.colorWithHexString("#9497A3")]
+        content = NSMutableAttributedString(string: "\nin 2 hours", attributes: attrs)
+        eventTimeAndLocationText.appendAttributedString(content)
 
         if (self.events[indexPath.section].location != ""){
             attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 16)!, NSForegroundColorAttributeName: UIColor.darkGrayColor()]
@@ -661,198 +649,141 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         }
         
         
-        if (self.events[indexPath.section].pictureId != ""){ // Image with Cell
-            
-            let Cell:HomeEventTableViewCell = tableView.dequeueReusableCellWithIdentifier("Event Cell", forIndexPath: indexPath) as! HomeEventTableViewCell
-            Cell.tag = indexPath.section
-            // set main labels
-            Cell.EventName.text = eventNameText
-            Cell.EventDescription.attributedText = eventDetailsText
-            Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
-            Cell.eventDateLabel.attributedText = eventDateText
-            
-            // clickable author name
-            if (self.events[indexPath.section].details != ""){
-                let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
-                Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
-                Cell.EventDescription.delegate = self
-                Cell.EventDescription.tag = indexPath.section
-            }
-            
-            // clickable location
-            if (self.events[indexPath.section].location != ""){
-                let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.section].location.length),length: self.events[indexPath.section].location.length)
-                Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
-                Cell.timeLocationLabel.delegate = self
-                Cell.timeLocationLabel.tag = indexPath.section
-            }
-            Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
-            Cell.EventDescription.attributedText = eventDetailsText
-
-            if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
-                Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
-            }else{
-                Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
-            }
-            
-            Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
-            
-            // Set Buttons
-            Cell.likeButton.setState(self.events[indexPath.section].likeManager.isLiked)
-            Cell.goButton.setState(self.events[indexPath.section].goManager.isGoing)
-            Cell.shareButton.setState(self.events[indexPath.section].shareManager.isShared)
-
-//            Cell.likeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
-//            Cell.likeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-//            Cell.goButton.initialize(self.events[indexPath.section].goManager.isGoing)
-//            Cell.goButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-//            Cell.shareButton.initialize(self.events[indexPath.section].shareManager.isShared)
-//            Cell.shareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
-            
-            
-            EventsManager().loadProfilePictureForEvent(&self.events[Cell.tag], completionHandler: {
-                (error:NSError!) -> Void in
-                let index = Cell.tag
-                if (error == nil){
-                    if (self.tableView.headerViewForSection(index) != nil){
-                        let header:eventHeaderView = self.tableView.headerViewForSection(index) as! eventHeaderView
-                        header.updateProfilePicture(
-                            self.events[index].profilePictureID as String,
-                            progress: self.events[index].profilePictureProgress,
-                            image: self.events[index].profilePicture)
-                    }
-                }else{
-                    print("Error:" + error.description)
-                }
-            })
-            Cell.UpdateEventPicture(self.events[indexPath.section], row: indexPath.section)
-            
-            Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
-            Cell.contentView.userInteractionEnabled = true
-            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-            Cell.EventPicture.userInteractionEnabled = true
-            Cell.EventPicture.tag = indexPath.section
-            Cell.ProgressView.tag = indexPath.section
-            Cell.EventPicture.addGestureRecognizer(pushEventRec1)
-            Cell.ProgressView.addGestureRecognizer(pushEventRec2)
-
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
-            Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
-
-            Cell.contentView.setNeedsLayout()
-            Cell.contentView.layoutIfNeeded()
-            //            CGFloat labelWidth                  = superviewWidth - 30.0f;
-            //            //    use the known label width with a maximum height of 100 points
-            //            CGSize labelContraints              = CGSizeMake(labelWidth, 100.0f);
-            //
-            //            NSStringDrawingContext *context     = [[NSStringDrawingContext alloc] init];
-            //
-            //            CGRect labelRect                    = [ingredientLine boundingRectWithSize:labelContraints
-            //            options:NSStringDrawingUsesLineFragmentOrigin
-            //            attributes:nil
-            //            context:context];
-
-            let descrHeight = Cell.EventDescription.sizeThatFits(CGSizeMake(Cell.EventDescription.frame.width, 550)).height
-            let timelocHeight = Cell.timeLocationLabel.sizeThatFits(CGSizeMake(Cell.timeLocationLabel.frame.width, 100)).height
-//            let numberOfGoingHeight = Cell.numberOfGoingLabel.sizeThatFits(CGSizeMake(Cell.numberOfGoingLabel.frame.width, 100)).height
-
-            //            println("time location height for \(indexPath.section) : \(Cell.timeLocationLabel.frame.height)")
-            //            println("event description height for \(indexPath.section) : \(Cell.EventDescription.frame.height)")
-            //            println("got height for \(indexPath.section) : \(Cell.frame.height)")
-            cellHeights.insert((screenWidth*4/5+15+timelocHeight+5+descrHeight), atIndex: indexPath.section)
-            
-            return Cell
-
-        }else{ // Cell without Image
-            let Cell:HomeEventNoPictureCell = tableView.dequeueReusableCellWithIdentifier("EventNoPic Cell", forIndexPath: indexPath) as! HomeEventNoPictureCell
-            Cell.tag = indexPath.section
-            
-            // set main labels
-            Cell.EventName.text = eventNameText
-            Cell.EventDescription.attributedText = eventDetailsText
-            Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
-            Cell.EventDate.attributedText = eventDateText
-            
-            // clickable author name
-            if (self.events[indexPath.section].details != ""){
-                let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
-                Cell.EventDescription.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
-                Cell.EventDescription.delegate = self
-                Cell.EventDescription.tag = indexPath.section
-            }
-            
-            // clickable location
-            if (self.events[indexPath.section].location != ""){
-                let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
-                let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.section].location.length),length: self.events[indexPath.section].location.length)
-                Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
-                Cell.timeLocationLabel.delegate = self
-                Cell.timeLocationLabel.tag = indexPath.section
-            }
-            Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
-            Cell.EventDescription.attributedText = eventDetailsText
-            
-            
-            if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
-                Cell.EventDate.backgroundColor = ColorFromCode.orangeDateColor()
-            }else{
-                Cell.EventDate.backgroundColor = ColorFromCode.orangeDateColor()
-            }
-
-            Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
-            
-            Cell.LikeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.GoButton.initialize(self.events[indexPath.section].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ShareButton.initialize(self.events[indexPath.section].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
-            // Set Profile Picture
-            //        dispatch_async(dispatch_get_main_queue(), {
-            //            () -> Void in
-            //            Cell.DownloadProfilePicture(&self.events[indexPath.row], row: indexPath.row)
-            //        })
-            
-            Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
-            Cell.contentView.userInteractionEnabled = true
-            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-            Cell.EventView.userInteractionEnabled = true
-            Cell.EventView.tag = indexPath.section
-            Cell.EventView.addGestureRecognizer(EventNameTapRecognizer)
-            Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
-            Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
-            
-            Cell.contentView.setNeedsLayout()
-            Cell.contentView.layoutIfNeeded()
-
-            //println(screenWidth)
-            //println(Cell.EventDescription.frame.width)
-            let descrHeight = Cell.EventDescription.sizeThatFits(CGSizeMake(Cell.EventDescription.frame.width, CGFloat.max)).height
-            let timelocHeight = Cell.timeLocationLabel.sizeThatFits(CGSizeMake(Cell.timeLocationLabel.frame.width, 100)).height
-            let numberOfGoingHeight = Cell.numberOfGoingLabel.sizeThatFits(CGSizeMake(Cell.numberOfGoingLabel.frame.width, CGFloat.max)).height
-            cellHeights.insert((screenWidth+15+timelocHeight+5+descrHeight+10+numberOfGoingHeight+5+60), atIndex: indexPath.section)
-
-            return Cell
+        let Cell:HomeEventTableViewCell = tableView.dequeueReusableCellWithIdentifier("Event Cell", forIndexPath: indexPath) as! HomeEventTableViewCell
+        Cell.tag = indexPath.section
+        // set main labels
+        Cell.eventNameLabel.text = eventNameText
+        Cell.eventDescriptionLabel.attributedText = eventDetailsText
+        Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
+        Cell.eventDateLabel.attributedText = eventDateText
+        
+        // clickable author name
+        if (self.events[indexPath.section].details != ""){
+            let url:NSURL = NSURL(scheme: "pushAuthor", host: "", path: "/")!
+            Cell.eventDescriptionLabel.addLinkToURL(url, withRange:NSRange(location: 0,length: (authorNameText as NSString).length))
+            Cell.eventDescriptionLabel.delegate = self
+            Cell.eventDescriptionLabel.tag = indexPath.section
         }
+        
+        // clickable location
+        if (self.events[indexPath.section].location != ""){
+            let url:NSURL = NSURL(scheme: "pushLocation", host: "", path: "/")!
+            let range = NSRange(location: (eventTimeAndLocationText.length-self.events[indexPath.section].location.length),length: self.events[indexPath.section].location.length)
+            Cell.timeLocationLabel.addLinkToURL(url, withRange: range)
+            Cell.timeLocationLabel.delegate = self
+            Cell.timeLocationLabel.tag = indexPath.section
+        }
+        Cell.timeLocationLabel.attributedText = eventTimeAndLocationText
+        Cell.eventDescriptionLabel.attributedText = eventDetailsText
+        
+        if (self.events[indexPath.section].date.timeIntervalSinceNow < 0){
+            Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
+        }else{
+            Cell.eventDateLabel.backgroundColor = ColorFromCode.orangeDateColor()
+        }
+        
+        Cell.Set_Numbers(self.events[indexPath.section].goManager.numberOfGoing, likes: self.events[indexPath.section].likeManager.numberOfLikes, comments: self.events[indexPath.section].numberOfComments, shares: self.events[indexPath.section].shareManager.numberOfShares)
+        
+        // Set Buttons
+        Cell.likeButton.setState(self.events[indexPath.section].likeManager.isLiked)
+        Cell.likeButton.handleTap({ () -> Void in
+            self.like(Cell.likeButton)
+        })
+        
+        Cell.goButton.setState(self.events[indexPath.section].goManager.isGoing)
+        Cell.goButton.handleTap({ () -> Void in
+            self.go(Cell.goButton)
+        })
+        
+        Cell.shareButton.setState(self.events[indexPath.section].shareManager.isShared)
+        Cell.shareButton.handleTap({ () -> Void in
+            self.share(Cell.shareButton)
+        })
+//        Cell.commentButton
+        //            Cell.likeButton.initialize(self.events[indexPath.section].likeManager.isLiked)
+        //            Cell.likeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+        //            Cell.goButton.initialize(self.events[indexPath.section].goManager.isGoing)
+        //            Cell.goButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+        //            Cell.shareButton.initialize(self.events[indexPath.section].shareManager.isShared)
+        //            Cell.shareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+        //            Cell.moreButton.handleTap({ () -> Void in
+        //                self.more(Cell.moreButton)
+        //            })
+        Cell.moreButton.tag = indexPath.section
+        Cell.moreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+//        Cell.commentButton.initialize()
+        
+        Cell.progressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        EventsManager().loadProfilePictureForEvent(&self.events[Cell.tag], completionHandler: {
+            (error:NSError!) -> Void in
+            let index = Cell.tag
+            if (error == nil){
+                if (self.tableView.headerViewForSection(index) != nil){
+                    let header:eventHeaderView = self.tableView.headerViewForSection(index) as! eventHeaderView
+                    header.updateProfilePicture(
+                        self.events[index].profilePictureID as String,
+                        progress: self.events[index].profilePictureProgress,
+                        image: self.events[index].profilePicture)
+                }
+            }else{
+                print("Error:" + error.description)
+            }
+        })
+        Cell.UpdateEventPicture(self.events[indexPath.section], row: indexPath.section)
+        
+        Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
+        Cell.contentView.userInteractionEnabled = true
+        let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+        let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+        Cell.pictureImageView.userInteractionEnabled = true
+        Cell.pictureImageView.tag = indexPath.section
+        Cell.progressView.tag = indexPath.section
+        Cell.pictureImageView.addGestureRecognizer(pushEventRec1)
+        Cell.progressView.addGestureRecognizer(pushEventRec2)
+        
+        Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
+        Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
+        
+        Cell.contentView.setNeedsLayout()
+        Cell.contentView.layoutIfNeeded()
+        //            CGFloat labelWidth                  = superviewWidth - 30.0f;
+        //            //    use the known label width with a maximum height of 100 points
+        //            CGSize labelContraints              = CGSizeMake(labelWidth, 100.0f);
+        //
+        //            NSStringDrawingContext *context     = [[NSStringDrawingContext alloc] init];
+        //
+        //            CGRect labelRect                    = [ingredientLine boundingRectWithSize:labelContraints
+        //            options:NSStringDrawingUsesLineFragmentOrigin
+        //            attributes:nil
+        //            context:context];
+        
+        let descrHeight = Cell.eventDescriptionLabel.sizeThatFits(CGSizeMake(Cell.eventDescriptionLabel.frame.width, 550)).height
+        //let timelocHeight = Cell.timeLocationLabel.sizeThatFits(CGSizeMake(Cell.timeLocationLabel.frame.width, 100)).height
+        //            let numberOfGoingHeight = Cell.numberOfGoingLabel.sizeThatFits(CGSizeMake(Cell.numberOfGoingLabel.frame.width, 100)).height
+        
+        //            println("time location height for \(indexPath.section) : \(Cell.timeLocationLabel.frame.height)")
+        //            println("event description height for \(indexPath.section) : \(Cell.EventDescription.frame.height)")
+        //            println("got height for \(indexPath.section) : \(Cell.frame.height)")
+        //let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[evDate(sq@999)][shareButton(sq@999)][likeButton(sq@999)][goButton(sq@999)][commentButton(sq@999)]-5-[evDescription(>=0@999)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let bigSquareSide = screenWidth*4/5
+        let smallSquareSide = screenWidth/5
+        cellHeights.insert((bigSquareSide+smallSquareSide+5+descrHeight+5), atIndex: indexPath.section)
+        
+        return Cell
+        
+
+        
     }
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if (indexPath.section == self.events.count-2){
             if (!end){
-                LoadMore()
+                loadMore()
             }
         }
     }
@@ -905,20 +836,20 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     }
 
     
-    func like(sender: HomeLikeButton){
+    func like(sender: ETableViewCellButton){
         print("button pressed \(sender.superview!.superview!.tag)")
         self.events[sender.superview!.superview!.tag].likeManager.button = sender
         self.events[sender.superview!.superview!.tag].likeManager.Like()
     }
     
-    func go(sender: HomeResponseButton){
+    func go(sender: ETableViewCellButton){
         print("button pressed \(sender.superview!.superview!.tag)")
         self.events[sender.superview!.superview!.tag].goManager.button = sender
         self.events[sender.superview!.superview!.tag].goManager.Going()
         
     }
     
-    func share(sender: HomeShareButton){
+    func share(sender: ETableViewCellButton){
         print("button pressed \(sender.superview!.superview!.tag)")
         self.events[sender.superview!.superview!.tag].shareManager.button = sender
         self.events[sender.superview!.superview!.tag].shareManager.Share()
@@ -1037,9 +968,9 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         }
     }
     
-    func LoadTimeline(){
+    func loadTimeline(){
         EventsManager.loadEventsForHomeTableView(nil,completionHandler: {
-                (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
+            (downloadedEventsArray:[FetchedEvent], error:NSError!) -> Void in
             self.refreshControlForTimeLine.endRefreshing()
             self.indicator.stopAnimating()
             if (error == nil){
@@ -1059,7 +990,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                 self.tableView.reloadData()
                 self.tableView.setContentOffset(CGPointZero, animated: false)
                 self.attachFooterView(!self.end)
-
+                
                 //load pictures
                 
                 for (index,_) in self.events.enumerate(){
@@ -1093,7 +1024,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             }
         })
     }
-    func LoadMore(){
+    func loadMore(){
         print("loadmore")
         if footerView.isAnimating {
             return
@@ -1175,12 +1106,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
     }
 
-//    func RefreshLayout(){ //i found this method less efficient than creating empty transparent cells
-//        CurrentLayout.SkippedDays0 = SkippedDays0
-//        CurrentLayout.SkippedDays1 = SkippedDays1
-//        CurrentLayout.SkippedDays2 = SkippedDays2
-//        CurrentMonth.collectionViewLayout = CurrentLayout
-//    }
+
 
     func countNumberOfEventsForSelectedMonth(){
         self.calendarView.scrollEnabled = false

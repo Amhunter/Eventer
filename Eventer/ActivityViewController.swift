@@ -141,9 +141,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
         //---------Set the scrollView------------------//
 
         // Segment View Autolayout
-        self.segmentLabel1.setTitle("ME", forState: UIControlState.Normal)
+        self.segmentLabel1.setTitle("ACCEPTED", forState: UIControlState.Normal)
         self.segmentLabel2.setTitle("YOU", forState: UIControlState.Normal)
-        self.segmentLabel3.setTitle("FOLLOWING", forState: UIControlState.Normal)
+        self.segmentLabel3.setTitle("FRIENDS", forState: UIControlState.Normal)
         self.segmentLabel1.adjustsImageWhenDisabled = false
         self.segmentLabel2.adjustsImageWhenDisabled = false
         self.segmentLabel3.adjustsImageWhenDisabled = false
@@ -394,7 +394,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                             self.youData[index].followManager.checkFollow(unit.fromUser!.userId, row: index, completionBlock: {
                                 (isFollowing:Bool, error:NSError!) -> Void in
                                 if (error == nil){
-                                    self.youData[index].followManager.initialize(unit.fromUser!, isFollowing: isFollowing, row: index, tab: forTab.Activity)
+                                    self.youData[index].followManager.initialize(unit.fromUser!, isFollowing: isFollowing, row: index, tab: TargetView.Activity)
 //                                    println(isFollowing)
 //                                    println(self.youData[index].followManager.loaded)
                                     let cells = self.youTableView.visibleCells

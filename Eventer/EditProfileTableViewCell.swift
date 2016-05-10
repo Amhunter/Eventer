@@ -143,7 +143,7 @@ class EditProfileTableViewCell: UITableViewCell, UITextFieldDelegate, UITextView
         phoneNumberTextField.tintColor =  ColorFromCode.colorWithHexString("#B8B7B9")
         fullNameTextField.tintColor = ColorFromCode.colorWithHexString("#B8B7B9")
         
-        fullNameTextField.addTarget(self, action: "fullNameTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
+        fullNameTextField.addTarget(self, action: #selector(fullNameTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
         phoneNumberTextField.keyboardType = UIKeyboardType.PhonePad
         
         fullNameTextField.delegate = self

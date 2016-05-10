@@ -7,8 +7,8 @@
 //
 
 import UIKit
-enum forTab {
-    case Home
+enum TargetView: Int {
+    case Home = 0
     case Explore
     case Activity
     case Profile
@@ -17,7 +17,7 @@ enum forTab {
 
 class LikeManager {
     var row:Int!
-    var button:HomeLikeButton!
+    var button:UIButton!
     var event:FetchedEvent!
     var numberOfLikes:Int = 0
 
@@ -28,9 +28,9 @@ class LikeManager {
     var attempts:Int = 0 //attempts to save or delete
     
     var isBusy:Bool = false // if processing a query
-    var tab:forTab!
+    var tab:TargetView!
     
-    func initialize(event:FetchedEvent,isLiked:Bool, row:Int, tab:forTab){
+    func initialize(event:FetchedEvent,isLiked:Bool, row:Int, tab:TargetView){
         self.event = event
         self.wasInitiallyLiked = isLiked
         self.isLiked = isLiked
@@ -164,31 +164,18 @@ class LikeManager {
     
     
     func Display_Changes(){
-        if (isLiked == true){
-            button.setImage(UIImage(named: "like-active.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "like.png"), forState: UIControlState.Highlighted)
-            self.numberOfLikes++
-        }else{
-            button.setImage(UIImage(named: "like.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "like-active.png"), forState: UIControlState.Highlighted)
-            self.numberOfLikes--
+        
+        isLiked ? (numberOfLikes += 1) : (numberOfLikes -= 1)
+        
+        switch self.tab! {
+        case .Home:
+            (self.button as! ETableViewCellButton).setState(isLiked)
+            (self.button as! ETableViewCellButton).setLabelNumber(numberOfLikes)
+        case .EventView:
+            (self.button as! HomeLikeButton).initialize(isLiked)
+        default:
+            break
         }
-//        if (self.tab == forTab.Home){
-//            if (self.event.pictureId == ""){
-//                (self.button.superview!.superview!.superview!.superview! as! HomeEventNoPictureCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-//            }else{
-//                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-//                
-//            }
-//        }else if self.tab == forTab.Profile { // profile
-//            if (self.event.pictureId == ""){
-//                (self.button.superview!.superview!.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-//            }else{
-//                (self.button.superview!.superview!.superview!.superview! as! ProfileEventTableViewCell).numberOfLikesLabel.text = "\(self.numberOfLikes)"
-//                
-//            }
-//        }
-
         
     }
     
@@ -202,7 +189,7 @@ class LikeManager {
                 isBusy = false
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 Save_Like(buttonWasPressed: false)
             }
             

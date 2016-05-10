@@ -39,6 +39,15 @@ extension UINavigationBar {
     
 }
 
+extension UIButton {
+    func centerTextAndImage(spacing: CGFloat) {
+        let insetAmount = spacing / 2
+        imageEdgeInsets = UIEdgeInsets(top: 0, left: -insetAmount, bottom: 0, right: insetAmount)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: insetAmount, bottom: 0, right: -insetAmount)
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: insetAmount, bottom: 0, right: insetAmount)
+    }
+}
+
 class MyProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var screenWidth = UIScreen.mainScreen().bounds.width
@@ -65,7 +74,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     var fullNameLabel:UILabel = UILabel()
     var websiteLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var editProfileButton:UIButton = UIButton()
-    
+    var seeCalendarButton = UIButton()
     
     var numberOfEventsLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
     var numberOfFollowersLabel:TTTAttributedLabel = TTTAttributedLabel(frame: CGRectZero)
@@ -180,6 +189,18 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         editProfileButton.addTarget(self, action: "editProfile", forControlEvents: UIControlEvents.TouchUpInside)
         editProfileButton.layer.cornerRadius = 4
         
+        
+        // See Calendar Button
+        seeCalendarButton.setTitle("See calendar", forState: UIControlState.Normal)
+        seeCalendarButton.titleLabel!.font = UIFont(name: "Lato-Medium", size: 18)
+        seeCalendarButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        seeCalendarButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
+        seeCalendarButton.setImage(UIImage(named: "calendar"), forState: UIControlState.Normal)
+        seeCalendarButton.backgroundColor = UIColor.clearColor()
+        seeCalendarButton.centerTextAndImage(10)
+//        editProfileButton.addTarget(self, action: "editProfile", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
         // Grid and Table Buttons
         gridButton.tag = 1
         tableButton.tag = 2
@@ -200,13 +221,13 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         var attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 21)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         var content = NSMutableAttributedString(string: " ", attributes: attrs)
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
-        content.appendAttributedString(NSMutableAttributedString(string: "\nfollowers", attributes: attrs))
+        content.appendAttributedString(NSMutableAttributedString(string: " followers", attributes: attrs))
         numberOfFollowersLabel.attributedText = content
         
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 21)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
         content = NSMutableAttributedString(string: " ", attributes: attrs)
         attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
-        content.appendAttributedString(NSMutableAttributedString(string: "\nfollowing", attributes: attrs))
+        content.appendAttributedString(NSMutableAttributedString(string: " following", attributes: attrs))
         numberOfFollowingLabel.attributedText = content
         
         
@@ -217,8 +238,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         numberOfEventsLabel.attributedText = content
         
         
-        fullNameLabel.font = UIFont(name: "Lato-Semibold", size: 18)
-        fullNameLabel.textAlignment = NSTextAlignment.Center
+        fullNameLabel.font = UIFont(name: "Lato-Semibold", size: 17)
+//        fullNameLabel.textAlignment = NSTextAlignment.Center
         fullNameLabel.numberOfLines = 0
         
         bioLabel.font = UIFont(name: "Lato-Regular", size: 14)
@@ -232,15 +253,15 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         websiteLabel.numberOfLines = 0
 
         profilePictureImageView.backgroundColor = UIColor.groupTableViewBackgroundColor()
-        profilePictureImageView.layer.cornerRadius = 8
+        profilePictureImageView.layer.cornerRadius = 45
         profilePictureImageView.layer.borderWidth = 2
         profilePictureImageView.layer.borderColor = UIColor.whiteColor().CGColor
         profilePictureImageView.layer.masksToBounds = true // otherwise the corner radius doesnt work
         
-        profilePictureShadowView.layer.shadowOffset = CGSizeMake(0, 0)
-        profilePictureShadowView.layer.shadowRadius = 3
-        profilePictureShadowView.layer.shadowColor = UIColor.blackColor().CGColor
-        profilePictureShadowView.layer.shadowOpacity = 0.4
+//        profilePictureShadowView.layer.shadowOffset = CGSizeMake(0, 0)
+//        profilePictureShadowView.layer.shadowRadius = 3
+//        profilePictureShadowView.layer.shadowColor = UIColor.blackColor().CGColor
+//        profilePictureShadowView.layer.shadowOpacity = 0.4
         
         let standardImage = UIImage(named: "going")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         let highlightedImage = UIImage(named: "going")
@@ -362,6 +383,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         tableHeaderView.addSubview(numberOfFollowingLabel)
         tableHeaderView.addSubview(numberOfFollowersLabel)
         tableHeaderView.addSubview(editProfileButton)
+        tableHeaderView.addSubview(seeCalendarButton)
         tableHeaderView.addSubview(fullNameLabel)
         tableHeaderView.addSubview(bioLabel)
         tableHeaderView.addSubview(gridButton)
@@ -373,6 +395,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         numberOfFollowingLabel.translatesAutoresizingMaskIntoConstraints = false
         numberOfFollowersLabel.translatesAutoresizingMaskIntoConstraints = false
         editProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        seeCalendarButton.translatesAutoresizingMaskIntoConstraints = false
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
         bioLabel.translatesAutoresizingMaskIntoConstraints = false
         websiteLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -406,6 +429,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             "nfws": numberOfFollowersLabel,
             "nfwg": numberOfFollowingLabel,
             "editbtn": editProfileButton,
+            "calendarbtn": seeCalendarButton,
             "biolbl": bioLabel,
             "fullnamelbl": fullNameLabel,
             "border": border,
@@ -420,19 +444,22 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             "o" : 15
         ]
 //        let H_Constraint0 = NSLayoutConstraint(item: profilePictureImageView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.tableHeaderView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
-        let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[fullnamelbl]-15@999-|", options: [], metrics: nil, views: views)
-        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[nfwg(==nfws)]-10-[pp(100@999)]-10-[nfws(==nfwg)]-10@999-|", options: [], metrics: metrics, views: views)
-        let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-30-[editbtn]-30@999-|", options: [], metrics: metrics, views: views)
-        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[biolbl(>=0@999)]-15@999-|", options: [], metrics: nil, views: views)
+        let H_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-14-[fullnamelbl]-14@999-|", options: [], metrics: nil, views: views)
+        let H_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-14-[nfwg(==nfws)]-10@999-[nfws(==nfwg)]-10@999-|", options: [], metrics: metrics, views: views)
+        let H_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[pp(90@999)]-22@999-[calendarbtn]-18@999-|", options: [], metrics: metrics, views: views)
+        let H_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[pp(90@999)]-22@999-[editbtn]-18@999-|", options: [], metrics: metrics, views: views)
+        let H_Constraint4 = NSLayoutConstraint.constraintsWithVisualFormat("H:|-14-[biolbl(>=0@999)]-14@999-|", options: [], metrics: nil, views: views)
         let H_Constraint6 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridButton(==tableButton)][tableButton(==goingButton)][goingButton(==gridButton)]|", options: [], metrics: metrics, views: views)
         let H_Constraint7 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[border]|", options: [], metrics: metrics, views: views)
         let H_Constraint8 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[gridUnderline(==tableUnderline)][tableUnderline(==goingUnderline)][goingUnderline]|", options: [], metrics: metrics, views: views)
 
         
 
-        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10@999-[pp(100@999)]-5@999-[fullnamelbl(>=0@300)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
-        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50@999-[nfws]-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[gridButton]-13-[gridUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
-        let V_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50@999-[nfwg]-[fullnamelbl(>=0@999)]-10-[editbtn(35)]-5-[biolbl]-10-[border(0.5)]-13-[goingButton]-13-[goingUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint0 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[pp(90@999)]-9@999-[nfwg]-7@999-[fullnamelbl(>=0@300)]-6@999-[biolbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        
+        let V_Constraint1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[calendarbtn(22@999)]-22@999-[editbtn(29@999)]-22@999-[nfws]-7@999-[fullnamelbl(>=0@300)]-6@999-[biolbl]-10-[border(0.5)]-13-[gridButton]-13-[gridUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+        let V_Constraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-4-[calendarbtn(22@999)]-22@999-[editbtn(29@999)]-22@999-[nfws]-7@999-[fullnamelbl(>=0@300)]-6@999-[biolbl]-10-[border(0.5)]-13-[goingButton]-13-[goingUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
+
 
 //        let V_Constraint3 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[pp(100)]-5-[fullnamelbl]-4-[editbtn(>=0@999)]-5-[biolbl]-2-[websitelbl]-10-[border(0.5)]-13-[tableButton]-13-[tableUnderline(2)]->=0@999-|", options: [], metrics: metrics, views: views)
 
@@ -441,6 +468,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableHeaderView.addConstraints(H_Constraint0)
         self.tableHeaderView.addConstraints(H_Constraint1)
         self.tableHeaderView.addConstraints(H_Constraint2)
+        self.tableHeaderView.addConstraints(H_Constraint3)
         self.tableHeaderView.addConstraints(H_Constraint4)
         self.tableHeaderView.addConstraints(H_Constraint6)
         self.tableHeaderView.addConstraints(H_Constraint7)
@@ -454,7 +482,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableHeaderView.setNeedsLayout()
         self.tableHeaderView.layoutIfNeeded()
         profilePictureShadowView.addSubview(profilePictureImageView)
-        self.profilePictureImageView.frame.size = CGSizeMake(100,100)
+        self.profilePictureImageView.frame.size = CGSizeMake(90,90)
         
         bioLabel.preferredMaxLayoutWidth = bioLabel.frame.width
         self.tableHeaderView.setNeedsUpdateConstraints()
@@ -464,7 +492,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let blueView = UIView()
         blueView.backgroundColor = ColorFromCode.standardBlueColor()
-        blueView.frame.size = CGSizeMake(screenWidth,50)
+        blueView.frame.size = CGSizeMake(screenWidth,36)
         self.tableHeaderView.addSubview(blueView)
         self.tableHeaderView.sendSubviewToBack(blueView)
         
@@ -710,10 +738,11 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         content = NSMutableAttributedString(string: "\(numberOfFollowing)", attributes: attrs)
         following.appendAttributedString(content)
         
-        attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: ColorFromCode.colorWithHexString("#747474")]
-        content = NSMutableAttributedString(string: "\nfollowers", attributes: attrs)
+//        attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: ColorFromCode.colorWithHexString("#747474")]
+        attrs = [NSFontAttributeName : UIFont(name: "Lato-Regular", size: 13)!, NSForegroundColorAttributeName: UIColor.blackColor()]
+        content = NSMutableAttributedString(string: " followers", attributes: attrs)
         followers.appendAttributedString(content)
-        content = NSMutableAttributedString(string: "\nfollowing", attributes: attrs)
+        content = NSMutableAttributedString(string: " following", attributes: attrs)
         following.appendAttributedString(content)
         
         numberOfFollowersLabel.attributedText = followers
@@ -1007,8 +1036,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
             
             
@@ -1112,8 +1141,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
             Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.MoreButton.initialize()
-            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+//            Cell.MoreButton.initialize()
+//            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
 
             Cell.contentView.userInteractionEnabled = true
             let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
@@ -1135,7 +1164,6 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             return Cell
         }
     }
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if cellHeights[indexPath.row] < 46 || (cellHeights[indexPath.row] == 0) {
             return UITableViewAutomaticDimension
@@ -1264,7 +1292,6 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    
     func pushComments(sender:UITapGestureRecognizer){
         let ViewSender:UILabel = sender.view! as! UILabel
         let SelectedIndexPath:NSIndexPath = NSIndexPath(forRow: ViewSender.tag, inSection: 0)

@@ -85,8 +85,8 @@ class SearchDisplayView: UIView, UIScrollViewDelegate {
         
         self.segmentLabel1.titleLabel?.textAlignment = NSTextAlignment.Center
         self.segmentLabel2.titleLabel?.textAlignment = NSTextAlignment.Center
-        self.segmentLabel1.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.segmentLabel2.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel1.addTarget(self, action: #selector(self.switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel2.addTarget(self, action: #selector(self.switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 
         
         self.segmentIndicator.backgroundColor = ColorFromCode.colorWithHexString("#02A8F3")

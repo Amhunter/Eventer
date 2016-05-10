@@ -87,7 +87,7 @@ class FetchedActivityUnit{
 
         if (unit.metadata != nil){
             self.metadata = unit.metadata!
-            createdAtText = DateToStringConverter.getCreatedAtString(unit.metadata!.creationTime(), tab: forTab.Explore)
+            createdAtText = DateToStringConverter.getCreatedAtString(unit.metadata!.creationTime(), tab: TargetView.Explore)
 
         }
         

@@ -10,7 +10,7 @@ import UIKit
 
 class GoManager {
     var row:Int!
-    var button:HomeResponseButton!
+    var button:UIButton!
     var event:FetchedEvent!
     var numberOfGoing:Int = 0
     var numberOfNo:UInt = 0
@@ -23,8 +23,8 @@ class GoManager {
     var attempts:Int = 0 //attempts to save or delete
     
     var isBusy:Bool = false // if processing a query
-    var tab:forTab!
-    func initialize(event:FetchedEvent,isGoing:Bool, row:Int,tab:forTab){
+    var tab:TargetView!
+    func initialize(event:FetchedEvent,isGoing:Bool, row:Int,tab:TargetView){
         self.event = event
         self.wasInitiallyGoing = isGoing
         self.isGoing = isGoing
@@ -158,34 +158,17 @@ class GoManager {
     
     
     func Display_Changes(){
-        if (isGoing == true){
-            button.setImage(UIImage(named: "going-active.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "going.png"), forState: UIControlState.Highlighted)
-
-            self.numberOfGoing++
-        }else{
-            button.setImage(UIImage(named: "going.png"), forState: UIControlState.Normal)
-            button.setImage(UIImage(named: "going-active.png"), forState: UIControlState.Highlighted)
-
-            self.numberOfGoing--
-        }
-        if (self.tab == forTab.Home){
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview!.superview!.superview! as! HomeEventNoPictureCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
-            }else{
-                (self.button.superview!.superview!.superview!.superview! as! HomeEventTableViewCell).goButton.setLabelNumber(self.numberOfGoing)
-                
-            }
-        }else{ // profile
-            if (self.event.pictureId == ""){
-                (self.button.superview!.superview!.superview!.superview! as! ProfileNoPictureTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
-            }else{
-                (self.button.superview!.superview!.superview!.superview! as! ProfileEventTableViewCell).numberOfGoingLabel.text = "\(self.numberOfGoing)"
-                
-            }
-
-        }
+        isGoing ? (numberOfGoing += 1) : (numberOfGoing -= 1)
         
+        switch self.tab! {
+        case .Home:
+            (self.button as! ETableViewCellButton).setState(isGoing)
+            (self.button as! ETableViewCellButton).setLabelNumber(numberOfGoing)
+        case .EventView:
+            (self.button as! HomeResponseButton).initialize(isGoing)
+        default:
+            break
+        }
     }
     
     
@@ -198,7 +181,7 @@ class GoManager {
                 isBusy = false
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 Save_Response(buttonWasPressed: false)
             }
             

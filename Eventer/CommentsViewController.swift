@@ -304,7 +304,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         comment.content = InputTextView.text
         comment.toUser = event.author
         let commentRendered = FetchedActivityUnit(fromUnit: comment)
-        commentRendered.createdAtText = DateToStringConverter.getCreatedAtString(NSDate(), tab: forTab.Explore)
+        commentRendered.createdAtText = DateToStringConverter.getCreatedAtString(NSDate(), tab: TargetView.Explore)
         Comments.append(commentRendered)
         let insertedIndex = Comments.count-1
         self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: insertedIndex, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)

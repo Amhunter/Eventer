@@ -487,7 +487,7 @@ class CreateEvent2ViewController: UIViewController,UIActionSheetDelegate,UINavig
         
 //        let authorNameText = self.event.author!.username
         let eventNameText = self.eventName
-        let eventDateText = DateToStringConverter.eventDateToText(eventDate!, tab: forTab.Home)
+        let eventDateText = DateToStringConverter.eventDateToText(eventDate!, tab: TargetView.Home)
         
         let dateFormatter:NSDateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"

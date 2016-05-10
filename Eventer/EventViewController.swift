@@ -696,12 +696,12 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
     
     func like(sender: HomeLikeButton){
         
-        self.event.likeManager.tab = forTab.EventView
+        self.event.likeManager.tab = TargetView.EventView
         self.event.likeManager.button = sender
         self.event.likeManager.Like()
     }
     func share(sender: HomeShareButton){
-        self.event.shareManager.tab = forTab.EventView
+        self.event.shareManager.tab = TargetView.EventView
         self.event.shareManager.button = sender
         self.event.shareManager.Share()
     }

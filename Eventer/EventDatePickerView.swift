@@ -109,7 +109,7 @@ class EventDatePickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         let ButtonIcon:UIImage = UIImage(named: "calendar.png")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         switchToCalendarButton.setImage(ButtonIcon, forState: UIControlState.Normal)
         switchToCalendarButton.tintColor = ColorFromCode.standardBlueColor()
-        switchToCalendarButton.addTarget(self, action: "switchViews", forControlEvents: UIControlEvents.TouchUpInside)
+        switchToCalendarButton.addTarget(self, action: #selector(self.switchViews), forControlEvents: UIControlEvents.TouchUpInside)
 
         
         todayButton.setTitle("TODAY", forState: UIControlState.Normal)
@@ -117,7 +117,7 @@ class EventDatePickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         todayButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
         todayButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 12)
         todayButton.titleLabel!.numberOfLines = 0
-        todayButton.addTarget(self, action: "backToToday", forControlEvents: UIControlEvents.TouchUpInside)
+        todayButton.addTarget(self, action: #selector(self.backToToday), forControlEvents: UIControlEvents.TouchUpInside)
 
         // Setting Dates
         let todayComponents = calendar.components([NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: NSDate())
@@ -160,7 +160,7 @@ class EventDatePickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         backToDateButton.tintColor = UIColor.blackColor()
         backToDateButton.sizeToFit()
         backToDateButton.frame.size.width = 50
-        backToDateButton.addTarget(self, action: "backToDate", forControlEvents: UIControlEvents.TouchUpInside)
+        backToDateButton.addTarget(self, action: #selector(self.backToDate), forControlEvents: UIControlEvents.TouchUpInside)
         let buttonWidth = backToDateButton.frame.size.width
         let buttonHeight = backToDateButton.frame.size.height
         
@@ -168,7 +168,7 @@ class EventDatePickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         doneButton.setTitleColor(ColorFromCode.randomBlueColorFromNumber(3), forState: UIControlState.Normal)
         doneButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
         doneButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 17)
-        doneButton.addTarget(self, action: "done", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(self.done), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.frame.size.width = buttonWidth
         doneButton.frame.size.height = backToDateButton.frame.height
         doneButton.frame.origin.x = screenWidth-buttonWidth-20 // 20 for offset
