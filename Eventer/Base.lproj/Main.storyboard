@@ -40,7 +40,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fCs-K2-l4t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-850" y="-290"/>
+            <point key="canvasLocation" x="-842" y="-298"/>
         </scene>
         <!--Explore Navigation-->
         <scene sceneID="wyH-vi-Vlr">
@@ -74,8 +74,6 @@
                     </navigationBar>
                     <connections>
                         <segue destination="xdB-Qx-Ste" kind="relationship" relationship="rootViewController" id="4gI-9o-uyH"/>
-                        <segue destination="PGB-Ik-zXX" kind="show" id="4M6-y4-FdS"/>
-                        <segue destination="uCE-l7-5XL" kind="show" id="qXw-dW-HHi"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Do-8u-d8a" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -314,8 +312,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="Comments" id="ojx-wO-jIt"/>
                     <connections>
-                        <segue destination="EuM-14-lpw" kind="show" id="FDZ-x4-d1D"/>
-                        <segue destination="MqT-ee-uZp" kind="show" id="SHU-z6-e8X"/>
+                        <segue destination="EuM-14-lpw" kind="show" identifier="random6" id="FDZ-x4-d1D"/>
+                        <segue destination="MqT-ee-uZp" kind="show" identifier="random5" id="SHU-z6-e8X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="azp-uf-wYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -359,7 +357,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JiW-bo-l85" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-850" y="481"/>
+            <point key="canvasLocation" x="-842" y="481"/>
         </scene>
         <!--DayView-->
         <scene sceneID="qwh-cO-yv1">
@@ -454,7 +452,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ojG-3x-Dx9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3079" y="-318"/>
+            <point key="canvasLocation" x="-3171" y="-318"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="vO5-ho-QCs">
@@ -532,6 +530,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Create Event" id="5hZ-wy-9U4"/>
+                    <connections>
+                        <segue destination="PGB-Ik-zXX" kind="show" identifier="random 4" id="7Ba-gJ-EdO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x9n-Sr-5Ul" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -572,6 +573,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Create Event 2 ViewController" id="02b-0F-NkE"/>
+                    <connections>
+                        <segue destination="uCE-l7-5XL" kind="show" identifier="Random22" id="7EH-q5-WEI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="25H-Qz-hu1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

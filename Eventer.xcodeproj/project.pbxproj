@@ -10,7 +10,6 @@
 		3EE7E5B34B069CB211A7D6A5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2DF3BFFBD1F77AFF226A189 /* libPods.a */; };
 		C93370231C97807200606FA2 /* HomeCommentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93370221C97807200606FA2 /* HomeCommentButton.swift */; };
 		C93BECCB1C5FEBB2002FB2D4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BECCA1C5FEBB2002FB2D4 /* SettingsViewController.swift */; };
-		C956426D1C44E67800A1931A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C956426C1C44E67800A1931A /* Info.plist */; };
 		C956426F1C44E68B00A1931A /* Eventer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = C956426E1C44E68B00A1931A /* Eventer.xcdatamodel */; };
 		C95642711C44E69300A1931A /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95642701C44E69300A1931A /* TabBarViewController.swift */; };
 		C95642731C44E69F00A1931A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95642721C44E69F00A1931A /* AppDelegate.swift */; };
@@ -684,7 +683,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Grisha;
 				TargetAttributes = {
 					C9DBE7061C44D572002F4525 = {
@@ -726,7 +725,6 @@
 				C9DBE7C01C44D607002F4525 /* Lato-Regular.ttf in Resources */,
 				C9DBE7BD1C44D607002F4525 /* Lato-HeavyItalic.ttf in Resources */,
 				C9DBE7BC1C44D607002F4525 /* Lato-Bold.ttf in Resources */,
-				C956426D1C44E67800A1931A /* Info.plist in Resources */,
 				C9B889B31CE2428A001E8FA9 /* Default-736@3x.png in Resources */,
 				C9DBE7C11C44D607002F4525 /* Lato-Semibold.ttf in Resources */,
 			);
@@ -1018,7 +1016,6 @@
 			baseConfigurationReference = 53BBCA647674FFD1CE47005F /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1041,7 +1038,6 @@
 			baseConfigurationReference = B39DCBAB3E8580E3BE824991 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
