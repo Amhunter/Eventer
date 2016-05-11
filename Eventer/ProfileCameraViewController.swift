@@ -94,7 +94,7 @@ class ProfileCameraViewController: UIViewController {
         self.navigationItem.titleView = titleLabel
         titleLabel.sizeToFit()
         
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "cancel")
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(cancel))
         self.navigationItem.leftBarButtonItem = cancelButton
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         
@@ -171,13 +171,13 @@ class ProfileCameraViewController: UIViewController {
         retakePhotoButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 18)
         retakePhotoButton.titleLabel!.textAlignment = NSTextAlignment.Center
         retakePhotoButton.setTitle("Retake", forState: UIControlState.Normal)
-        retakePhotoButton.addTarget(self, action: "retakePhoto:", forControlEvents: UIControlEvents.TouchUpInside)
+        retakePhotoButton.addTarget(self, action: #selector(retakePhoto(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         retakePhotoButton.setTitleColor(ColorFromCode.standardBlueColor(), forState: UIControlState.Normal)
         retakePhotoButton.setTitleColor(ColorFromCode.randomBlueColorFromNumber(3), forState: UIControlState.Highlighted)
         donePhotoButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 18)
         donePhotoButton.titleLabel!.textAlignment = NSTextAlignment.Center
         donePhotoButton.setTitle("Done", forState: UIControlState.Normal)
-        donePhotoButton.addTarget(self, action: "done:", forControlEvents: UIControlEvents.TouchUpInside)
+        donePhotoButton.addTarget(self, action: #selector(done(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         donePhotoButton.setTitleColor(ColorFromCode.standardBlueColor(), forState: UIControlState.Normal)
         donePhotoButton.setTitleColor(ColorFromCode.randomBlueColorFromNumber(3), forState: UIControlState.Highlighted)
         retakePhotoButton.hidden = true
@@ -212,12 +212,12 @@ class ProfileCameraViewController: UIViewController {
         self.toolBar.addConstraint(V_Constraint0)
 
         flipCameraButton.setImage(UIImage(named: "flip.png"), forState: UIControlState.Normal)
-        flipCameraButton.addTarget(self, action: "flipCamera", forControlEvents: UIControlEvents.TouchUpInside)
+        flipCameraButton.addTarget(self, action: #selector(ProfileCameraViewController.flipCamera), forControlEvents: UIControlEvents.TouchUpInside)
         
-        takePhotoButton.addTarget(self, action: "takePhoto:", forControlEvents: UIControlEvents.TouchUpInside)
-        takePhotoButton.addTarget(self, action: "Unhighlight:", forControlEvents: UIControlEvents.TouchDragOutside)
-        takePhotoButton.addTarget(self, action: "Highlight:", forControlEvents: UIControlEvents.TouchDragInside)
-        takePhotoButton.addTarget(self, action: "Highlight:", forControlEvents: UIControlEvents.TouchDown)
+        takePhotoButton.addTarget(self, action: #selector(takePhoto(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        takePhotoButton.addTarget(self, action: #selector(Unhighlight(_:)), forControlEvents: UIControlEvents.TouchDragOutside)
+        takePhotoButton.addTarget(self, action: #selector(Highlight(_:)), forControlEvents: UIControlEvents.TouchDragInside)
+        takePhotoButton.addTarget(self, action: #selector(Highlight(_:)), forControlEvents: UIControlEvents.TouchDown)
         
         let image:UIImage = UIImage(named: "focus.png")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         focusIcon.tintColor = UIColor.whiteColor()
@@ -329,7 +329,7 @@ class ProfileCameraViewController: UIViewController {
         captureSession?.startRunning()
         
         previewView.userInteractionEnabled = true
-        let taprec = UITapGestureRecognizer(target: self,action: "focusTo:")
+        let taprec = UITapGestureRecognizer(target: self,action: #selector(focusTo(_:)))
         previewView.addGestureRecognizer(taprec)
         
         self.focusToPoint(self.previewView.center, device: captureDevice!)

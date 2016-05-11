@@ -138,12 +138,12 @@ class SignupViewController: UIViewController {
         emailTextField.tintColor = ColorFromCode.colorWithHexString("#B8B7B9")
         passwordTextField.secureTextEntry = true
         
-        passwordTextField.addTarget(self, action: "passwordTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
-        loginOrForgotButton.addTarget(self, action: "LoginOrForgot:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "endEditing"))
+        passwordTextField.addTarget(self, action: #selector(passwordTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
+        loginOrForgotButton.addTarget(self, action: #selector(LoginOrForgot(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(endEditing)))
         
-        loginButton.addTarget(self, action: "buttonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        signupButton.addTarget(self, action: "buttonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        loginButton.addTarget(self, action: #selector(buttonPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        signupButton.addTarget(self, action: #selector(buttonPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         backgroundImageView.userInteractionEnabled = true
         signupButton.tag = 1
         loginButton.tag = 2
@@ -152,7 +152,7 @@ class SignupViewController: UIViewController {
         signupIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         signupIndicator.hidesWhenStopped = true
         signupIndicator.transform = CGAffineTransformMakeScale(1.25, 1.25)
-        emailTextField.addTarget(self, action: "emailTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
+        emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
         emailTextField.keyboardType = UIKeyboardType.EmailAddress
         signupLabel.font = UIFont(name: "Lato-Semibold", size: 17)
         signupLabel.textAlignment = NSTextAlignment.Center
@@ -163,12 +163,12 @@ class SignupViewController: UIViewController {
         self.signupContinueButton.hidden = true
         self.signupContinueButton.setImage(image, forState: UIControlState.Normal)
         self.signupContinueButton.tintColor = ColorFromCode.colorWithHexString("#00CA7D")
-        self.signupContinueButton.addTarget(self, action: "ContinueSignUp", forControlEvents: UIControlEvents.TouchUpInside)
+        self.signupContinueButton.addTarget(self, action: #selector(ContinueSignUp), forControlEvents: UIControlEvents.TouchUpInside)
         // Do any additional setup after loading the view.
         switchForgetLoginButton(0)
         
         // Recognizer
-        let rec = UISwipeGestureRecognizer(target: self, action: "endEditing")
+        let rec = UISwipeGestureRecognizer(target: self, action: #selector(endEditing))
         rec.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(rec)
 
@@ -480,10 +480,10 @@ class SignupViewController: UIViewController {
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     

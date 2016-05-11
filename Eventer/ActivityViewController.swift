@@ -77,7 +77,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -166,9 +166,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
         self.segmentLabel2.titleLabel?.textAlignment = NSTextAlignment.Center
         self.segmentLabel3.titleLabel?.textAlignment = NSTextAlignment.Center
 
-        self.segmentLabel1.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.segmentLabel2.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.segmentLabel3.addTarget(self, action: "switchSegment:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel1.addTarget(self, action: #selector(switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel2.addTarget(self, action: #selector(switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.segmentLabel3.addTarget(self, action: #selector(switchSegment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 
         
         self.segmentIndicator.backgroundColor = ColorFromCode.colorWithHexString("#0087D9")
@@ -201,7 +201,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
         self.addChildViewController(t1)
         t1.refreshControl = meRefreshControl
         t1.refreshControl!.layer.zPosition = -1
-        t1.refreshControl!.addTarget(self, action: "Get_Me_Data", forControlEvents: UIControlEvents.ValueChanged)
+        t1.refreshControl!.addTarget(self, action: #selector(Get_Me_Data), forControlEvents: UIControlEvents.ValueChanged)
         t1.tableView = meTableView
         self.scrollView.addSubview(t1.tableView)
         
@@ -226,7 +226,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
         self.addChildViewController(t2)
         t2.refreshControl = youRefreshControl
         t2.refreshControl!.layer.zPosition = -1
-        t2.refreshControl!.addTarget(self, action: "Get_You_Data", forControlEvents: UIControlEvents.ValueChanged)
+        t2.refreshControl!.addTarget(self, action: #selector(Get_You_Data), forControlEvents: UIControlEvents.ValueChanged)
         t2.tableView = youTableView
         self.scrollView.addSubview(t2.tableView)
         
@@ -253,7 +253,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
         self.addChildViewController(t3)
         t3.refreshControl = followingRefreshControl
         t3.refreshControl!.layer.zPosition = -1
-        t3.refreshControl!.addTarget(self, action: "Get_Following_Data", forControlEvents: UIControlEvents.ValueChanged)
+        t3.refreshControl!.addTarget(self, action: #selector(Get_Following_Data), forControlEvents: UIControlEvents.ValueChanged)
         t3.tableView = followingTableView
         self.scrollView.addSubview(t3.tableView)
         
@@ -536,12 +536,12 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     }
                 })
                 Cell.UpdatePictures(self.youData[indexPath.row], row: Cell.tag)
-                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
 
                 // Date
                 Cell.dateLabel.attributedText = eventDateText
-                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
+                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
                 
                 var dateString:NSMutableAttributedString = NSMutableAttributedString()
                 attrs = [NSFontAttributeName : Cell.textFont!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
@@ -583,9 +583,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 Cell.UpdatePictures(self.youData[indexPath.row], row: indexPath.row)
                 Cell.dateLabel.attributedText = eventDateText
                 Cell.dateLabel.backgroundColor = cellColor
-                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
 
                 var dateString:NSMutableAttributedString = NSMutableAttributedString()
                 attrs = [NSFontAttributeName : Cell.textFont!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
@@ -654,9 +654,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 // Event Date
 
                 Cell.dateLabel.attributedText = eventDateText
-                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
 
                 var dateString:NSMutableAttributedString = NSMutableAttributedString()
                 attrs = [NSFontAttributeName : Cell.textFont!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
@@ -704,9 +704,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     }
                 })
                 Cell.UpdatePictures(self.youData[indexPath.row], row: Cell.tag)
-                Cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                Cell.followButton.addTarget(self, action: #selector(follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 Cell.followButton.initialize(self.youData[indexPath.row].followManager.loaded, isFollowing: self.youData[indexPath.row].followManager.isFollowing)
-                Cell.fromUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.fromUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
 
                 
                 var dateString:NSMutableAttributedString = NSMutableAttributedString()
@@ -763,7 +763,7 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 dateString = NSMutableAttributedString(string: createdAtText, attributes:attrs)
                 attributedString.appendAttributedString(dateString)
                 
-                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
                 Cell.highlightMentionsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))
                 Cell.highlightHashtagsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))
                 //Cell.updateConstraints()
@@ -826,9 +826,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 }
             })
             Cell.UpdatePictures(self.meData[indexPath.row], row: indexPath.row)
-            Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushToUserByPicture:"))
-            Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-            Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
+            Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushToUserByPicture(_:))))
+            Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+            Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
             // Event Date
         
             Cell.dateLabel.attributedText = eventDateText
@@ -923,9 +923,9 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 
                 Cell.dateLabel.attributedText = eventDateText
                 Cell.dateLabel.backgroundColor = cellColor
-                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushEvent:"))
-                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
+                Cell.dateLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.eventPicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
+                Cell.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
 
                 Cell.highlightMentionsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))
                 Cell.highlightHashtagsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))
@@ -982,8 +982,8 @@ class ActivityViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     }
                 })
                 Cell.UpdatePictures(self.followingData[indexPath.row], row: Cell.tag)
-                Cell.fromUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushFromUserByPicture:"))
-                Cell.toUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushToUserByPicture:"))
+                Cell.fromUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushFromUserByPicture(_:))))
+                Cell.toUserImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushToUserByPicture(_:))))
 
                 Cell.highlightMentionsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))
                 Cell.highlightHashtagsInString(attributedString, withColor: ColorFromCode.randomBlueColorFromNumber(3))

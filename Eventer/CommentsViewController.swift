@@ -59,7 +59,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         mainView.frame = self.view.frame
         self.view.addSubview(mainView)
         
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -104,7 +104,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         
 
-        loadMoreView.button.addTarget(self, action: "loadMoreComments", forControlEvents: UIControlEvents.TouchUpInside)
+        loadMoreView.button.addTarget(self, action: #selector(loadMoreComments), forControlEvents: UIControlEvents.TouchUpInside)
         loadMoreView.button.setTitle("Load more comments", forState: UIControlState.Normal)
         loadMoreView.button.frame.size.height = 37.5
         loadMoreView.button.center = loadMoreView.center
@@ -134,7 +134,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         postButton.backgroundColor = ColorFromCode.colorWithHexString("#EBF0F2")
         postButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 14)
         postButton.layer.cornerRadius = 5
-        postButton.addTarget(self, action: "postComment", forControlEvents: UIControlEvents.TouchUpInside)
+        postButton.addTarget(self, action: #selector(postComment), forControlEvents: UIControlEvents.TouchUpInside)
         //----------Setting PostCommentView---------------------//
         
         
@@ -160,7 +160,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.HVC.view.hidden = true
         //--------------------------------------------------------//
         
-        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "HideKeyboard")
+        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HideKeyboard))
         TapRecognizer.delegate = self
         self.mainView.addGestureRecognizer(TapRecognizer)
 
@@ -401,7 +401,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let Cell = tableView.dequeueReusableCellWithIdentifier("Comment Cell", forIndexPath: indexPath) as! CommentTableViewCell
-        let rec = UITapGestureRecognizer(target: self, action: "imagePressed:")
+        let rec = UITapGestureRecognizer(target: self, action: #selector(imagePressed(_:)))
         rec.delegate = self
         Cell.pictureImageView.addGestureRecognizer(rec)
         Cell.pictureImageView.tag = indexPath.row
@@ -498,15 +498,15 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
 
         
-        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "HideKeyboard")
+        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HideKeyboard))
         TapRecognizer.cancelsTouchesInView = false
         self.view.addGestureRecognizer(TapRecognizer)
         
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
 
 
     }
@@ -656,7 +656,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         if (word.length >= 1 && range.location != NSNotFound){
             let first:NSString = word.substringToIndex(1) //
             let rest:NSString = word.substringFromIndex(1) //actual word
-            range.location++  // to avoid replacing @ or #
+            range.location += 1  // to avoid replacing @ or #
             if (first.isEqualToString("@")){
                 if (rest.length > 0){
                     //call our method and pass rest

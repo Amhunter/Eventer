@@ -53,9 +53,9 @@ class EventDatePickerCalendarLayout: UICollectionViewFlowLayout {
     override  func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var AllCells:[UICollectionViewLayoutAttributes] = [] // creating array to represent all cells we are going
         // to add
-        for var s = 0; s<self.collectionView?.numberOfSections(); s++ {
-
-            for var i = 0; i<self.collectionView?.numberOfItemsInSection(s); i++ {
+        for s in 0 ..< self.collectionView!.numberOfSections() {
+            
+            for i in 0 ..< self.collectionView!.numberOfItemsInSection(s) {
                 // this bit calculates all properties of cells
                 let row:Int = ((i) / 7); // first cell is a month, thats where i-1 comes from
                 let col:Int = ((i) % 7);

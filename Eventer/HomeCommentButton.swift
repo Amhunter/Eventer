@@ -65,11 +65,11 @@ class HomeCommentButton: UIView {
         self.setNeedsLayout()
         self.layoutIfNeeded()
         
-        containerCenterSubview.addTarget(self, action: "unhighlight", forControlEvents: UIControlEvents.TouchCancel)
-        containerCenterSubview.addTarget(self, action: "unhighlight", forControlEvents: UIControlEvents.TouchDragOutside)
-        containerCenterSubview.addTarget(self, action: "highlight", forControlEvents: UIControlEvents.TouchDragInside)
-        containerCenterSubview.addTarget(self, action: "highlight", forControlEvents: UIControlEvents.TouchDown)
-        containerCenterSubview.addTarget(self, action: "trigger", forControlEvents: UIControlEvents.TouchUpInside)
+        containerCenterSubview.addTarget(self, action: #selector(unhighlight), forControlEvents: UIControlEvents.TouchCancel)
+        containerCenterSubview.addTarget(self, action: #selector(unhighlight), forControlEvents: UIControlEvents.TouchDragOutside)
+        containerCenterSubview.addTarget(self, action: #selector(highlight), forControlEvents: UIControlEvents.TouchDragInside)
+        containerCenterSubview.addTarget(self, action: #selector(highlight), forControlEvents: UIControlEvents.TouchDown)
+        containerCenterSubview.addTarget(self, action: #selector(trigger), forControlEvents: UIControlEvents.TouchUpInside)
         
     }
     func handleTap(completionBlock:() -> Void) {

@@ -95,8 +95,8 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         homeButton.setImage(homeActiveImg, forState: UIControlState.Selected)
         //createButton.backgroundColor = UIColor.clearColor()
         homeButtonView.userInteractionEnabled = true
-        homeButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "selectHomeTab"))
-        homeButton.addTarget(self, action: "selectHomeTab", forControlEvents: UIControlEvents.TouchUpInside)
+        homeButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectHomeTab)))
+        homeButton.addTarget(self, action: #selector(selectHomeTab), forControlEvents: UIControlEvents.TouchUpInside)
         
         // explore
         let exploreImg = UIImage(named: "tab-explore.png")
@@ -111,8 +111,8 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         exploreButton.setImage(exploreActiveImg, forState: UIControlState.Highlighted)
         exploreButton.setImage(exploreActiveImg, forState: UIControlState.Selected)
         exploreButtonView.userInteractionEnabled = true
-        exploreButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "selectExploreTab"))
-        exploreButton.addTarget(self, action: "selectExploreTab", forControlEvents: UIControlEvents.TouchUpInside)
+        exploreButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectExploreTab)))
+        exploreButton.addTarget(self, action: #selector(selectExploreTab), forControlEvents: UIControlEvents.TouchUpInside)
         
         // create
         let createImg = UIImage(named: "tab-create.png")
@@ -128,8 +128,8 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         createButton.setImage(createActiveImg, forState: UIControlState.Selected)
         createButtonView.center = self.tabBar.center
         createButtonView.userInteractionEnabled = true
-        createButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "selectCreateTab"))
-        createButton.addTarget(self, action: "selectCreateTab", forControlEvents: UIControlEvents.TouchUpInside)
+        createButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectCreateTab)))
+        createButton.addTarget(self, action: #selector(selectCreateTab), forControlEvents: UIControlEvents.TouchUpInside)
 
         // activity
         let activityImg = UIImage(named: "tab-activity.png")
@@ -144,8 +144,8 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         activityButton.setImage(activityActiveImg, forState: UIControlState.Highlighted)
         activityButton.setImage(activityActiveImg, forState: UIControlState.Selected)
         activityButtonView.userInteractionEnabled = true
-        activityButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "selectActivityTab"))
-        activityButton.addTarget(self, action: "selectActivityTab", forControlEvents: UIControlEvents.TouchUpInside)
+        activityButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectActivityTab)))
+        activityButton.addTarget(self, action: #selector(selectActivityTab), forControlEvents: UIControlEvents.TouchUpInside)
         
         // profile
         let profileImg = UIImage(named: "tab-profile.png")
@@ -160,8 +160,8 @@ class TabBarViewController: UITabBarController,UITabBarControllerDelegate,EventC
         profileButton.setImage(profileActiveImg, forState: UIControlState.Highlighted)
         profileButton.setImage(profileActiveImg, forState: UIControlState.Selected)
         profileButtonView.userInteractionEnabled = true
-        profileButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "selectProfileTab"))
-        profileButton.addTarget(self, action: "selectProfileTab", forControlEvents: UIControlEvents.TouchUpInside)
+        profileButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectProfileTab)))
+        profileButton.addTarget(self, action: #selector(selectProfileTab), forControlEvents: UIControlEvents.TouchUpInside)
         
  
     }

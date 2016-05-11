@@ -85,7 +85,7 @@ class MonthCustomLayout: UICollectionViewLayout {
     override  func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var AllCells:[UICollectionViewLayoutAttributes] = [] // creating array to represent all cells we are going
                                                        // to add
-        for var s = 0; s<self.collectionView?.numberOfSections(); s++ {
+        for s in 0 ..< self.collectionView!.numberOfSections() {
 // Commented because i found refreshing layout inefficient in comparison to just adding empty transparent cells
 //            var SkippedDays:Int
 //            if (s == 0){
@@ -97,7 +97,7 @@ class MonthCustomLayout: UICollectionViewLayout {
 //            }else{
 //                SkippedDays = 0 //not supposed to happen
 //            }
-            for var i = 0; i<self.collectionView?.numberOfItemsInSection(s); i++ {
+            for i in 0 ..< self.collectionView!.numberOfItemsInSection(s) {
                 // this bit calculates all properties of cells
                 let row:Int = ((i) / 7); // first cell is a month, thats where i-1 comes from
                 let col:Int = ((i) % 7);

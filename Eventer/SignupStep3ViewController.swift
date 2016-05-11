@@ -49,10 +49,10 @@ class SignupStep3ViewController: UIViewController,UITextFieldDelegate, UITextVie
     }
     func Set_Subviews(){
         
-        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
+        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(save(_:)))
         pushButton.tintColor = UIColor.whiteColor()
         
-        skipButton = UIBarButtonItem(title: " Skip", style: UIBarButtonItemStyle.Plain, target: self , action: "skip")
+        skipButton = UIBarButtonItem(title: " Skip", style: UIBarButtonItemStyle.Plain, target: self , action: #selector(skip))
         skipButton.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Lato-Semibold", size: 18)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
         self.navigationItem.hidesBackButton = true
         self.navigationItem.rightBarButtonItem = pushButton
@@ -118,9 +118,9 @@ class SignupStep3ViewController: UIViewController,UITextFieldDelegate, UITextVie
         phoneNumberTextField.tintColor =  ColorFromCode.colorWithHexString("#B8B7B9")
         fullNameTextField.tintColor = ColorFromCode.colorWithHexString("#B8B7B9")
         
-        fullNameTextField.addTarget(self, action: "fullNameTextFieldDidChange", forControlEvents: UIControlEvents.EditingChanged)
+        fullNameTextField.addTarget(self, action: #selector(fullNameTextFieldDidChange), forControlEvents: UIControlEvents.EditingChanged)
         phoneNumberTextField.keyboardType = UIKeyboardType.PhonePad
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "endEditing"))
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(endEditing)))
         
         backgroundImageView.userInteractionEnabled = true
         
@@ -162,7 +162,7 @@ class SignupStep3ViewController: UIViewController,UITextFieldDelegate, UITextVie
         bioCount.text = "150"
         
         // Recognizer
-        let rec = UISwipeGestureRecognizer(target: self, action: "endEditing")
+        let rec = UISwipeGestureRecognizer(target: self, action: #selector(endEditing))
         rec.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(rec)
     }
@@ -360,10 +360,10 @@ class SignupStep3ViewController: UIViewController,UITextFieldDelegate, UITextVie
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     

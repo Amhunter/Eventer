@@ -48,7 +48,7 @@ class HashtagsViewController: UIViewController,UITableViewDataSource,UITableView
         //var count:String = count
         Cell.hashtagNameLabel.text = "#\(hashtag)"
         Cell.userInteractionEnabled = true
-        let recognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "chosenHashtag:")
+        let recognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chosenHashtag(_:)))
         Cell.addGestureRecognizer(recognizer)
         return Cell
     }

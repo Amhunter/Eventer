@@ -75,9 +75,9 @@ class InvitePeopleViewController: UIViewController,UITableViewDelegate,UITableVi
         self.navigationItem.titleView = titleLabel
         titleLabel.sizeToFit()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "DONE", style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "DONE", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CLEAR", style: UIBarButtonItemStyle.Plain, target: self, action: "clear")
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CLEAR", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clear))
 
         self.view.addSubview(tableView)
         self.view.addSubview(searchTableView)
@@ -281,7 +281,7 @@ class InvitePeopleViewController: UIViewController,UITableViewDelegate,UITableVi
         Cell.label.attributedText = finalString
         Cell.displaySelected(followers[Cell.tag].isSelected, animated: false)
         
-        let rec = UITapGestureRecognizer(target: self, action: "selectUser:")
+        let rec = UITapGestureRecognizer(target: self, action: #selector(selectUser(_:)))
         Cell.userInteractionEnabled = true
         Cell.addGestureRecognizer(rec)
         

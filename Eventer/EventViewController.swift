@@ -267,8 +267,8 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         profileView.userInteractionEnabled = true
         profileUsernameLabel.userInteractionEnabled = true
         profileImageView.userInteractionEnabled = true
-        profileUsernameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushAuthor"))
-        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushAuthor"))
+        profileUsernameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushAuthor)))
+        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushAuthor)))
 
         createdAtLabel.textColor = UIColor.lightGrayColor()
         createdAtLabel.font = UIFont(name: "Lato-Regular", size: 14)
@@ -279,14 +279,14 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         numberOfGoingLabel.setTitleColor(ColorFromCode.orangeFollowColor(), forState: UIControlState.Highlighted)
         numberOfGoingLabel.titleLabel!.textAlignment = NSTextAlignment.Center
         numberOfGoingLabel.titleLabel!.numberOfLines = 1
-        numberOfGoingLabel.addTarget(self, action: "pushGoing", forControlEvents: UIControlEvents.TouchUpInside)
+        numberOfGoingLabel.addTarget(self, action: #selector(pushGoing), forControlEvents: UIControlEvents.TouchUpInside)
 
         numberOfMaybeLabel.titleLabel!.font = UIFont(name: "Lato-Bold", size: 12)
         numberOfMaybeLabel.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         numberOfMaybeLabel.setTitleColor(ColorFromCode.orangeFollowColor(), forState: UIControlState.Highlighted)
         numberOfMaybeLabel.titleLabel!.textAlignment = NSTextAlignment.Center
         numberOfMaybeLabel.titleLabel!.numberOfLines = 1
-        numberOfMaybeLabel.addTarget(self, action: "pushMaybe", forControlEvents: UIControlEvents.TouchUpInside)
+        numberOfMaybeLabel.addTarget(self, action: #selector(pushMaybe), forControlEvents: UIControlEvents.TouchUpInside)
 
 
         numberOfInvitedLabel.titleLabel!.font = UIFont(name: "Lato-Bold", size: 12)
@@ -294,7 +294,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         numberOfInvitedLabel.setTitleColor(ColorFromCode.orangeFollowColor(), forState: UIControlState.Highlighted)
         numberOfInvitedLabel.titleLabel!.textAlignment = NSTextAlignment.Center
         numberOfInvitedLabel.titleLabel!.numberOfLines = 1
-        numberOfInvitedLabel.addTarget(self, action: "pushInvited", forControlEvents: UIControlEvents.TouchUpInside)
+        numberOfInvitedLabel.addTarget(self, action: #selector(pushInvited), forControlEvents: UIControlEvents.TouchUpInside)
 
         numberOfLikesButton.tintColor = UIColor.whiteColor()
         numberOfLikesButton.titleLabel!.font = UIFont(name: "Lato-Bold", size: 12)
@@ -307,7 +307,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         numberOfLikesButton.setImage(UIImage(named: "small-like-active")!, forState: UIControlState.Highlighted)
         numberOfLikesButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         numberOfLikesButton.setTitleColor(ColorFromCode.orangeFollowColor(), forState: UIControlState.Highlighted)
-        numberOfLikesButton.addTarget(self, action: "pushLikes", forControlEvents: UIControlEvents.TouchUpInside)
+        numberOfLikesButton.addTarget(self, action: #selector(pushLikes), forControlEvents: UIControlEvents.TouchUpInside)
         numberOfSharesButton.tintColor = UIColor.whiteColor()
         numberOfSharesButton.titleLabel!.font = UIFont(name: "Lato-Bold", size: 12)
         numberOfSharesButton.titleLabel!.numberOfLines = 1
@@ -318,7 +318,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         numberOfSharesButton.setImage(UIImage(named: "small-share-active")!, forState: UIControlState.Highlighted)
         numberOfSharesButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         numberOfSharesButton.setTitleColor(ColorFromCode.orangeFollowColor(), forState: UIControlState.Highlighted)
-        numberOfSharesButton.addTarget(self, action: "pushShares", forControlEvents: UIControlEvents.TouchUpInside)
+        numberOfSharesButton.addTarget(self, action: #selector(pushShares), forControlEvents: UIControlEvents.TouchUpInside)
 
         eventImageView.backgroundColor = ColorFromCode.standardBlueColor()
 
@@ -328,7 +328,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         pushAllCommentsButton.backgroundColor = ColorFromCode.colorWithHexString("#EBF0F2")
         pushAllCommentsButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 14)
         pushAllCommentsButton.layer.cornerRadius = 7
-        pushAllCommentsButton.addTarget(self, action: "pushAllComments", forControlEvents: UIControlEvents.TouchUpInside)
+        pushAllCommentsButton.addTarget(self, action: #selector(pushAllComments), forControlEvents: UIControlEvents.TouchUpInside)
         writeComment.setImage(UIImage(named: "comment"), forState: UIControlState.Normal)
         writeComment.setImage(UIImage(named: "comment-highlighted"), forState: UIControlState.Highlighted)
 
@@ -485,7 +485,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
     
     func setMainView(){
 
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -513,7 +513,7 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         self.tableView.allowsSelection = false
         self.tableView.estimatedRowHeight = 100
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.eventImageView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.eventImageView.progressCircle.addTarget(self, action: #selector(refresh(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         let view = UIView(frame: CGRectMake(0,0,viewWidth,30))
         tableView.tableFooterView = view
@@ -542,9 +542,9 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
         self.numberOfSharesButton.hidden = false
         
         LikeButton.initialize(event.likeManager.isLiked)
-        LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+        LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         ShareButton.initialize(event.shareManager.isShared)
-        ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+        ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         numberOfLikesButton.setTitle("\(self.event.likeManager.numberOfLikes)", forState: UIControlState.Normal)
         numberOfSharesButton.setTitle("\(self.event.shareManager.numberOfShares)", forState: UIControlState.Normal)
     }
@@ -583,9 +583,9 @@ class EventViewController: UIViewController,UITableViewDelegate, UITableViewData
        
         
         LikeButton.initialize(event.likeManager.isLiked)
-        LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+        LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         ShareButton.initialize(event.shareManager.isShared)
-        ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+        ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         var authorNameText = ""
         if event.author != nil {

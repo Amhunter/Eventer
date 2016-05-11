@@ -131,7 +131,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         calendarView.registerClass(DayCollectionViewCell.self, forCellWithReuseIdentifier: "Day Cell")
         calendarView.registerClass(TransparentDayCollectionViewCell.self, forCellWithReuseIdentifier: "Transparent Cell")
         
-        refreshControlForCalendar.addTarget(self, action: "countNumberOfEventsForSelectedMonth", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControlForCalendar.addTarget(self, action: #selector(countNumberOfEventsForSelectedMonth), forControlEvents: UIControlEvents.ValueChanged)
         calendarSuperView.addSubview(refreshControlForCalendar)
         calendarSuperView.alwaysBounceVertical = true
         calendarSuperView.separatorStyle = UITableViewCellSeparatorStyle.None //just removing that annoying black line
@@ -151,13 +151,13 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         //tableView.contentInset.top = refreshControlForTimeLine.frame.height
         //tableView.estimatedRowHeight = 600
-        footerView.button.addTarget(self, action: "loadMore", forControlEvents: UIControlEvents.TouchUpInside)
+        footerView.button.addTarget(self, action: #selector(loadMore), forControlEvents: UIControlEvents.TouchUpInside)
         tableView.rowHeight = UITableViewAutomaticDimension
         
         let tableViewController = UITableViewController()
         self.addChildViewController(tableViewController)
         tableViewController.refreshControl = refreshControlForTimeLine
-        tableViewController.refreshControl!.addTarget(self, action: "loadTimeline", forControlEvents: UIControlEvents.ValueChanged)
+        tableViewController.refreshControl!.addTarget(self, action: #selector(loadTimeline), forControlEvents: UIControlEvents.ValueChanged)
         tableViewController.tableView = tableView
         self.view.addSubview(tableViewController.tableView)
         
@@ -210,7 +210,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -333,10 +333,10 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             if (CurrentPage > self.previousPage){   // changed to next month
                 CurrentPage = 1
                 if (self.SelectedMonth == 12){
-                    self.SelectedYear++
+                    self.SelectedYear += 1
                     self.SelectedMonth = 1
                 }else{
-                    self.SelectedMonth++
+                    self.SelectedMonth += 1
                 }
                 
                 if (TargetContentOffsetChanged){ //checks if we try to scroll again while it still decellerates in case if we need to change target contentoffset depending where was the second scroll
@@ -362,10 +362,10 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
             }else{
                 CurrentPage = 1
                 if (self.SelectedMonth == 1){
-                    self.SelectedYear--
+                    self.SelectedYear -= 1
                     self.SelectedMonth = 12
                 }else{
-                    self.SelectedMonth--
+                    self.SelectedMonth -= 1
                 }
 
                 if (TargetContentOffsetChanged){ //checks whether we try to scroll again while it still decellerates in case if we need to change target contentoffset depending where was the second scroll
@@ -519,7 +519,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                         }
                     }
                     
-                    let tapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "chooseDay:")
+                    let tapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseDay(_:)))
                     DayCell.addGestureRecognizer(tapRecognizer)
                     
                     return DayCell
@@ -599,7 +599,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         var header:eventHeaderView = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! eventHeaderView
         header = eventHeaderView(event: self.events[section])
         header.tag = section
-        header.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pushUser:"))
+        header.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushUser(_:))))
         return header
         
 //        Cell.ProfileView.tag = indexPath.row // this is to remember in which cell we clicked the label
@@ -710,10 +710,10 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         //                self.more(Cell.moreButton)
         //            })
         Cell.moreButton.tag = indexPath.section
-        Cell.moreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.moreButton.addTarget(self, action: #selector(more(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 //        Cell.commentButton.initialize()
         
-        Cell.progressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.progressView.progressCircle.addTarget(self, action: #selector(refresh(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         EventsManager().loadProfilePictureForEvent(&self.events[Cell.tag], completionHandler: {
@@ -735,17 +735,17 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
         
         Cell.tag = indexPath.section // this is to remember in which cell we clicked the label
         Cell.contentView.userInteractionEnabled = true
-        let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
-        let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "PushEventViewController:")
+        let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:)))
+        let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PushEventViewController(_:)))
         Cell.pictureImageView.userInteractionEnabled = true
         Cell.pictureImageView.tag = indexPath.section
         Cell.progressView.tag = indexPath.section
         Cell.pictureImageView.addGestureRecognizer(pushEventRec1)
         Cell.progressView.addGestureRecognizer(pushEventRec2)
         
-        Cell.likesbtn.addTarget(self, action: "PushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-        Cell.goingbtn.addTarget(self, action: "PushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-        Cell.sharesbtn.addTarget(self, action: "PushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.likesbtn.addTarget(self, action: #selector(PushLikes(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.goingbtn.addTarget(self, action: #selector(PushGoing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        Cell.sharesbtn.addTarget(self, action: #selector(PushShares(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
         Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
         
@@ -1160,8 +1160,7 @@ class MonthViewController: UIViewController , UICollectionViewDataSource, UIColl
                 }
                 
                 self.numberOfEventsForCollectionView.removeAllObjects()
-                
-                for var i = 0; i < numberOfDaysInMonth; i++ {
+                for _ in 0 ... numberOfDaysInMonth {
                     self.numberOfEventsForCollectionView.addObject(0) // from empty array to
                 }
 

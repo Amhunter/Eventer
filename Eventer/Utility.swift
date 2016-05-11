@@ -129,7 +129,7 @@ class Utility {
     class func getImageFromUIBarButtonItem(systemItem:UIBarButtonSystemItem) -> UIImage!{
         
         // Creating a temporary item: UIBarButtonSystemItemTrash - change based on your needs
-        let item:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: Selector(""))
+        let item:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: nil)
         let itemView = item.customView!
         
         for view in itemView.subviews {

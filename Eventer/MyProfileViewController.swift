@@ -127,13 +127,13 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func setSubviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
         }
         // bar button
-        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "pushSettings")
+        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(pushSettings))
         settingsButton.tintColor = UIColor.whiteColor()
         
         self.navigationItem.rightBarButtonItem = settingsButton
@@ -143,9 +143,9 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         collectionView.addSubview(collectionViewRefreshControl)
         tableViewRefreshControl.tintColor = UIColor.whiteColor()
         collectionViewRefreshControl.tintColor = UIColor.whiteColor()
-        tableViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
-        collectionViewRefreshControl.addTarget(self, action: "Refresh", forControlEvents: UIControlEvents.ValueChanged)
-        footerView.button.addTarget(self, action: "loadMoreEvents", forControlEvents: UIControlEvents.TouchUpInside)
+        tableViewRefreshControl.addTarget(self, action: #selector(Refresh), forControlEvents: UIControlEvents.ValueChanged)
+        collectionViewRefreshControl.addTarget(self, action: #selector(Refresh), forControlEvents: UIControlEvents.ValueChanged)
+        footerView.button.addTarget(self, action: #selector(loadMoreEvents), forControlEvents: UIControlEvents.TouchUpInside)
         
         // Table View
 
@@ -186,7 +186,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         editProfileButton.setTitleColor(ColorFromCode.colorWithHexString("#0087D9"), forState: UIControlState.Normal)
         editProfileButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
         editProfileButton.backgroundColor = ColorFromCode.colorWithHexString("#EBF0F2")
-        editProfileButton.addTarget(self, action: "editProfile", forControlEvents: UIControlEvents.TouchUpInside)
+        editProfileButton.addTarget(self, action: #selector(editProfile), forControlEvents: UIControlEvents.TouchUpInside)
         editProfileButton.layer.cornerRadius = 4
         
         
@@ -206,8 +206,8 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         tableButton.tag = 2
         gridButton.enabled = false
         tableButton.enabled = false
-        gridButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        tableButton.addTarget(self, action: "switchBtnPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+        gridButton.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        tableButton.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         // Labels
@@ -270,7 +270,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         goingButton.setImage(highlightedImage, forState: UIControlState.Highlighted)
         goingButton.enabled = false
         goingUnderline.backgroundColor = ColorFromCode.colorWithHexString("#DAE4E7")
-        goingButton.addTarget(self, action: "pushGoingEventList", forControlEvents: UIControlEvents.TouchUpInside)
+//        goingButton.addTarget(self, action: #selector(pushEventGoingList), forControlEvents: UIControlEvents.TouchUpInside)
         
 
         // Set Refresh Control Background Color
@@ -287,19 +287,19 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         self.collectionView.insertSubview(collectionViewRefreshBackground, atIndex: 0)
 
         //Edit Profile button
-        let EditProfileTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "editProfile")
+        let EditProfileTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(editProfile))
         editProfileButton.addGestureRecognizer(EditProfileTapRecognizer)
         editProfileButton.userInteractionEnabled = true
         //
         
         //Show Followers Button
-        let ShowFollowersTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushFollowers")
+        let ShowFollowersTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushFollowers))
         numberOfFollowersLabel.addGestureRecognizer(ShowFollowersTapRecognizer)
         numberOfFollowersLabel.userInteractionEnabled = true
         
         
         //Show Following Button
-        let ShowFollowingTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "Push_Following_List")
+        let ShowFollowingTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(Push_Following_List))
         numberOfFollowingLabel.addGestureRecognizer(ShowFollowingTapRecognizer)
         numberOfFollowingLabel.userInteractionEnabled = true
         
@@ -1031,14 +1031,14 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             
             // Set Buttons
             Cell.LikeButton.initialize(self.events[indexPath.row].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.GoButton.initialize(self.events[indexPath.row].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.GoButton.addTarget(self, action: #selector(go(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 //            Cell.MoreButton.initialize()
 //            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.ProgressView.progressCircle.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ProgressView.progressCircle.addTarget(self, action: #selector(refresh(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
             
             // Update profile picture
@@ -1057,16 +1057,16 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
             Cell.UpdateEventPicture(self.events[indexPath.row], row: indexPath.row)
             
             Cell.contentView.userInteractionEnabled = true
-            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
-            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
+            let pushEventRec1:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:)))
+            let pushEventRec2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:)))
             Cell.EventPicture.userInteractionEnabled = true
             Cell.EventPicture.tag = indexPath.row
             Cell.EventPicture.addGestureRecognizer(pushEventRec1)
             Cell.ProgressView.addGestureRecognizer(pushEventRec2)
             
-            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: #selector(pushLikes(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: #selector(pushGoing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: #selector(pushShares(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -1136,22 +1136,22 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
                 shares: self.events[indexPath.row].shareManager.numberOfShares)
             
             Cell.LikeButton.initialize(self.events[indexPath.row].likeManager.isLiked)
-            Cell.LikeButton.addTarget(self, action: "like:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.LikeButton.addTarget(self, action: #selector(like(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.GoButton.initialize(self.events[indexPath.row].goManager.isGoing)
-            Cell.GoButton.addTarget(self, action: "go:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.GoButton.addTarget(self, action: #selector(go(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.ShareButton.initialize(self.events[indexPath.row].shareManager.isShared)
-            Cell.ShareButton.addTarget(self, action: "share:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.ShareButton.addTarget(self, action: #selector(share(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 //            Cell.MoreButton.initialize()
 //            Cell.MoreButton.addTarget(self, action: "more:", forControlEvents: UIControlEvents.TouchUpInside)
 
             Cell.contentView.userInteractionEnabled = true
-            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "pushEvent:")
+            let EventNameTapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:)))
             Cell.EventView.userInteractionEnabled = true
             Cell.EventView.tag = indexPath.row
             Cell.EventView.addGestureRecognizer(EventNameTapRecognizer)
-            Cell.likesbtn.addTarget(self, action: "pushLikes:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.goingbtn.addTarget(self, action: "pushGoing:", forControlEvents: UIControlEvents.TouchUpInside)
-            Cell.sharesbtn.addTarget(self, action: "pushShares:", forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.likesbtn.addTarget(self, action: #selector(pushLikes(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.goingbtn.addTarget(self, action: #selector(pushGoing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            Cell.sharesbtn.addTarget(self, action: #selector(pushShares(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             Cell.highlightMentionsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             Cell.highlightHashtagsInString(eventDetailsText, withColor: ColorFromCode.randomBlueColorFromNumber(3))
             
@@ -1381,7 +1381,7 @@ class MyProfileViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         Cell.eventNameLabel.frame = frame
         Cell.contentView.tag = indexPath.row
-        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "PushEventViewController:"))
+        Cell.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushEvent(_:))))
         
         // remove year word
         let shortenedString:NSAttributedString = self.events[indexPath.row].smallEventDateText

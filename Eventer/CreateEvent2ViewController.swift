@@ -110,7 +110,7 @@ class CreateEvent2ViewController: UIViewController,UIActionSheetDelegate,UINavig
     func updateProgressIndicators(progress:Double){
         if progress < 0 {
             // haven't  started yet
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "DONE!", style: UIBarButtonItemStyle.Plain, target: self, action: "done")
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "DONE!", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(done))
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
             self.progressIndicator.frame.size.width = 0
             progressActivityIndicator.stopAnimating()
@@ -156,7 +156,7 @@ class CreateEvent2ViewController: UIViewController,UIActionSheetDelegate,UINavig
     }
     
     func setSubviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backButton
         Utility.dropShadow(self.navigationController!.navigationBar, offset: 3, opacity: 0.25)
@@ -328,7 +328,7 @@ class CreateEvent2ViewController: UIViewController,UIActionSheetDelegate,UINavig
         customizeButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
         customizeButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 18)
         customizeButton.backgroundColor = ColorFromCode.tabBackgroundColor()
-        customizeButton.addTarget(self, action: "customizeEvent", forControlEvents: UIControlEvents.TouchUpInside)
+        customizeButton.addTarget(self, action: #selector(customizeEvent), forControlEvents: UIControlEvents.TouchUpInside)
         
         sizeHeaderToFit(false)
         self.tableHeaderView.addSubview(progressIndicator)

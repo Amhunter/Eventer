@@ -228,7 +228,7 @@ class MentionsViewController: UIViewController,UITableViewDelegate, UITableViewD
         
 //        Cell.label.attributedText = finalString
         
-        let rec = UITapGestureRecognizer(target: self, action: "selectUser:")
+        let rec = UITapGestureRecognizer(target: self, action: #selector(selectUser(_:)))
         Cell.addGestureRecognizer(rec)
         return Cell
     }

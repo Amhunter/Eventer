@@ -45,7 +45,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
     }
     func setSubviews() {
         // Back Button
-        let backButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "back")
+        let backButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backButton
         self.navigationController!.navigationBar.barTintColor = ColorFromCode.sexyPurpleColor()
@@ -56,7 +56,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         self.view.bringSubviewToFront(datePickerView)
         
         // Save Button
-        let DoneButton:UIBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: "updateEvent")
+        let DoneButton:UIBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(updateEvent))
         DoneButton.enabled = false
         DoneButton.tintColor = UIColor.whiteColor()
         self.navigationItem.rightBarButtonItem = DoneButton
@@ -133,7 +133,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         eventNameTextfield.placeholder = "Event Name"
         eventNameTextfield.font = UIFont(name: "Helvetica", size: 17)
         eventNameTextfield.tintColor =  ColorFromCode.colorWithHexString("#B8B7B9")
-        eventNameTextfield.addTarget(self, action: "checkData", forControlEvents: UIControlEvents.EditingChanged)
+        eventNameTextfield.addTarget(self, action: #selector(checkData), forControlEvents: UIControlEvents.EditingChanged)
         
         
         // Description textview and placeholder
@@ -159,7 +159,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         eventDateButton.backgroundColor = ColorFromCode.tabBackgroundColor()
         eventDateButton.layer.cornerRadius = 4
         eventDateButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 17)
-        eventDateButton.addTarget(self, action: "pickDate", forControlEvents: UIControlEvents.TouchUpInside)
+        eventDateButton.addTarget(self, action: #selector(pickDate), forControlEvents: UIControlEvents.TouchUpInside)
         
         // Date Label
         eventDateButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 16)
@@ -168,7 +168,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         eventDateButton.titleLabel!.numberOfLines = 0
         
         // Image View
-        let imageRec = UITapGestureRecognizer(target: self, action: "imageViewClicked")
+        let imageRec = UITapGestureRecognizer(target: self, action: #selector(imageViewClicked))
         imageView.backgroundColor = ColorFromCode.standardBlueColor()
         imageView.addGestureRecognizer(imageRec)
         imageView.userInteractionEnabled = true
@@ -176,8 +176,8 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         datePickerView.frame.origin.y = self.view.frame.height
         datePickerView.initializeView(CGSizeMake(95, 150))
         datePickerView.delegate = self
-        let tapRec = UITapGestureRecognizer(target: self, action: "endEditing")
-        let swipeRec = UISwipeGestureRecognizer(target: self, action: "endEditing")
+        let tapRec = UITapGestureRecognizer(target: self, action: #selector(endEditing))
+        let swipeRec = UISwipeGestureRecognizer(target: self, action: #selector(endEditing))
         swipeRec.direction = UISwipeGestureRecognizerDirection.Down
         self.mainView.addGestureRecognizer(tapRec)
         self.mainView.addGestureRecognizer(swipeRec)
@@ -234,7 +234,7 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
         self.navigationItem.leftBarButtonItem!.enabled = false
     }
     func stopUpdatingAnimation(){
-        let doneButton:UIBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: "updateEvent")
+        let doneButton:UIBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(updateEvent))
         self.navigationItem.rightBarButtonItem = doneButton
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
         progressActivityIndicator.stopAnimating()
@@ -444,10 +444,10 @@ class EditEventViewController: UIViewController,UITextViewDelegate,UITextFieldDe
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     func keyboardWillShow(notification: NSNotification) {
         let info:NSDictionary = notification.userInfo!

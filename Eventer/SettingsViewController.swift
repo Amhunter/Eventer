@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController {
         setSubviews()
     }
     func setSubviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -54,7 +54,7 @@ class SettingsViewController: UIViewController {
         self.logoutButton.backgroundColor = ColorFromCode.redFollowColor()
         self.logoutButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         self.logoutButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 17)
-        self.logoutButton.addTarget(self, action: "logout", forControlEvents: UIControlEvents.TouchUpInside)
+        self.logoutButton.addTarget(self, action: #selector(logout), forControlEvents: UIControlEvents.TouchUpInside)
 
     }
     

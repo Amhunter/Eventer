@@ -195,12 +195,12 @@ class DateToStringConverter {
     
     class func eventDateToText(date:NSDate,tab:TargetView) -> NSMutableAttributedString{
         var smallFont:CGFloat = 12
-        var smallFontName = "Lato-Medium"
+        let smallFontName = "Lato-Medium"
         var mediumFont:CGFloat = 13
-        var mediumFontName = "Lato-Regular"
+        let mediumFontName = "Lato-Regular"
 
         var bigFont:CGFloat = 14
-        var bigFontName = "Lato-Medium"
+        let bigFontName = "Lato-Medium"
 
         if (tab == TargetView.Home){
             smallFont = 14 // month
@@ -228,10 +228,11 @@ class DateToStringConverter {
             if (tab == TargetView.Explore){
                 bigFont = 16
             }
-            
-            text.appendAttributedString(self.attrStr("\(year)", size: bigFont, fontName: bigFontName))
+            let day = calendar.component(NSCalendarUnit.Day, fromDate: date)
+
+            text.appendAttributedString(self.attrStr("\(year)", size: mediumFont, fontName: mediumFontName))
             text.appendAttributedString(NSAttributedString(string: "\n"))
-            text.appendAttributedString(self.attrStr("\(month)", size: smallFont, fontName: smallFontName))
+            text.appendAttributedString(self.attrStr("\(day) \(month)", size: smallFont, fontName: smallFontName))
             return text
         }else{
             if (MonthDifference >= 0){

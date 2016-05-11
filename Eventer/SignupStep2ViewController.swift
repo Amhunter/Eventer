@@ -51,10 +51,10 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         Set_Subviews()
     }
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupStep2ViewController.back))
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         
-        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("createAccount"))
+        pushButton = UIBarButtonItem(image: UIImage(named: "forward.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(signup))
         pushButton.tintColor = UIColor.whiteColor()
         
         if (self.navigationController!.viewControllers.count > 1){
@@ -187,7 +187,6 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         
         
         
-        pushButton.action = #selector(self.signup)
         pushIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
         pushIndicator.hidesWhenStopped = true
         pushIndicator.frame = CGRectMake(0,0,25,25)
@@ -196,7 +195,7 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
         
 
         // Recognizer
-        let rec = UISwipeGestureRecognizer(target: self, action: "endEditing")
+        let rec = UISwipeGestureRecognizer(target: self, action: #selector(endEditing))
         rec.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(rec)
         
@@ -607,10 +606,10 @@ class SignupStep2ViewController: UIViewController, UIActionSheetDelegate, UIImag
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     

@@ -82,7 +82,7 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         }
     }
     func setSubviews(){
-        let backButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "back")
+        let backButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backButton
 
@@ -92,7 +92,7 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         mainView.frame.size = CGSizeMake(screenWidth, 3000)
         self.view.bringSubviewToFront(datePickerView)
         
-        let DoneButton:UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "forward"), style: UIBarButtonItemStyle.Plain, target: self, action: "continueCreatingEvent")
+        let DoneButton:UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "forward"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(continueCreatingEvent))
         DoneButton.enabled = false
         DoneButton.tintColor = UIColor.whiteColor()
         self.navigationItem.rightBarButtonItem = DoneButton
@@ -183,7 +183,7 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         eventNameTextField.placeholder = "Event Name"
         eventNameTextField.font = UIFont(name: "Helvetica", size: 17)
         eventNameTextField.tintColor =  ColorFromCode.colorWithHexString("#B8B7B9")
-        eventNameTextField.addTarget(self, action: "checkData", forControlEvents: UIControlEvents.EditingChanged)
+        eventNameTextField.addTarget(self, action: #selector(checkData), forControlEvents: UIControlEvents.EditingChanged)
         
         
         // Description textview and placeholder
@@ -211,7 +211,7 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         pickDateButton.layer.cornerRadius = 4
         pickDateButton.setTitle("Choose Date", forState: UIControlState.Normal)
         pickDateButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 17)
-        pickDateButton.addTarget(self, action: "pickDate", forControlEvents: UIControlEvents.TouchUpInside)
+        pickDateButton.addTarget(self, action: #selector(pickDate), forControlEvents: UIControlEvents.TouchUpInside)
         
         // Date Label
         eventDateLabel.font = UIFont(name: "Lato-Semibold", size: 16)
@@ -227,13 +227,13 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         // Public & Private Views
         publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton.setTitle("PUBLIC", forState: UIControlState.Normal)
-        publicButton.addTarget(self, action: "switchToPublic", forControlEvents: UIControlEvents.TouchUpInside)
+        publicButton.addTarget(self, action: #selector(switchToPublic), forControlEvents: UIControlEvents.TouchUpInside)
         publicButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 15)
         publicButton.backgroundColor = ColorFromCode.tabBackgroundColor()
         
         privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton.setTitle("PRIVATE", forState: UIControlState.Normal)
-        privateButton.addTarget(self, action: "switchToPrivate", forControlEvents: UIControlEvents.TouchUpInside)
+        privateButton.addTarget(self, action: #selector(switchToPrivate), forControlEvents: UIControlEvents.TouchUpInside)
         privateButton.titleLabel!.font = UIFont(name: "Lato-Semibold", size: 15)
         privateButton.backgroundColor = ColorFromCode.tabBackgroundColor()
 
@@ -242,8 +242,8 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
         publicOrPrivateLabel.numberOfLines = 0
         publicOrPrivateLabel.textAlignment = NSTextAlignment.Center
         switchToPublic()
-        let tapRec = UITapGestureRecognizer(target: self, action: "endEditing")
-        let swipeRec = UISwipeGestureRecognizer(target: self, action: "endEditing")
+        let tapRec = UITapGestureRecognizer(target: self, action: #selector(endEditing))
+        let swipeRec = UISwipeGestureRecognizer(target: self, action: #selector(endEditing))
         swipeRec.direction = UISwipeGestureRecognizerDirection.Down
         self.mainView.addGestureRecognizer(tapRec)
         self.mainView.addGestureRecognizer(swipeRec)
@@ -444,10 +444,10 @@ class CreateEventViewController: UIViewController,UIImagePickerControllerDelegat
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func keyboardWillShow(notification: NSNotification) {

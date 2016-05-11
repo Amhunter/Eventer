@@ -46,10 +46,10 @@ class ActivityButton: UIButton {
         self.titleLabel?.font = UIFont(name: "Helvetica", size: 13)
         self.size = size
         self.event = forEvent
-        self.addTarget(self, action: "Like", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addTarget(self, action: "Unhighlight", forControlEvents: UIControlEvents.TouchDragOutside)
-        self.addTarget(self, action: "Highlight", forControlEvents: UIControlEvents.TouchDragInside)
-        self.addTarget(self, action: "Highlight", forControlEvents: UIControlEvents.TouchDown)
+        self.addTarget(self, action: #selector(Like), forControlEvents: UIControlEvents.TouchUpInside)
+        self.addTarget(self, action: #selector(Unhighlight), forControlEvents: UIControlEvents.TouchDragOutside)
+        self.addTarget(self, action: #selector(Highlight), forControlEvents: UIControlEvents.TouchDragInside)
+        self.addTarget(self, action: #selector(Highlight), forControlEvents: UIControlEvents.TouchDown)
     }
     
     func Highlight(){
@@ -115,7 +115,7 @@ class ActivityButton: UIButton {
                     
                     // deleting excessive components
                     var objectsToRemove = objects
-                    objectsToRemove.removeRange(Range(start: 1, end: objects.count-1))
+                    objectsToRemove.removeRange(1..<(objects.count-1))
                     print("more than one response detected, fixing...")
                     
                     let idsToRemove:NSMutableArray = NSMutableArray()
@@ -286,7 +286,7 @@ class ActivityButton: UIButton {
                 isBusy = false
                 Display_Changes(nil)
             }else{
-                attempts++
+                attempts += 1
                 Save_Like(buttonWasPressed: false)
             }
             

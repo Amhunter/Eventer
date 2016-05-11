@@ -36,13 +36,13 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func setSubviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
         }
         
-        let saveButton = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: "save")
+        let saveButton = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(save))
         saveButton.tintColor = UIColor.whiteColor()
         self.navigationItem.rightBarButtonItem = saveButton
         
@@ -76,7 +76,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.allowsSelection = false
         tableView.backgroundColor = UIColor.whiteColor()
         //For Hiding Keyboard
-        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "HideKeyboard")
+        let TapRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HideKeyboard))
         self.view.addGestureRecognizer(TapRecognizer)
         
         
@@ -124,7 +124,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.pickImageSuperview.addSubview(pickImageView)
         self.pickImageView.frame.size = CGSizeMake(buttonSide, buttonSide)
         self.pickImageView.center = CGPointMake(pickImageSuperview.frame.width/2, pickImageSuperview.frame.width/2)
-        let rec = UITapGestureRecognizer(target: self, action: "presentActionSheet")
+        let rec = UITapGestureRecognizer(target: self, action: #selector(presentActionSheet))
         self.pickImageView.addGestureRecognizer(rec)
         self.pickImageView.userInteractionEnabled = true
         
@@ -136,7 +136,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.view.addSubview(loadingView)
         tableView.hidden = true
         loadingView.center = CGPointMake(self.view.frame.width/2, self.view.frame.height/2)
-        loadingView.button.addTarget(self, action: "startLoadingData", forControlEvents: UIControlEvents.TouchUpInside)
+        loadingView.button.addTarget(self, action: #selector(startLoadingData), forControlEvents: UIControlEvents.TouchUpInside)
         loadingView.disableAfterFirstTime = false
         self.navigationItem.rightBarButtonItem?.enabled = false
         
@@ -216,7 +216,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     func updateBarButtons(showLoading:Bool){
         if !showLoading {
             // haven't  started yet
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: "save")
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "SAVE", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(save))
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
             progressActivityIndicator.stopAnimating()
             self.navigationItem.leftBarButtonItem!.enabled = true
@@ -446,10 +446,10 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     func Add_Keyboard_Observers(){
         //initial view frame
         //make trigger when keyboard displayed/changed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         
         //when keyboard is hidden
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     

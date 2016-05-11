@@ -85,7 +85,7 @@ class ResponseManager: UIView {
         
         for cont in Array(self.buttons.keys){
             let content:String = cont
-            buttons[content]?.addTarget(self, action: "Response:", forControlEvents: UIControlEvents.TouchUpInside)
+            buttons[content]?.addTarget(self, action: #selector(Response(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 
         }
     }
@@ -386,7 +386,7 @@ class ResponseManager: UIView {
                 print("_____________________stop trying___________________")
                 Display_Changes()
             }else{
-                attempts++
+                attempts += 1
                 print("_____________________try again_____________________")
                 Save_Response(actualResponse, buttonWasPressed: false)
             }

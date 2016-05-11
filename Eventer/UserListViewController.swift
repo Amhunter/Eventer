@@ -33,7 +33,7 @@ class UserListViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     
     func Set_Subviews(){
-        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back.png"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(back))
         backButton.tintColor = UIColor.whiteColor()
         if (self.navigationController!.viewControllers.count > 1){
             self.navigationItem.leftBarButtonItem = backButton
@@ -245,8 +245,8 @@ class UserListViewController: UIViewController,UITableViewDelegate, UITableViewD
 
 
         Cell.followButton.initialize(self.Data[Cell.tag].followManager.loaded, isFollowing: self.Data[Cell.tag].followManager.isFollowing)
-        Cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-        let rec = UITapGestureRecognizer(target: self, action: "pushUser:")
+        Cell.followButton.addTarget(self, action: #selector(follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        let rec = UITapGestureRecognizer(target: self, action: #selector(pushUser(_:)))
         Cell.profileImageView.tag = indexPath.row
         Cell.profileImageView.addGestureRecognizer(rec)
         
